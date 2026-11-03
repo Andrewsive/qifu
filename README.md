@@ -2,6 +2,13 @@
 
 春节白墙互动祈福功能原型。游客在手机页面选灯、写下心愿与落款，生成个人愿灯，再将愿望送入公共白墙灯市，参与点灯接福与万灯同辉仪式。
 
+## 在线体验
+
+- [双屏联调：白墙与游客手机对照](https://andrewsive.github.io/qifu/#sync)
+- [游客手机版](https://andrewsive.github.io/qifu/#mobile)
+- [白墙投影](https://andrewsive.github.io/qifu/#wall)
+- [演出控制](https://andrewsive.github.io/qifu/#control)
+
 ## 快速体验
 
 需要 Node.js 20.19+ 或 22.12+，推荐使用 Chrome 或 Edge。
@@ -48,13 +55,21 @@ npm run preview -- --port 4173
 
 构建结果位于 `dist/`，可部署到静态网站托管服务。已使用相对资源路径，兼容根域名与 `/qifu/` 子路径。
 
-GitHub 仓库存放源码。对外分享体验时，需要将构建结果部署成网站；部署前请按 [Vite 官方部署说明](https://vite.dev/guide/static-deploy#github-pages) 配置 GitHub Pages。Pages 开启并构建成功后，才会有可分享的体验网址。
+网站通过 GitHub Pages 发布，`main` 保留源码，`gh-pages` 保存构建产物。发布配置为 `gh-pages` 分支根目录，具体机制参见 [GitHub Pages 官方说明](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)。
+
+修改完成并提交源码后，运行：
+
+```sh
+npm run deploy
+```
+
+该命令先构建，再将产物提交到 `gh-pages`，GitHub Pages 随后更新网站。需要当前电脑具有仓库的 Git 推送权限。发布过程中使用独立临时目录，不切换当前源码分支。
 
 ## 版本管理
 
 ```sh
 git status
-git add src index.html package.json package-lock.json vite.config.js README.md .gitignore .gitattributes
+git add src scripts index.html package.json package-lock.json vite.config.js README.md .gitignore .gitattributes
 git commit -m "Describe the demo update"
 git push
 ```
@@ -68,3 +83,4 @@ git push
 - `src/generated-preview.css`：愿灯生成页的一屏布局。
 - `src/celebration.js`：万灯同辉动画与纪念图导出。
 - `src/*.css`：白墙、手机与双屏联调的视觉样式。
+- `scripts/deploy-pages.mjs`：将构建产物发布到 GitHub Pages。
