@@ -9,11 +9,17 @@ const output = path.join(root, 'dist');
 const repository = 'https://github.com/Andrewsive/qifu.git';
 const branch = 'gh-pages';
 const gitEnv = { ...process.env, GIT_TERMINAL_PROMPT: '0' };
-const git = (args, cwd = root) => execFileSync('git', args, {
+const git = (args, cwd = root) => execFileSync('git', [
+  '-c', 'http.version=HTTP/1.1',
+  '-c', 'http.lowSpeedLimit=1',
+  '-c', 'http.lowSpeedTime=20',
+  ...args,
+], {
   cwd,
   env: gitEnv,
   encoding: 'utf8',
   stdio: ['ignore', 'pipe', 'inherit'],
+  timeout: 60000,
 }).trim();
 
 if (!existsSync(path.join(output, 'index.html'))) {
