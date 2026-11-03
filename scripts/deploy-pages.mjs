@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { cpSync, existsSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,18 +9,25 @@ const output = path.join(root, 'dist');
 const repository = 'https://github.com/Andrewsive/qifu.git';
 const branch = 'gh-pages';
 const gitEnv = { ...process.env, GIT_TERMINAL_PROMPT: '0' };
-const git = (args, cwd = root) => execFileSync('git', [
-  '-c', 'http.version=HTTP/1.1',
-  '-c', 'http.lowSpeedLimit=1',
-  '-c', 'http.lowSpeedTime=20',
-  ...args,
-], {
-  cwd,
-  env: gitEnv,
-  encoding: 'utf8',
-  stdio: ['ignore', 'pipe', 'inherit'],
-  timeout: 60000,
-}).trim();
+function git(args, cwd = root) {
+  try {
+    return execFileSync('git', [
+      '-c', 'http.version=HTTP/1.1',
+      '-c', 'http.lowSpeedLimit=1',
+      '-c', 'http.lowSpeedTime=20',
+      ...args,
+    ], {
+      cwd,
+      env: gitEnv,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      timeout: 60000,
+    }).trim();
+  } catch (error) {
+    if (error.stderr) process.stderr.write(error.stderr);
+    throw error;
+  }
+}
 
 if (!existsSync(path.join(output, 'index.html'))) {
   throw new Error('Build the demo with npm run build before deploying.');
@@ -29,6 +36,7 @@ if (!existsSync(path.join(output, 'index.html'))) {
 const authorName = git(['config', 'user.name']);
 const authorEmail = git(['config', 'user.email']);
 const sourceCommit = git(['rev-parse', '--short', 'HEAD']);
+console.log('Checking the published branch…');
 const previous = git(['ls-remote', '--heads', repository, branch]);
 const temporary = mkdtempSync(path.join(tmpdir(), 'qifu-pages-'));
 
@@ -40,7 +48,20 @@ function assertInsideTemporary(target) {
   }
 }
 
+function copyBuild(source, destination) {
+  assertInsideTemporary(destination);
+  mkdirSync(destination, { recursive: true });
+  for (const entry of readdirSync(source, { withFileTypes: true })) {
+    const target = path.join(destination, entry.name);
+    assertInsideTemporary(target);
+    if (entry.isDirectory()) copyBuild(path.join(source, entry.name), target);
+    else if (entry.isFile()) copyFileSync(path.join(source, entry.name), target);
+    else throw new Error('The build contains an unsupported file type.');
+  }
+}
+
 try {
+  console.log('Preparing a temporary publishing checkout…');
   if (previous) {
     git(['clone', '--depth', '1', '--branch', branch, '--single-branch', repository, temporary]);
   } else {
@@ -48,6 +69,7 @@ try {
     git(['remote', 'add', 'origin', repository], temporary);
   }
 
+  console.log('Configuring the publishing commit…');
   git(['config', 'user.name', authorName], temporary);
   git(['config', 'user.email', authorEmail], temporary);
 
@@ -57,21 +79,29 @@ try {
     assertInsideTemporary(target);
     rmSync(target, { recursive: true, force: true });
   }
-  for (const entry of readdirSync(output)) {
-    const target = path.join(temporary, entry);
+  for (const entry of readdirSync(output, { withFileTypes: true })) {
+    const target = path.join(temporary, entry.name);
     assertInsideTemporary(target);
-    cpSync(path.join(output, entry), target, { recursive: true });
+    const source = path.join(output, entry.name);
+    if (entry.isDirectory()) copyBuild(source, target);
+    else if (entry.isFile()) copyFileSync(source, target);
+    else throw new Error('The build contains an unsupported file type.');
   }
   writeFileSync(path.join(temporary, '.nojekyll'), '');
+  console.log('Staging the built website…');
   git(['add', '--all'], temporary);
 
   if (git(['status', '--porcelain'], temporary)) {
     git(['commit', '-m', 'deploy: publish demo from ' + sourceCommit], temporary);
+    console.log('Uploading the build to gh-pages…');
     git(['push', '--set-upstream', 'origin', branch], temporary);
     console.log('Published build: https://andrewsive.github.io/qifu/');
   } else {
     console.log('The published build is already up to date.');
   }
+} catch (error) {
+  console.log('Deployment failed: ' + error.message);
+  process.exitCode = 1;
 } finally {
   // This exact directory was freshly created above and never used as an input path.
   const relative = path.relative(path.resolve(tmpdir()), temporary);
