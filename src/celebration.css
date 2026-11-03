@@ -1,0 +1,211 @@
+/* Shared finale layers: the show clock supplies data-finale-phase. */
+.sync-wall > label { justify-content: space-between; }
+#replayFinale { margin-top: -4px; padding: 3px 8px; border: 1px solid #c9a55e70; border-radius: 2px; color: #e6cc91; background: #1c3028; font: 9px/1.5 serif; letter-spacing: .08em; cursor: pointer; }
+#replayFinale:hover { background: #354837; }
+.glow .boundary {
+  --town-light: .08;
+  --gold-haze: .06;
+  --title-light: .75;
+  isolation: isolate;
+  background: linear-gradient(180deg, #102a2a 0%, #203e35 53%, #0a2020 100%);
+  box-shadow: inset 0 0 130px #e6b75e12;
+  transition: background 2.4s, box-shadow 2.4s;
+}
+.glow .boundary::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--gold-haze);
+  background:
+    radial-gradient(ellipse at 50% 70%, #ffc363 0%, #d6a14d35 38%, transparent 72%),
+    linear-gradient(180deg, transparent 42%, #f0ba5c35 69%, #fff0b81a 100%);
+  mix-blend-mode: screen;
+  transition: opacity 2.8s ease;
+}
+.glow .boundary[data-finale-phase="awakening"] { --town-light: .3; --gold-haze: .25; --title-light: .88; }
+.glow .boundary[data-finale-phase="rising"] { --town-light: .54; --gold-haze: .5; --title-light: 1; }
+.glow .boundary[data-finale-phase="radiance"] { --town-light: .8; --gold-haze: .85; --title-light: 1; box-shadow: inset 0 0 150px #ecc06b45; }
+.glow .boundary[data-finale-phase="hold"] { --town-light: .7; --gold-haze: .68; --title-light: 1; box-shadow: inset 0 0 130px #dfb66a35; }
+.glow .boundary > .celebration-canvas,
+.mobile-celebration-stage > .celebration-canvas {
+  position: absolute;
+  z-index: 4;
+  display: block;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.glow .boundary > .title {
+  z-index: 9;
+  opacity: var(--title-light);
+  pointer-events: none;
+  transition: opacity 2s ease, filter 2s ease;
+  filter: drop-shadow(0 0 12px #f9ce7626);
+}
+.glow .boundary > .title h1 { color: #fff0cc; text-shadow: 0 2px 12px #071815, 0 0 30px #eac47720; }
+.glow .boundary > .title p { color: #dcb872; }
+.glow .boundary > .village { z-index: 2; opacity: 0; }
+.glow .boundary > .village i { background: linear-gradient(90deg, #95896b, #ddc48b 52%, #aca17c); }
+.glow .boundary > .water { z-index: 2; opacity: .92; background: repeating-linear-gradient(176deg, #efd79516 0 1px, transparent 1px 15px), linear-gradient(#1c3c36, #091c1e); }
+.glow .boundary > .moon { opacity: .6; box-shadow: 0 0 62px #ecd39a24; }
+.glow .boundary > .girl { z-index: 3; opacity: .6; transition: opacity 2s ease; }
+.glow .boundary[data-finale-phase="rising"] > .girl,
+.glow .boundary[data-finale-phase="radiance"] > .girl,
+.glow .boundary[data-finale-phase="hold"] > .girl { opacity: .16; }
+.glow .boundary > .field { z-index: 5; opacity: .45; transition: opacity 2s ease; }
+.glow .boundary > .field > button { animation: float 5s ease-in-out infinite; filter: drop-shadow(0 0 9px #f2c96b88); }
+.glow .boundary[data-finale-phase="gathering"] > .field { opacity: .18; }
+.glow .boundary[data-finale-phase="radiance"] > .field,
+.glow .boundary[data-finale-phase="hold"] > .field { opacity: .85; }
+.glow .boundary > .caption { opacity: 0; pointer-events: none; }
+.celebration-phase {
+  position: absolute;
+  z-index: 10;
+  left: 3.8%;
+  top: 20%;
+  max-width: 26%;
+  padding: 6px 9px;
+  border-left: 1px solid #d9b77480;
+  color: #d9c594;
+  background: linear-gradient(90deg, #091b18bd, transparent);
+  font-size: clamp(7px, .68vw, 11px);
+  letter-spacing: .13em;
+  line-height: 1.6;
+  pointer-events: none;
+}
+.celebration-caption {
+  position: absolute;
+  z-index: 10;
+  left: 24%;
+  right: 24%;
+  bottom: 5.8%;
+  text-align: center;
+  text-shadow: 0 2px 14px #04110f;
+  pointer-events: none;
+}
+.celebration-caption > small { display: block; color: #d3bb85; font-size: clamp(6px, .58vw, 10px); letter-spacing: .25em; }
+.celebration-caption > b { display: block; margin: 7px 0 4px; color: #ffedbc; font-size: clamp(17px, 2.2vw, 35px); font-weight: 400; letter-spacing: .25em; text-indent: .25em; }
+.celebration-caption > p { margin: 0; color: #d8cda9; font-size: clamp(7px, .7vw, 12px); letter-spacing: .2em; line-height: 1.8; }
+.glow .boundary[data-finale-phase="radiance"] .celebration-caption > b,
+.glow .boundary[data-finale-phase="hold"] .celebration-caption > b { text-shadow: 0 2px 12px #071411, 0 0 30px #ffc86966; }
+
+/* The mobile companion keeps its illustration, status, and save action in view. */
+.m-scene.glow.glow-finale {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  height: 100%;
+  min-height: 100%;
+  padding: 25px 24px 21px;
+  isolation: isolate;
+  text-align: center;
+  color: #f4e8cc;
+  background: radial-gradient(ellipse at 50% 42%, #4b49352b, transparent 62%), linear-gradient(180deg, #142b31, #10231f 68%, #10231f);
+}
+.m-scene.glow.glow-finale::before { z-index: 0; opacity: .7; background: radial-gradient(circle at 80% 14%, #edcb7626, transparent 31%), repeating-linear-gradient(174deg, transparent 0 36px, #eed7a306 37px); }
+.glow-finale > .step { flex: none; text-align: left; font-size: 10px; }
+.glow-finale > .step span { font-size: 11px; color: #cbb880; }
+.glow-finale > h1 { flex: none; margin: 18px 0 5px; font-size: 36px; font-weight: 400; line-height: 1.4; letter-spacing: .14em; color: #fae6b6; text-shadow: 0 2px 15px #071711, 0 0 32px #efbc5b30; }
+.glow-finale > .finale-subtitle { flex: none; margin: 0 0 12px; color: #bfbea5; font-size: 10px; letter-spacing: .12em; line-height: 1.8; }
+.mobile-celebration-stage {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-height: 180px;
+  overflow: hidden;
+  border-top: 1px solid #d9bb7a30;
+  border-bottom: 1px solid #d9bb7a30;
+  background: radial-gradient(ellipse at 50% 70%, #c69c4420, transparent 70%), linear-gradient(180deg, #10292d45, #0b1d1cb3);
+}
+.mobile-celebration-stage::after { content: ""; position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 34%; background: linear-gradient(transparent, #0b1d1cb0); pointer-events: none; }
+.personal-glow {
+  position: absolute;
+  z-index: 7;
+  bottom: 13px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 10px 12px;
+  color: #f2e1b7;
+  background: #10231fce;
+  border: 1px solid #cfac655c;
+  box-shadow: 0 5px 30px #04141055, inset 0 0 24px #eac46c08;
+  backdrop-filter: blur(8px);
+  text-align: left;
+}
+.personal-glow > .lantern { flex: none; transform: scale(.7); transform-origin: center; width: 34px; height: 72px; margin: -6px 3px; filter: drop-shadow(0 0 16px #eac06965); }
+.personal-glow > div { min-width: 0; }
+.personal-glow small { display: block; color: #bfaa7b; font: 8px/1.6 sans-serif; letter-spacing: .08em; }
+.personal-glow b { display: block; margin: 4px 0; color: #f5e0aa; font-size: 13px; font-weight: 400; line-height: 1.6; overflow-wrap: anywhere; }
+.personal-glow span { color: #aab6a5; font-size: 9px; }
+.finale-mobile-status { position: relative; z-index: 2; flex: none; min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 0; color: #d2bc86; font-size: 9px; letter-spacing: .08em; line-height: 1.7; }
+.finale-mobile-status::before { content: ""; width: 5px; height: 5px; flex: none; border-radius: 50%; background: #f5cf78; box-shadow: 0 0 10px #edbf5e88; }
+.m-scene.glow.glow-finale > #viewMine {
+  position: relative;
+  z-index: 8;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  flex: none;
+  width: 100%;
+  margin: 4px 0 0;
+  padding: 12px 10px;
+  border: 1px solid #c89957;
+  background: linear-gradient(90deg, #74382b, #91442f, #74382b);
+  color: #f6e7c7;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: .12em;
+  box-shadow: inset 0 0 18px #d1a35d10;
+  cursor: pointer;
+}
+.m-scene.glow.glow-finale > #viewMine:hover { background: linear-gradient(90deg, #83432e, #a45237, #83432e); }
+.m-scene.glow.glow-finale > #viewMine:focus-visible { outline: 2px solid #f7dc9b; outline-offset: 3px; }
+.glow-finale[data-finale-phase="gathering"] .personal-glow { opacity: .55; }
+.glow-finale .personal-glow { transition: opacity 2s ease, border-color 2s ease; }
+.glow-finale[data-finale-phase="radiance"] .personal-glow,
+.glow-finale[data-finale-phase="hold"] .personal-glow { border-color: #e4bb6b9c; }
+.glow .boundary > .field > button small { display: none; }
+.glow .boundary[data-finale-phase="radiance"] > .field,
+.glow .boundary[data-finale-phase="hold"] > .field { opacity: .4; }
+.finale-mobile-status { flex-direction: column; gap: 2px; min-height: 64px; padding: 10px 0 8px; }
+.finale-mobile-status::before { display: none; }
+.finale-mobile-status > b { font-size: 13px; font-weight: 400; color: #f1d18e; }
+.finale-mobile-status > p { margin: 0; font-size: 9px; }
+.finale-mobile-status > span { color: #91a99b; font-size: 8px; }
+.sync-phone .m-scene.glow.glow-finale { min-height: 100%; height: 100%; padding: 20px 16px 16px; }
+.sync-phone .glow-finale > h1 { margin-top: 13px; font-size: 31px; }
+.sync-phone .glow-finale > .finale-subtitle { font-size: 9px; margin-bottom: 10px; }
+.sync-phone .mobile-celebration-stage { min-height: 155px; }
+.sync-phone .personal-glow { left: 7px; right: 7px; bottom: 10px; gap: 9px; padding: 8px 10px; }
+.sync-phone .personal-glow b { font-size: 11px; }
+.sync-phone .personal-glow small { font-size: 7px; }
+.sync-phone .m-scene.glow.glow-finale > #viewMine { font-size: 10px; padding: 11px 8px; letter-spacing: .08em; }
+.sync-wall .celebration-caption { left: 22%; right: 22%; bottom: 5.5%; }
+.sync-wall .celebration-caption > b { font-size: clamp(15px, 2.1vw, 27px); margin: 4px 0 2px; }
+.sync-wall .celebration-caption > small { font-size: 6px; }
+.sync-wall .celebration-caption > p { font-size: 7px; }
+.sync-wall .celebration-phase { font-size: 7px; left: 3.6%; padding: 4px 7px; }
+@media (max-height: 690px) and (min-width: 821px) {
+  .sync-phone .glow-finale > h1 { font-size: 27px; margin-top: 10px; }
+  .sync-phone .glow-finale > .finale-subtitle { margin-bottom: 7px; }
+  .sync-phone .mobile-celebration-stage { min-height: 130px; }
+  .sync-phone .finale-mobile-status { padding: 7px 0; min-height: 30px; }
+}
+@media (max-width: 680px) {
+  .wall.glow .celebration-caption { left: 10%; right: 10%; }
+  .wall.glow .celebration-phase { top: 18%; font-size: 8px; }
+  .m-scene.glow.glow-finale { min-height: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glow .boundary, .glow .boundary::after, .glow .boundary > .title,
+  .glow .boundary > .village, .glow .boundary > .girl, .glow .boundary > .field,
+  .glow-finale .personal-glow { transition-duration: .2s; }
+  .glow .boundary > .field > button { animation: none; }
+}

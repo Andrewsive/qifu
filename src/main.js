@@ -1,0 +1,204 @@
+import './style.css';
+import './ritual.css';
+import './mobile-stages.css';
+import './wish-flow.css';
+import './waiting.css';
+import './lighting-mobile.css';
+import './handoff.css';
+import './sync.css';
+import './sync-compact.css';
+import './crowd.css';
+import './participation.css';
+import './visitor-flow.css';
+import './celebration.css';
+import './component-fixes.css';
+import './generated-preview.css';
+import { renderWishLantern } from './wish-lantern.js';
+import { GLOW_START_KEY, FINALE_DURATION_MS, saveFinalePicture } from './celebration.js';
+const KEY='xixi-wishes-v4',SK='xixi-stage-v4',EK='xixi-event-v4',DK='xixi-draft-v1';
+const OPENING_KEY='xixi-opening-v1',VISITOR_KEY='xixi-visitor-v1',OPENING_MS=10000;
+const opening=()=>{try{return JSON.parse(localStorage.getItem(OPENING_KEY))||{}}catch{return {}}};
+const visitor=()=>{try{return JSON.parse(sessionStorage.getItem(VISITOR_KEY))||{step:'landing',wishId:null}}catch{return {step:'landing',wishId:null}}};
+function setVisitor(value){sessionStorage.setItem(VISITOR_KEY,JSON.stringify({...visitor(),...value}))}
+function personalWish(){return read().find(w=>String(w.id)===String(visitor().wishId))}
+const stages=[['idle','待机','水乡画卷静候来客'],['guide','引导','扫码入市，写下新岁心愿'],['collect','互动收愿','愿灯汇入西溪水巷'],['light','点灯接福','宋韵少女点亮幸运愿望'],['glow','万灯同辉','众愿成灯，照见新岁'],['close','收束','愿心长明，且留西溪']];
+const types=[['lotus','莲影灯','清和如意','莲'],['moon','月白灯','长乐未央','月'],['fish','锦鲤灯','年年有余','鲤'],['plum','梅枝灯','春信先归','梅']];
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}},write=v=>{localStorage.setItem(KEY,JSON.stringify(v));dispatchEvent(new Event('sync'))};
+const stage=()=>localStorage.getItem(SK)||'collect',setStage=v=>{if(v==='idle')localStorage.setItem(OPENING_KEY,JSON.stringify({startedAt:Date.now(),endsAt:Date.now()+OPENING_MS}));if(v==='glow'){const now=Date.now();localStorage.setItem(GLOW_START_KEY,String(now));localStorage.setItem(EK,JSON.stringify({...event(),phase:'glow',startedAt:now,endsAt:null}))}localStorage.setItem(SK,v);dispatchEvent(new Event('sync'))};
+const event=()=>{try{return JSON.parse(localStorage.getItem(EK))||{}}catch{return{}}},setEvent=v=>{localStorage.setItem(EK,JSON.stringify(v));dispatchEvent(new Event('sync'))};
+const draft=()=>{try{return JSON.parse(localStorage.getItem(DK))||{}}catch{return{}}},setDraft=v=>{localStorage.setItem(DK,JSON.stringify(v));dispatchEvent(new Event('sync'))};
+if(!localStorage.getItem(KEY))write([['愿家人岁岁安康','阿禾','lotus'],['愿新的一年常有好消息','小满','moon'],['愿所求皆如愿，所行皆坦途','南枝','fish'],['愿我们还能一起看很多次春天','清嘉','plum']].map((x,i)=>({id:Date.now()+i,serial:126+i,wish:x[0],name:x[1],type:x[2]})));
+if(event().phase==='arrival')setEvent({...event(),phase:'waiting',endsAt:Date.now()+120000});
+if(!localStorage.getItem(SK))setStage('idle');
+if(stage()==='glow'&&!localStorage.getItem(GLOW_START_KEY))localStorage.setItem(GLOW_START_KEY,String(Date.now()));
+if(stage()==='idle'&&!opening().endsAt)localStorage.setItem(OPENING_KEY,JSON.stringify({startedAt:Date.now(),endsAt:Date.now()+OPENING_MS}));
+let autoShowTimers=[];
+function stopAutoShow(){autoShowTimers.forEach(clearTimeout);autoShowTimers=[]}
+function restartOpening(){stopAutoShow();setVisitor({step:'landing',wishId:null,form:{}});setDraft({});setEvent({});setStage('idle');render()}
+function startAutoShow(){restartOpening();autoShowTimers.push(setTimeout(()=>beginLighting(),OPENING_MS+12000),setTimeout(()=>{setStage('close');render()},OPENING_MS+12000+8000+FINALE_DURATION_MS+4000));toast('自动演示：开场后收愿，再进行点灯与万灯同辉')}
+const L=(t='lotus',s='')=>`<span class="lantern ${t} ${s}"><i></i><b>${types.find(x=>x[0]===t)?.[3]||'愿'}</b><em></em></span>`;
+$('#app').innerHTML=`<header><a href="#sync"><i class="seal">愿</i><span><b>西溪且留下</b><small>万愿成灯 · 新春灯市</small></span></a><nav><a href="#sync">双屏联调</a><a href="#mobile">游客手机</a><a href="#wall">白墙投影</a><a href="#control">演出控制</a></nav><label>LOCAL DEMO · 非现场联网</label></header><main></main>`;
+function toast(x){let e=document.createElement('div');e.className='toast';e.textContent=x;document.body.append(e);setTimeout(()=>e.remove(),2300)}
+const htmlText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function finaleWall(){return '<canvas class="celebration-canvas" data-surface="wall" aria-hidden="true"></canvas><div class="celebration-phase">03 · 众愿共明</div><div class="celebration-caption"><small>万愿成灯 · 万灯同辉</small><b data-finale-title>愿光汇聚</b><p data-finale-copy>一盏心灯，照见你我</p></div>'}
+function finalePhone(mine){
+  const personal=mine?`<div class="personal-glow">${L(mine.type)}<div><small>我的愿灯 · 第 ${mine.serial} 盏</small><b>${htmlText(mine.wish)}</b><span>${htmlText(mine.name)}</span></div></div>`:'';
+  return `<section class="m-scene glow glow-finale"><div class="step">03 <span>万灯同辉</span></div><h1>万灯同辉</h1><p class="finale-subtitle">万千心愿，汇作一城灯火</p><div class="mobile-celebration-stage"><canvas class="celebration-canvas" data-surface="mobile" aria-hidden="true"></canvas>${personal}</div><div class="finale-mobile-status"><b data-finale-title>愿光汇聚</b><p data-finale-copy>一盏心灯，照见你我</p><span>${mine?'我的灯已汇入万灯':'众愿成灯，共赏此刻灯火'}</span></div><button id="viewMine">保存万灯同辉纪念画面</button></section>`;
+}
+function beginLighting(id){let all=read(),pool=all.slice(-8),chosen=id?all.find(x=>String(x.id)===String(id)):pool[Math.floor(Math.random()*pool.length)];if(!chosen)return toast('愿池为空，请先收集愿望');let now=Date.now();setEvent({phase:'lighting',wishId:chosen.id,startedAt:now,endsAt:now+8000});setStage('light');render();toast(`已抽中第 ${chosen.serial} 盏 · 点灯动画开始`)}
+function wall(inner=false){let ws=read(),st=stage(),meta=stages.find(x=>x[0]===st),picked=ws.find(x=>String(x.id)===String(event().wishId));return `<section class="wall ${st==='glow'?'glow':''} ${st==='light'&&picked?'lighting':''}"><div class="boundary"><div class="moon"></div><div class="mount"></div><div class="village"><i></i><i></i><i></i><i></i></div><div class="water"></div><div class="title"><small>西溪灯事 · 新春特别呈现</small><h1>西溪且留下</h1><p>万 愿 成 灯</p></div><div class="ritual"><small>02 · 点灯接福</small><b>今夜幸运愿望</b></div><div class="girl"><i></i><b></b><em></em><span></span></div>${st==='light'&&picked?`<div class="blessing">${L(picked.type)}<div><small>第 ${picked.serial} 盏</small><p>${picked.wish}</p><span>—— ${picked.name}</span></div></div><div class="trail"></div>`:''}<div class="field">${ws.map((w,i)=>`<button data-w="${w.id}" style="--x:${8+(i*17)%82}%;--y:${18+(i*21)%58}%;--d:${i%4}s" class="${picked&&String(w.id)===String(picked.id)?'on':''}">${L(w.type,'mini')}<small>${w.name}</small></button>`).join('')}</div>${st==='glow'?finaleWall():''}<div class="caption"><b>${meta[1]}</b><span>${meta[2]}</span></div></div>${inner?'':`<div class="walltools"><button id="full">全屏投影</button><button id="shot">保存节目纪念画面</button></div>`}</section>`}
+function mobile(){let mine=read().at(-1),st=stage(),meta=stages.find(x=>x[0]===st),picked=read().find(x=>String(x.id)===String(event().wishId));return `<section class="mobile"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>入一盏灯<br>留一桩愿</h2><p>选择灯型，写下心愿。提交后，愿灯将进入公共白墙的点灯队列。</p><aside><b>功能原型</b> 同一浏览器本地状态模拟多人愿灯队列。</aside></div><div class="phone"><div class="bar">19:28 <b>西溪灯市</b> •••</div><div class="scroll"><div class="mobile-stage ${st}"><i></i><div><small>公共白墙 · 当前环节</small><b>${meta[1]}</b><span>${st==='light'&&picked?`正在点亮第 ${picked.serial} 盏 · ${picked.name}`:meta[2]}</span></div></div><div class="hero"><small>西溪且留下 · 新春特别灯事</small><h1>万愿<br>成灯</h1><p>一念入灯，随水入画</p></div><form><label>择一盏愿灯</label><div class="choices">${types.map((x,i)=>`<button type="button" data-t="${x[0]}" class="${i?'':'chosen'}">${L(x[0],'mini')}<b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</div><label>写下心愿 <small id="count">0 / 28</small></label><textarea maxlength="28" placeholder="愿新岁，常安常乐……"></textarea><label>落款昵称</label><input maxlength="8" placeholder="2–8个字"><button class="submit">放愿入灯市 <b>→</b></button><p id="status"></p></form><div class="ticket">${mine?`<small>我的愿灯</small>${L(mine.type)}<b>第 ${mine.serial} 盏</b><p>${mine.wish}</p><span>${mine.name} · 已进入点灯队列</span><button id="save">保存个人纪念图</button>`:'<b>尚未放入愿灯</b><p>完成上方心愿，即可获得专属序号。</p>'}</div></div></div></section>`}
+function control(){let ws=read(),picked=ws.find(x=>String(x.id)===String(event().wishId));return `<section class="control"><div class="chead"><div><span>SHOW CONTROL · 主持 / 控制台</span><h2>万愿成灯 · 演出流程</h2></div><b>● 本地状态同步中</b></div><div class="grid"><aside><h3>节目段落</h3>${stages.map((x,i)=>`<button data-s="${x[0]}" class="${stage()===x[0]?'active':''}"><i>0${i+1}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}<button id="draw" class="run">✦ 随机抽取并点灯</button><button id="auto">▶ 加速自动演示</button><button id="reset">↺ 收束 / 复位</button></aside><div class="preview"><label>白墙输出预监 <span>安全画面边界 100%</span></label>${wall(true)}</div><aside class="queue"><h3>愿灯队列 <span>${ws.length}</span></h3><div>${ws.map((w,i)=>`<button data-pick="${w.id}"><i>${String(i+1).padStart(2,'0')}</i>${L(w.type,'mini')}<span><b>${w.name}</b><small>${w.wish}</small></span><em>${picked&&String(w.id)===String(picked.id)?'点灯中':i?'排队中':'待点亮'}</em></button>`).join('')}</div><button id="mock">＋ 模拟一位新游客</button><button id="clear">清空演示愿灯</button></aside></div></section>`}
+function mobileV2(){let mine=personalWish(),st=stage(),meta=stages.find(x=>x[0]===st),picked=read().find(x=>String(x.id)===String(event().wishId));const card=mine?`<div class="mine-card">${L(mine.type)}<div><small>我的愿灯 · 第 ${mine.serial} 盏</small><b>${mine.wish}</b><span>${mine.name}</span></div></div>`:`<div class="mobile-empty">你还没有放入愿灯</div>`;let scene='';
+if(st==='idle')scene=`<section class="m-scene idle"><small>西溪且留下 · 新春灯事</small><h1>一念入灯<br>愿照新岁</h1><p>白墙灯市即将开启</p><div class="m-moon"></div><button data-go="guide">进入数字灯市</button></section>`;
+if(st==='guide')scene=`<section class="m-scene guide"><i>01</i><small>第一步 · 许愿入灯</small><h1>写下一桩<br>新岁心愿</h1><div class="guide-lines"><span>择一盏宋韵灯型</span><span>写下心愿与昵称</span><span>获得专属愿灯编号</span></div><button data-go="collect">开始许愿</button></section>`;
+if(st==='collect')scene=`<section class="m-scene collect"><div class="step">01 <span>许愿入灯</span></div><h1>我的心愿灯签</h1><form><label>择一盏愿灯</label><div class="choices">${types.map((x,i)=>`<button type="button" data-t="${x[0]}" class="${i?'':'chosen'}">${L(x[0],'mini')}<b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</div><label>写下心愿 <small id="count">0 / 28</small></label><textarea maxlength="28" placeholder="愿新岁，常安常乐……"></textarea><label>落款昵称</label><input maxlength="8" placeholder="2–8个字"><button class="submit">放愿入灯市 <b>→</b></button><p id="status"></p></form>${card}</section>`;
+if(st==='light')scene=`<section class="m-scene light"><div class="step">02 <span>点灯接福</span></div><small>白墙正在进行幸运愿望点灯仪式</small><div class="lucky-ring">${picked?L(picked.type):'<i>愿</i>'}</div><h1>${picked?`第 ${picked.serial} 盏愿灯`:'正在抽取幸运愿望'}</h1><p class="picked-wish">${picked?.wish||'愿池流光汇聚中……'}</p><b class="picked-name">${picked?'—— '+picked.name:''}</b><div class="sync-live"><i></i> 与白墙点灯动画同步</div>${mine&&picked&&String(mine.id)===String(picked.id)?'<div class="congrats">恭喜，你的愿望正在被点亮</div>':''}</section>`;
+if(st==='glow')scene=finalePhone(mine);
+if(st==='close')scene=`<section class="m-scene close"><small>愿心长明 · 且留西溪</small><h1>今夜灯事<br>已圆满收束</h1>${card}<p>愿此刻的光，陪你走进新岁</p><button id="save">保存新春纪念图</button></section>`;
+return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>手机伴随屏</h2><p>六个环节与公共白墙实时对应，画面会随主持控制台同步切换。</p><aside><b>当前环节</b> ${meta[1]} · ${meta[2]}</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">${scene}</div></div></section>`}
+function generatedWishScene(d){return `<section class="m-scene generated generated-preview"><div class="generated-heading"><div class="step">01 <span>许愿入灯</span></div><h1>我的心愿灯签</h1><p>一盏微光 · 寄予山河</p></div><div class="generated-stage"><figure class="generated-illustration">${renderWishLantern(d)}</figure><div class="generated-type"><i></i>${types.find(x=>x[0]===d.type)?.[1]||'宋韵愿灯'}<i></i></div></div><div class="generated-status"><i></i>已生成，等待上墙</div><div class="generated-actions"><button id="saveDraft"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v10m-4-4 4 4 4-4M3 12v5h14v-5" /></svg>保存愿灯图片</button><button id="enterMarket">放愿望入灯市 <span aria-hidden="true">→</span></button></div></section>`}
+function mobileV3(force=false){if(stage()!=='collect'&&!force)return mobileV2();let d=draft(),mine=personalWish(),body=d.generated?generatedWishScene(d):`<section class="m-scene collect"><div class="step">01 <span>许愿入灯</span></div><h1>我的心愿灯签</h1><form><label>择一盏愿灯</label><div class="choices">${types.map((x,i)=>`<button type="button" data-t="${x[0]}" class="${i?'':'chosen'}">${L(x[0],'mini')}<b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</div><label>写下心愿 <small id="count">0 / 28</small></label><textarea maxlength="28" placeholder="愿新岁，常安常乐……"></textarea><label>落款昵称</label><input maxlength="8" placeholder="2–8个字"><button class="submit">生成我的愿灯 <b>→</b></button><p id="status"></p></form>${mine?`<div class="mine-card">${L(mine.type)}<div><small>上一盏愿灯 · 第 ${mine.serial} 盏</small><b>${mine.wish}</b><span>${mine.name}</span></div></div>`:''}</section>`;return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>许愿入灯</h2><p>先生成并保存个人愿灯，再确认放入灯市；确认后白墙才会播放愿望升起动画。</p><aside><b>当前环节</b> 互动收愿 · 愿灯汇入西溪水巷</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">${body}</div></div></section>`}
+function mobileV4(){let ev=event(),w=read().find(x=>String(x.id)===String(ev.wishId));if(stage()==='collect'&&ev.phase==='arrival'&&w)return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>愿灯入市</h2><p>个人愿灯已经进入公共画面，白墙正在同步播放愿望升起动画。</p><aside><b>请抬头</b> 看向白墙，寻找你的愿望光迹</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll"><section class="m-scene entering"><div class="step">01 <span>愿灯上墙</span></div><div class="enter-lantern">${L(w.type)}</div><h1>愿灯正汇入<br>西溪灯市</h1><p>第 ${w.serial} 盏 · ${w.name}</p><div class="look-wall">↑ 请抬头看向公共白墙</div><div class="enter-status"><i></i> 白墙入场动画播放中</div><button id="save">查看我的愿灯</button></section></div></div></section>`;return mobileV3()}
+function mobileV5(){let ev=event(),w=personalWish();if(stage()==='collect'&&ev.phase==='waiting'&&w)return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>等待点灯接福</h2><p>愿灯已经进入灯市与候选愿池。下一轮仪式开始后，系统将自动抽取一盏幸运愿灯。</p><aside><b>保持期待</b> 你的愿望有机会成为今夜被点亮的一盏</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll"><section class="m-scene waiting"><div class="step">01 → 02 <span>等待点灯接福</span></div><div class="waiting-lantern">${L(w.type)}</div><small>第 ${w.serial} 盏 · ${w.name}</small><h1>愿灯已进入<br>幸运愿池</h1><p>下一轮点灯接福将在</p><div class="countdown" id="countdown">02:00</div><div class="waiting-note"><i></i> 倒计时结束将自动进入点灯仪式</div><div class="wish-reminder">“${w.wish}”</div></section></div></div></section>`;return mobileV4()}
+function mobileV6(){return mobileV5().replace('下一轮点灯接福将在','距离点灯接福还有').replace('倒计时结束将自动进入点灯仪式','静候灯火亮起，愿你的心愿成为今夜的幸运之选')}
+function mobileV7(){let base=mobileV6().replace('查看我的灯','保存万灯同辉纪念画面'),mine=personalWish(),picked=read().find(x=>String(x.id)===String(event().wishId));if(stage()!=='light'||!picked)return base;let won=mine&&String(mine.id)===String(picked.id),scene=won?`<section class="m-scene light-won"><small>当前状态 · 点灯接福</small><div class="celebrate">✦ 恭喜 ✦</div><div class="hero-lantern">${L(picked.type)}</div><h1>你的心愿<br>已被点亮</h1><div class="winner-wish"><i>第 ${picked.serial} 盏</i><b>${picked.wish}</b><span>—— ${picked.name}</span></div><p>一盏明灯，承载美好心愿<br>愿家人平安，岁岁常安</p></section>`:`<section class="m-scene light-watch"><small>当前状态 · 点灯接福</small><div class="song-girl"><i></i><b></b><em></em><span>${L(picked.type)}</span></div><h1>宋韵少女<br>正在点亮幸运愿望</h1><div class="drawn-wish"><small>本轮幸运愿灯 · 第 ${picked.serial} 盏</small><b>“${picked.wish}”</b><span>—— ${picked.name}</span></div><div class="watch-wall">请继续观看公共白墙 · 万灯同辉即将开启</div></section>`;return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>${won?'心愿被点亮':'同步点灯仪式'}</h2><p>${won?'你的愿望被本轮仪式抽中，手机与白墙同步呈现专属点灯画面。':'本轮幸运愿望正在白墙上被宋韵少女点亮，所有游客手机同步观看仪式。'}</p><aside><b>点灯接福</b> 约 8 秒后自动进入万灯同辉</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">${scene}</div></div></section>`}
+function mobileV8(){let ev=event(),w=personalWish(),elapsed=Date.now()-(visitor().submittedAt||ev.startedAt||0);if(stage()==='collect'&&ev.phase==='waiting'&&w&&elapsed<8000)return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>愿灯正在上墙</h2><p>手机正在将个人愿灯交给公共白墙，愿望会沿着金色光迹从地面升入灯市。</p><aside><b>请抬头</b> 手机与白墙正在同步播放环节一动画</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll"><section class="m-scene handoff"><div class="step">01 <span>许愿入灯</span></div><div class="handoff-copy">愿灯已生成<br><b>正在送往西溪灯市</b></div><div class="handoff-lantern">${L(w.type)}<small>第 ${w.serial} 盏 · ${w.name}</small><strong>${w.wish}</strong></div><div class="handoff-light"></div><div class="raise-head">↑ 请抬头看向公共白墙</div><p>寻找属于你的愿望光迹</p></section></div></div></section>`;return mobileV7()}
+function syncView(){let meta=stages.find(x=>x[0]===stage());return `<section class="sync-page"><div class="sync-head"><div><span>DUAL-SCREEN PREVIEW · 双屏流程联调</span><h2>白墙投影 × 游客手机</h2></div><div><b>${meta[1]}</b><small>${meta[2]}</small></div></div><div class="sync-grid"><article class="sync-wall"><label>PUBLIC WALL · 公共白墙输出${stage()==='glow'?'<button id="replayFinale" aria-label="重播万灯同辉高潮动画">↻ 重播高潮</button>':''}</label>${wall(true)}</article><article class="sync-phone"><label>VISITOR MOBILE · 游客手机伴随屏</label>${visitorMobile()}</article></div><div class="sync-hint">两端共享同一本地模拟状态 · 可直接在右侧手机完成许愿并观察左侧白墙同步变化</div></section>`}
+function visitorMobile(){
+  if(['light','glow','close'].includes(stage()))return mobileV8();
+  const v=visitor();
+  if(['form','generated'].includes(v.step))return mobileV3(true);
+  if(v.step==='submitted')return mobileV8();
+  const isGuide=v.step==='guide';
+  const scene=isGuide
+    ? '<section class="m-scene guide"><i>01</i><small>第一步 · 许愿入灯</small><h1>写下一桩<br>新岁心愿</h1><div class="guide-lines"><span>择一盏宋韵灯型</span><span>写下心愿与昵称</span><span>生成灯签，再放入灯市</span></div><button data-go="collect">开始许愿</button></section>'
+    : '<section class="m-scene idle visitor-landing"><small>西溪且留下 · 新春灯事</small><h1>看灯火入画<br>留一桩心愿</h1><p>万千心愿正在汇入西溪灯市</p><div class="m-moon"></div><div class="visitor-invite">下一盏灯，愿为你而亮</div><button data-go="guide">我也来许愿点灯 →</button></section>';
+  return '<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>'+ (isGuide?'许愿引导':'走近西溪灯市')+'</h2><p>看见他人的心愿在白墙升起，也为新岁留下一盏自己的愿灯。</p><aside><b>参与灯事</b> '+(isGuide?'选灯、写愿、落款，生成你的灯签':'点击进入数字灯市，开始你的许愿之旅')+'</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">'+scene+'</div></div></section>';
+}
+function visitorViewKey(){
+  const v=visitor(),ev=event(),st=stage();
+  if(['light','glow','close'].includes(st))return [st,st==='glow'?localStorage.getItem(GLOW_START_KEY):ev.startedAt,v.wishId].join(':');
+  if(v.step==='submitted')return [v.step,v.wishId,st,ev.phase,v.submittedAt||ev.startedAt,Date.now()-(v.submittedAt||ev.startedAt)>=8000?'waiting':'handoff'].join(':');
+  return [v.step,draft().id||''].join(':');
+}
+function render(){
+  const h=location.hash||'#sync',main=$('main'),samePage=main.dataset.route===h;
+  const focused=document.activeElement,selection=main.contains(focused)&&(focused instanceof HTMLInputElement||focused instanceof HTMLTextAreaElement)?{start:focused.selectionStart,end:focused.selectionEnd}:null;
+  const oldWall=samePage?$('.wall',main):null,oldPhone=samePage?$('.mobile',main):null;
+  const phoneKey=visitorViewKey(),wallKey=[stage(),stage()==='idle'?opening().startedAt:'',event().phase,event().startedAt,read().length,stage()==='glow'?localStorage.getItem(GLOW_START_KEY):''].join(':');
+  main.innerHTML=h==='#sync'?syncView():h==='#mobile'?visitorMobile():h==='#control'?control():`<section class="wallpage"><label>PUBLIC PROJECTION · 公共白墙端 <b>当前节目：${stages.find(x=>x[0]===stage())[1]}</b></label>${wall()}</section>`;
+  let newWall=$('.wall',main),newPhone=$('.mobile',main);
+  if(oldWall?.dataset.sceneKey===wallKey&&newWall){newWall.replaceWith(oldWall);newWall=oldWall}
+  if(oldPhone?.dataset.viewKey===phoneKey&&newPhone){newPhone.replaceWith(oldPhone);newPhone=oldPhone}
+  if(newWall)newWall.dataset.sceneKey=wallKey;
+  if(newPhone)newPhone.dataset.viewKey=phoneKey;
+  main.dataset.route=h;bind();
+  if(selection&&document.contains(focused)){focused.focus({preventScroll:true});focused.setSelectionRange(selection.start,selection.end)}
+}
+function bindVisitor(phone){
+  if(phone.dataset.bound==='yes')return;
+  phone.dataset.bound='yes';
+  $$('[data-go]',phone).forEach(b=>b.onclick=()=>{setVisitor({step:b.dataset.go==='collect'?'form':'guide'});render()});
+  const input=$('input',phone),textarea=$('textarea',phone),saved=visitor().form||{};
+  if(input)input.value=saved.name||'';
+  if(textarea){textarea.value=saved.wish||'';$('#count',phone).textContent=textarea.value.length+' / 28'}
+  function rememberForm(){
+    setVisitor({form:{name:input?.value||'',wish:textarea?.value||'',type:$('[data-t].chosen',phone)?.dataset.t||'lotus'}});
+  }
+  $$('[data-t]',phone).forEach(b=>{
+    b.classList.toggle('chosen',b.dataset.t===(saved.type||'lotus'));
+    b.onclick=()=>{$$('[data-t]',phone).forEach(x=>x.classList.remove('chosen'));b.classList.add('chosen');rememberForm()};
+  });
+  if(input)input.oninput=rememberForm;
+  if(textarea)textarea.oninput=()=>{$('#count',phone).textContent=textarea.value.length+' / 28';rememberForm()};
+  const form=$('form',phone);
+  if(form)form.onsubmit=e=>{
+    e.preventDefault();
+    const wish=textarea.value.trim(),name=input.value.trim(),status=$('#status',phone),a=read();
+    if(!wish||!name){status.textContent='请先写下心愿并留下昵称';return}
+    if(a.some(x=>x.wish===wish&&x.name===name)){status.textContent='这盏愿灯已进入灯市，请勿重复提交';return}
+    const type=$('[data-t].chosen',phone).dataset.t;
+    rememberForm();setVisitor({step:'generated'});
+    setDraft({generated:true,id:Date.now(),serial:126+a.length,wish,name,type});render();
+  };
+  $('#saveDraft',phone)?.addEventListener('click',()=>toast('愿灯图片已保存（功能原型反馈）'));
+  $('#enterMarket',phone)?.addEventListener('click',()=>{
+    const d=draft(),a=read();
+    if(!d.generated){render();return}
+    const existing=a.find(x=>String(x.id)===String(d.id)||x.wish===d.wish&&x.name===d.name);
+    if(existing){setVisitor({step:'submitted',wishId:existing.id,submittedAt:visitor().submittedAt||event().startedAt||Date.now()});localStorage.setItem(DK,'{}');render();toast('这盏愿灯已入市，请继续观看白墙');return}
+    const item={id:d.id,serial:d.serial,wish:d.wish,name:d.name,type:d.type},now=Date.now();
+    // Publish the complete handoff together; a partial sync must not cache the old preview as the handoff screen.
+    setVisitor({step:'submitted',wishId:item.id,submittedAt:now,form:{}});
+    localStorage.setItem(KEY,JSON.stringify([...a,item]));
+    localStorage.setItem(EK,JSON.stringify({phase:'waiting',wishId:item.id,startedAt:now,endsAt:now+120000}));
+    localStorage.setItem(DK,'{}');
+    dispatchEvent(new Event('sync'));
+    render();toast('愿灯已入市 · 请期待下一轮点灯接福');
+  });
+  $('#viewMine',phone)?.addEventListener('click',()=>{saveFinalePicture(personalWish());toast('正在生成万灯同辉纪念画面…')});
+  $('#save',phone)?.addEventListener('click',()=>toast('个人纪念图已保存（功能原型反馈）'));
+}
+function bind(){
+  const phone=$('.mobile');if(phone)bindVisitor(phone);
+  const ev=event();
+  if(ev.phase==='waiting'&&Date.now()-ev.startedAt<8000){
+    const w=read().find(x=>String(x.id)===String(ev.wishId));
+    if(w)$$('.boundary').forEach(x=>{
+      if(x.querySelector('.arrival-wish'))return;
+      x.classList.add('wish-arrival');
+      x.insertAdjacentHTML('beforeend',`<div class="arrival-wish">${L(w.type)}<small>第 ${w.serial} 盏 · ${w.name}</small><b>${w.wish}</b><span>愿望正汇入灯市</span></div><div class="arrival-path"></div>`);
+      $$('.arrival-wish,.arrival-path',x).forEach(el=>el.style.animationDelay=-(Date.now()-ev.startedAt)+'ms');
+    });
+  }
+  $$('.handoff-lantern,.handoff-light,.raise-head').forEach(el=>el.style.animationDelay=-(Date.now()-(visitor().submittedAt||ev.startedAt))+'ms');
+  $$('[data-w]').forEach(b=>b.onclick=()=>{
+    $$('[data-w]').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  });
+  $$('[data-s]').forEach(b=>b.onclick=()=>{
+    stopAutoShow();
+    if(b.dataset.s==='idle')restartOpening();
+    else if(b.dataset.s==='light')beginLighting();
+    else{setStage(b.dataset.s);render()}
+  });
+  $$('[data-pick]').forEach(b=>b.onclick=()=>{stopAutoShow();beginLighting(b.dataset.pick)});
+  const handlers={
+    '#replayFinale':()=>{stopAutoShow();setStage('glow');render()},
+    '#draw':()=>{stopAutoShow();beginLighting()},
+    '#full':()=>$('.wall').requestFullscreen?.(),
+    '#shot':()=>toast('节目纪念画面已生成（原型反馈）'),
+    '#mock':()=>{const a=read(),i=a.length,ss=['愿奔赴皆有回响','愿春风常伴，旧愿皆偿','愿日日有欢喜','愿山河无恙，家人安康'];write([...a,{id:Date.now(),serial:126+i,type:types[i%4][0],wish:ss[i%4],name:['小荷','云舟','阿桥','听雨'][i%4]}]);render()},
+    '#clear':()=>{write([]);setEvent({});render()},
+    '#reset':restartOpening,
+    '#auto':startAutoShow
+  };
+  for(const [selector,handler] of Object.entries(handlers)){const button=$(selector);if(button)button.onclick=handler}
+}
+setInterval(()=>{let ev=event();if(!ev.endsAt)return;let left=Math.max(0,ev.endsAt-Date.now()),el=$('#countdown');if(ev.phase==='waiting'&&$('.handoff')&&['#mobile','#sync'].includes(location.hash||'#sync')&&Date.now()-(visitor().submittedAt||ev.startedAt)>=8000)render();if(ev.phase==='waiting'&&el){let m=Math.floor(left/60000),s=Math.floor(left%60000/1000);el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}if(ev.phase==='waiting'&&left<=0&&stage()==='collect')beginLighting();if(ev.phase==='lighting'&&left<=0&&stage()==='light'){setStage('glow');render();toast('点灯礼成 · 万灯同辉')}} ,1000);
+addEventListener('hashchange',render);addEventListener('storage',render);addEventListener('sync',()=>{if(['#mobile','#sync'].includes(location.hash||'#sync'))render()});render();
+const crowdSamples=[['愿家人平安喜乐','小屿','lotus'],['愿所行皆坦途','云舟','moon'],['愿新岁常有好消息','阿满','plum'],['愿学业有成','青禾','fish'],['愿山河无恙','听雨','lotus'],['愿日日有欢喜','南星','moon'],['愿春风常伴','桥西','plum'],['愿万事顺遂','小荷','fish'],['愿团圆长安','知微','lotus'],['愿梦想开花','清嘉','plum']];
+function spawnCrowdWish(){if(!['guide','collect'].includes(stage()))return;$$('.boundary').forEach((boundary,index)=>{if(!boundary.querySelector('.crowd-live'))boundary.insertAdjacentHTML('beforeend','<div class="crowd-live"><i></i> 多人愿灯正实时汇入</div>');if(boundary.querySelectorAll('.crowd-wish').length>=6)return;let sample=crowdSamples[Math.floor(Math.random()*crowdSamples.length)],node=document.createElement('div');node.className='crowd-wish';node.style.setProperty('--cx',`${8+Math.random()*82}%`);node.style.setProperty('--drift',`${-35+Math.random()*70}px`);node.style.setProperty('--scale',`${.72+Math.random()*.38}`);node.innerHTML=`${L(sample[2],'mini')}<b>${sample[0]}</b><small>—— ${sample[1]}</small><span>✦ · ✧ · ✦</span>`;boundary.append(node);setTimeout(()=>node.remove(),7600+index*200)})}
+setInterval(spawnCrowdWish,1900);setTimeout(spawnCrowdWish,500);
+function applyParticipationGuide(){
+  const st=stage(),clock=opening(),elapsed=Math.max(0,Date.now()-(clock.startedAt||Date.now()));
+  if(st==='idle'&&clock.endsAt&&Date.now()>=clock.endsAt){setStage('collect');render();spawnCrowdWish();return}
+  $$('.boundary').forEach(boundary=>{
+    if(!['idle','guide','collect'].includes(st)){
+      boundary.querySelectorAll('.participation-intro,.join-entry,.opening-lights').forEach(el=>el.remove());
+      boundary.classList.remove('opening-mode');return;
+    }
+    if(st==='idle'&&!boundary.querySelector('.participation-intro')){
+      boundary.classList.add('opening-mode');
+      boundary.style.setProperty('--opening-offset',-elapsed+'ms');
+      boundary.insertAdjacentHTML('beforeend',`<div class="participation-intro"><div class="intro-seal">愿</div><small>西溪且留下 · 新春灯事</small><h2><span>拿出手机</span><span>搜索小程序</span><span>许愿点灯</span></h2><p>一念入灯 · 万愿成光</p><i></i></div><div class="opening-lights"><i></i><i></i><i></i><i></i><i></i></div>${joinEntry(true)}`);
+    }
+    if(['guide','collect'].includes(st)){
+      boundary.classList.remove('opening-mode');
+      if(!boundary.querySelector('.join-entry'))boundary.insertAdjacentHTML('beforeend',joinEntry(false));
+    }
+  });
+}
+function joinEntry(delayed=false){return `<div class="join-entry ${delayed?'delayed':''}"><div class="demo-qr"><i></i></div><div><small>微信扫一扫 · 演示入口</small><b>进入「万愿成灯」</b><span>① 选灯　② 写愿　③ 放入灯市</span></div></div>`}
+setInterval(applyParticipationGuide,350);setTimeout(applyParticipationGuide,100);

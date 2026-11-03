@@ -1,0 +1,15 @@
+/* Keep the reusable moon lantern independent from the wall's background moon. */
+.lantern.moon {
+  position: static;
+  inset: auto;
+  width: auto;
+  aspect-ratio: auto;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.choices .lantern.mini {
+  display: flex;
+  margin: 0 auto 4px;
+}

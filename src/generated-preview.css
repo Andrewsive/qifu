@@ -1,0 +1,72 @@
+/* A complete generated lantern and its actions share the phone's available height. */
+.phone:has(.generated-preview) .scroll {
+  overflow: hidden;
+  container-type: size;
+}
+
+.m-scene.generated.generated-preview,
+.sync-phone .m-scene.generated.generated-preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 18px 22px 20px;
+  background: radial-gradient(ellipse at 50% 44%, #fff9e8 0, #f3e8cf 52%, #e8dcc3 100%);
+}
+.generated-preview::before {
+  background: repeating-linear-gradient(175deg, transparent 0 25px, #a8803d04 26px),
+    radial-gradient(ellipse at 0 20%, #bb8c4820, transparent 45%);
+}
+.generated-heading { flex: none; text-align: center; }
+.generated-heading .step { font-size: 9px; letter-spacing: .14em; color: #a77942; }
+.generated-heading .step span { font-size: 10px; }
+.generated-heading h1 { margin: 8px 0 3px; font-size: 23px; line-height: 1.4; letter-spacing: .13em; color: #253e36; }
+.generated-heading p { margin: 0; font-size: 9px; line-height: 1.7; letter-spacing: .16em; color: #987e55; }
+.generated-stage { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; align-items: center; padding: 5px 0 0; }
+.generated-illustration { flex: 1 1 0; width: 100%; min-height: 0; margin: 0; display: flex; justify-content: center; align-items: center; }
+.wish-lantern-art { display: block; width: 100%; height: 100%; max-width: 290px; max-height: 410px; overflow: visible; }
+.generated-type { flex: none; display: flex; align-items: center; gap: 9px; color: #9a7346; font-size: 9px; letter-spacing: .18em; line-height: 18px; }
+.generated-type i { width: 25px; height: 1px; background: linear-gradient(90deg, transparent, #b78c53); }
+.generated-type i:last-child { transform: rotate(180deg); }
+.generated-preview .generated-status { flex: none; margin: 7px 0 10px; font-size: 10px; line-height: 18px; color: #92714c; letter-spacing: .06em; }
+.generated-status > i { display: inline-block; width: 5px; height: 5px; margin-right: 7px; vertical-align: 2px; border-radius: 50%; background: #bb7843; box-shadow: 0 0 6px #d5a15d55; }
+.generated-actions { flex: none; display: grid; gap: 8px; }
+.generated-actions > button { position: static; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 41px; margin: 0; padding: 10px 12px; border: 1px solid #b88b53; background: transparent; color: #875434; font-size: 12px; line-height: 20px; letter-spacing: .12em; cursor: pointer; }
+.generated-actions > #saveDraft { background: #fff9e52b; border-color: #bb985e99; }
+.generated-actions > #enterMarket { justify-content: space-between; border-color: #8f392b; background: linear-gradient(100deg, #9b4934, #843629); color: #fff0d1; box-shadow: inset 0 0 16px #c78b4b14, 0 3px 9px #7c372b15; }
+.generated-actions > #enterMarket span { font: 20px/1 serif; }
+.generated-actions svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.generated-actions > button:hover { filter: brightness(1.06); }
+.generated-actions > button:focus-visible { outline: 2px solid #a6753b; outline-offset: 3px; }
+
+/* The comparison view itself also stays within a desktop viewport. */
+@media (min-width: 821px) {
+  .sync-page:has(.generated-preview) { display: flex; flex-direction: column; height: calc(100dvh - 68px); min-height: 0; padding-top: 14px; padding-bottom: 12px; }
+  .sync-page:has(.generated-preview) .sync-head { flex: none; margin-bottom: 12px; }
+  .sync-page:has(.generated-preview) .sync-grid { flex: 1 1 0; min-height: 0; grid-template-columns: minmax(0, 1fr) 355px; }
+  .sync-page:has(.generated-preview) .sync-phone { height: 100%; min-height: 0; }
+  .sync-page:has(.generated-preview) .sync-phone > .mobile { height: calc(100% - 25px); }
+  .sync-page:has(.generated-preview) .sync-phone .phone { height: 100%; min-height: 0; }
+  .sync-page:has(.generated-preview) .sync-hint { flex: none; padding-top: 8px; line-height: 15px; }
+  .mobile:not(.sync-phone > .mobile):has(.generated-preview) { height: calc(100dvh - 68px); min-height: 0; padding-top: 20px; padding-bottom: 20px; }
+  .mobile:not(.sync-phone > .mobile):has(.generated-preview) > .phone { height: 100%; max-height: 750px; }
+}
+@media (min-width: 821px) and (max-width: 1100px) {
+  .sync-page:has(.generated-preview) .sync-grid { grid-template-columns: minmax(0, 1fr) 310px; }
+}
+@media (max-width: 820px) {
+  .mobile:has(.generated-preview) > .intro { display: none; }
+  .mobile:has(.generated-preview) { display: block; min-height: 0; padding: 10px; }
+  .mobile:has(.generated-preview) > .phone { height: calc(100dvh - 88px); min-height: 0; width: min(390px, 100%); }
+  .sync-phone:has(.generated-preview) { min-height: 0; }
+  .sync-phone:has(.generated-preview) > .mobile { padding: 0; }
+  .sync-phone:has(.generated-preview) .phone { height: calc(100dvh - 108px); min-height: 0; }
+}
+@container (max-height: 510px) {
+  .m-scene.generated.generated-preview { padding: 12px 18px 14px; }
+  .generated-heading h1 { font-size: 21px; margin-top: 5px; }
+  .generated-heading p { font-size: 8px; }
+  .generated-actions { gap: 6px; }
+  .generated-actions > button { min-height: 36px; padding: 7px 10px; font-size: 11px; }
+  .generated-preview .generated-status { margin: 3px 0 6px; font-size: 9px; }
+}
