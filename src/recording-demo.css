@@ -51,6 +51,25 @@
 .sync-page.is-auto-playing .sync-phone .phone { pointer-events: none; user-select: none; }
 .queue button:disabled { opacity: .45; cursor: default; }
 
+@media (min-width: 821px) {
+  .sync-page .sync-wall {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    container-type: size;
+  }
+  .sync-page .sync-wall > label { flex: none; }
+  .sync-page .sync-wall > .wall {
+    flex: none;
+    width: min(100cqw, calc((100cqh - 25px) * 16 / 9));
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    margin: auto;
+  }
+}
+
 /* The countdown is an overlay, so entering or leaving it never shifts a screen. */
 .recording-countdown {
   position: absolute;
