@@ -1,0 +1,25 @@
+.handoff .handoff-lantern,
+.handoff .handoff-light { animation-duration: 6s; }
+
+.wish-arrival .arrival-wish,
+.wish-arrival .arrival-path,
+.wish-arrival .title,
+.wish-arrival .field { animation-delay: var(--arrival-offset, 0ms); }
+
+.waiting-wall-prompt {
+  flex: none;
+  padding: 8px 6px;
+  border: 1px solid #d8b36a70;
+  background: linear-gradient(100deg, #75533228, #d4aa5515);
+  color: #edd08b;
+  line-height: 1.6;
+}
+.waiting-wall-prompt b { display: block; font-size: 12px; font-weight: 400; letter-spacing: .05em; }
+.waiting-wall-prompt span { display: block; font-size: 9px; color: #bfc4ae; }
+.phone .waiting-wall-prompt { margin: 3px 0; }
+.phone .handoff > p { color: #c7c7ad; }
+@container (max-height: 490px) {
+  .waiting-wall-prompt { padding: 5px; }
+  .waiting-wall-prompt b { font-size: 11px; }
+  .waiting-wall-prompt span { font-size: 8px; }
+}
