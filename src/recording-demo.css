@@ -1,0 +1,126 @@
+/* The recording controls occupy one quiet row; the comparison keeps the rest. */
+.sync-page { position: relative; }
+.recording-toolbar {
+  position: relative;
+  z-index: 25;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 22px;
+  min-height: 48px;
+  margin: 0 0 10px;
+  padding: 7px 12px;
+  border: 1px solid #c8a76338;
+  background: linear-gradient(110deg, #1c302a, #10201d 68%);
+  color: #e9dec3;
+}
+.recording-actions { display: flex; flex: none; align-items: center; gap: 6px; }
+.recording-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 31px;
+  padding: 6px 12px;
+  border: 1px solid #bd9d5d50;
+  border-radius: 2px;
+  background: #0c1b18;
+  color: #c5c9b9;
+  font-size: 10px;
+  line-height: 1.5;
+  white-space: nowrap;
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.recording-actions #startRecordingDemo {
+  border-color: #c8a467a8;
+  background: linear-gradient(110deg, #79402b, #5e3527);
+  color: #f1dfb7;
+}
+.recording-actions button:hover { border-color: #d9b674b3; background: #263c31; color: #f1dfb7; }
+.recording-actions #startRecordingDemo:hover { background: #8d4c30; }
+.recording-actions button:focus-visible { outline: 2px solid #ead19a; outline-offset: 3px; }
+.recording-actions button:disabled { opacity: .45; cursor: default; }
+.recording-progress { flex: 1 1 180px; min-width: 140px; margin-left: auto; }
+.recording-progress > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.recording-progress b { overflow: hidden; color: #d8bd83; font-size: 10px; font-weight: 400; line-height: 1.3; white-space: nowrap; text-overflow: ellipsis; }
+.recording-progress span { flex: none; color: #91a295; font: 9px/1.3 sans-serif; font-variant-numeric: tabular-nums; letter-spacing: .08em; }
+.recording-track { height: 2px; overflow: hidden; background: #d9c49120; }
+.recording-track > i { display: block; height: 100%; max-width: 100%; background: linear-gradient(90deg, #a5854b, #f0ce86); box-shadow: 0 0 8px #e4bd6860; transition: width .25s linear; }
+.sync-page.is-auto-playing .recording-toolbar { border-color: #cba76366; }
+.sync-page.is-auto-playing .sync-phone .phone { pointer-events: none; user-select: none; }
+.queue button:disabled { opacity: .45; cursor: default; }
+
+/* The countdown is an overlay, so entering or leaving it never shifts a screen. */
+.recording-countdown {
+  position: absolute;
+  z-index: 80;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 28px;
+  background: radial-gradient(ellipse at center, #1d352df2, #07130ff5 72%);
+  color: #f1dfb9;
+  text-align: center;
+  backdrop-filter: blur(7px);
+}
+.recording-countdown small { font-size: 12px; letter-spacing: .28em; color: #d2b77d; }
+.recording-countdown b { min-width: 1.2em; font-size: clamp(80px, 11vw, 144px); font-weight: 400; line-height: 1.1; color: #f3d89c; text-shadow: 0 0 55px #dfb55e45; font-variant-numeric: tabular-nums; }
+.recording-countdown span { max-width: 430px; font-size: 10px; line-height: 2; color: #a7b5a5; letter-spacing: .08em; }
+
+/* Hover the top edge or focus a control to recover controls in the clean view. */
+body.recording-clean #app > header,
+body.recording-clean .sync-head,
+body.recording-clean .sync-hint { display: none !important; }
+body.recording-clean .sync-page,
+body.recording-clean .sync-page:has(.generated-preview) {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  min-height: 0;
+  padding: 12px;
+}
+body.recording-clean .sync-page > .recording-toolbar {
+  position: absolute;
+  z-index: 60;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  margin: 0;
+  opacity: 0;
+  background: #0e211ef5;
+  box-shadow: 0 10px 26px #0005;
+  transition: opacity .2s ease;
+}
+body.recording-clean .sync-page > .recording-toolbar:hover,
+body.recording-clean .sync-page > .recording-toolbar:focus-within { opacity: 1; }
+body.recording-clean .sync-page .sync-grid { flex: 1 1 0; min-height: 0; }
+body.recording-clean .sync-page .sync-phone { height: 100%; min-height: 0; }
+body.recording-clean .sync-page .sync-phone > .mobile { height: calc(100% - 25px); min-height: 0; }
+body.recording-clean .sync-page .sync-phone .phone { height: 100%; min-height: 0; }
+
+@media (min-width: 821px) and (max-width: 1100px) {
+  .recording-toolbar { gap: 14px; padding-inline: 9px; }
+  .recording-actions { gap: 5px; }
+  .recording-actions button { padding-inline: 9px; font-size: 9px; }
+  .recording-progress { min-width: 130px; }
+  .recording-progress b, .recording-progress span { font-size: 8px; }
+}
+@media (max-width: 820px) {
+  .recording-toolbar { flex-wrap: wrap; gap: 10px; padding: 9px; }
+  .recording-actions { flex-wrap: wrap; gap: 5px; }
+  .recording-actions button { padding-inline: 10px; font-size: 9px; }
+  .recording-progress { flex-basis: 100%; }
+  body.recording-clean .sync-page { overflow: auto; }
+  body.recording-clean .sync-page .sync-grid { flex: none; }
+  body.recording-clean .sync-page .sync-phone > .mobile { height: auto; }
+  body.recording-clean .sync-page .sync-phone .phone { height: calc(100dvh - 70px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .recording-actions button,
+  .recording-track > i,
+  body.recording-clean .sync-page > .recording-toolbar { transition: none; }
+}

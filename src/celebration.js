@@ -12,7 +12,9 @@ const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
 const smooth = v => { const t = clamp(v); return t * t * (3 - 2 * t); };
 const noise = n => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
 export const celebrationPhase = seconds => phases.find(p => seconds < p.until) || phases.at(-1);
-const startTime = () => Number(localStorage.getItem(GLOW_START_KEY)) || Date.now();
+let previewClock = null;
+export function setCelebrationPreviewClock(value) { previewClock = value; }
+const startTime = () => previewClock ?? (Number(localStorage.getItem(GLOW_START_KEY)) || Date.now());
 
 const sprites = new Map();
 function lanternSprite(type = 0) {
