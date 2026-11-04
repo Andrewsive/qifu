@@ -1,0 +1,168 @@
+/* One shared screen contract for every visitor stage. */
+main[data-route="#mobile"] { height: calc(var(--app-height, 100dvh) - 68px); }
+main[data-route="#mobile"] > .mobile,
+main[data-route="#mobile"] > .mobile:has(.generated-preview) {
+  height: 100%; min-height: 0; padding: 16px 24px;
+  grid-template-columns: minmax(0, 400px) minmax(0, 390px); gap: 40px;
+}
+main[data-route="#mobile"] > .mobile > .phone { width: 100%; height: 100%; max-height: 750px; min-height: 0; }
+.phone { display: flex; flex-direction: column; }
+.phone > .bar { flex: none; min-height: 36px; height: 36px; align-items: center; padding: 0 20px; }
+.phone > .scroll {
+  position: relative; flex: 1 1 0; min-height: 0; width: 100%; height: auto !important;
+  overflow: hidden; container-type: size;
+}
+.phone .scroll > .m-scene {
+  display: flex; flex-direction: column; align-items: stretch; gap: 6px;
+  width: 100%; height: 100%; min-height: 0 !important; padding: 18px 22px;
+  transform-origin: top left;
+}
+.phone .scroll > .m-scene > * { flex-shrink: 0; min-width: 0; }
+.phone .m-scene h1 { font-size: clamp(23px, 5.4cqh, 34px); line-height: 1.35; margin: 8px 0; overflow-wrap: anywhere; }
+.phone .m-scene > p { font-size: 11px; line-height: 1.7; margin: 4px 0; letter-spacing: .07em; }
+.phone .m-scene > small { font-size: 10px; line-height: 1.6; }
+.phone .m-scene > button {
+  position: static; flex: none; width: 100%; min-height: 42px; padding: 10px 8px;
+  margin: auto 0 0; font-size: 13px; line-height: 1.5; letter-spacing: .1em;
+}
+.phone .step { font-size: 10px; line-height: 1.7; }
+.phone .step span { font-size: 11px; }
+
+/* Invitation and instructions. */
+.phone .scroll > .m-scene.visitor-landing { padding: 22px !important; justify-content: center; align-items: stretch; text-align: center; }
+.phone .scroll > .visitor-landing h1 { font-size: clamp(26px, 6cqh, 38px) !important; margin: 8px 0; line-height: 1.5; }
+.phone .visitor-landing .m-moon { flex: 0 1 auto; width: clamp(55px, 15cqh, 105px); height: auto; aspect-ratio: 1; margin: 12px auto; }
+.phone .visitor-invite { margin: 4px 0 14px; font-size: 11px; line-height: 1.7; }
+.phone .guide > i { font: 28px/1 sans-serif; color: #d5ad5d66; margin: 0 0 4px; }
+.phone .guide h1 { margin: 5px 0 10px; }
+.phone .guide-lines { width: 100%; margin: 0; }
+.phone .guide-lines span { font-size: 12px; line-height: 1.6; padding: clamp(8px, 2.4cqh, 15px) 5px; }
+
+/* Keep labels, inputs, validation feedback and the submit button together. */
+.phone .scroll > .collect { padding: 14px 16px; gap: 4px; }
+.phone .collect h1 { font-size: clamp(21px, 4.6cqh, 27px); margin: 3px 0 8px; }
+.phone .collect form { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; padding: 12px; }
+.phone .collect form > label { flex: none; font-size: 11px; line-height: 1.6; margin: 7px 0 5px; }
+.phone .collect form > label:first-child { margin-top: 0; }
+.phone .choices { flex: none; gap: 5px; }
+.phone .choices button { min-width: 0; height: 84px; padding: 5px 1px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.phone .choices button > b { font-size: 10px; line-height: 1.5; }
+.phone .choices button > small { font-size: 8px; line-height: 1.5; white-space: nowrap; }
+.phone .choices .lantern.mini { flex: none; height: 39px; margin: 0 auto; }
+.phone .collect textarea { flex: 1 1 50px; min-height: 44px; max-height: 84px; padding: 8px; font-size: 16px; line-height: 1.5; }
+.phone .collect input { flex: none; height: 38px; padding: 6px 8px; font-size: 16px; }
+.phone .collect .submit { flex: none; min-height: 40px; margin-top: 12px; padding: 9px 12px; font-size: 13px; }
+.phone .collect #status { flex: none; min-height: 28px; margin: 6px 0 0; font-size: 10px; line-height: 1.4; }
+.phone .collect .mine-card { flex: none; margin: 6px 0 0; padding: 7px 10px; font-size: 10px; }
+
+/* Personal lantern preview. */
+.phone .scroll > .generated-preview { gap: 0; padding: 14px 22px 18px; }
+.phone .generated-preview > .generated-stage { flex: 1 1 0; min-height: 0; }
+.phone .generated-heading h1 { font-size: clamp(21px, 4.7cqh, 27px); margin: 6px 0 3px; }
+.phone .generated-actions > button { font-size: 12px; min-height: 40px; }
+
+/* Hand-off to the wall. */
+.phone .handoff { text-align: center; }
+.phone .handoff-copy { margin: 0; font-size: 11px; line-height: 1.8; }
+.phone .handoff-copy b { font-size: clamp(17px, 4.1cqh, 22px); }
+.phone .scroll > .handoff > .handoff-lantern { flex: 1 1 0; height: auto; min-height: 150px; }
+.phone .handoff-lantern > .lantern { transform: scale(1.35); margin-bottom: 36px; }
+.phone .handoff-lantern strong { font-size: 16px; line-height: 1.6; overflow-wrap: anywhere; }
+.phone .raise-head { margin: 4px 0; padding: 10px 6px; font-size: 13px; line-height: 1.6; }
+.phone .handoff > p { margin: 0; font-size: 10px; }
+
+/* Waiting countdown. */
+.phone .waiting { text-align: center; gap: 5px; }
+.phone .scroll > .waiting > .waiting-lantern { flex: 1 1 0; min-height: 85px; max-height: 170px; height: auto; }
+.phone .waiting-lantern .lantern { transform: scale(1.15); animation: fittedWaitFloat 2.4s ease-in-out infinite; }
+.phone .waiting > small { font-size: 10px; }
+.phone .waiting h1 { font-size: clamp(22px, 5.2cqh, 30px); line-height: 1.3; margin: 5px 0; }
+.phone .waiting > p { font-size: 11px; margin: 7px 0 0; }
+.phone .countdown { font-size: clamp(36px, 10cqh, 58px); line-height: 1.1; margin: 3px 0; }
+.phone .waiting-note { font-size: 10px; line-height: 1.7; letter-spacing: 0; }
+.phone .wish-reminder { margin: 9px 0 0; padding: 9px 4px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+@keyframes fittedWaitFloat { 50% { transform: translateY(-6px) scale(1.15); } }
+
+/* Shared girl-lighting scene and the selected visitor's congratulations. */
+.phone .light-watch, .phone .light-won { text-align: center; gap: 5px; }
+.phone .scroll > .m-scene > .song-girl-frame { flex: 1 1 0; position: relative; min-height: 85px; max-height: 270px; }
+.phone .song-girl-frame > .song-girl { position: absolute; left: 50%; top: 50%; width: 210px; height: 300px; margin: 0; transform-origin: center; }
+.phone .light-watch h1 { font-size: clamp(20px, 4.7cqh, 28px); line-height: 1.35; margin: 5px 0; }
+.phone .drawn-wish { margin: 5px 0; padding: 10px 8px; }
+.phone .drawn-wish small { font-size: 9px; line-height: 1.5; }
+.phone .drawn-wish b { margin: 5px 0; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.phone .drawn-wish span { font-size: 10px; line-height: 1.5; }
+.phone .watch-wall { margin: 3px 0 0; font-size: 10px; line-height: 1.7; letter-spacing: .02em; }
+.phone .celebrate { margin: 3px 0; font-size: 14px; line-height: 1.7; }
+.phone .scroll > .light-won > .hero-lantern { flex: 1 1 0; min-height: 90px; max-height: 190px; height: auto; }
+.phone .hero-lantern .lantern { transform: scale(1.25); }
+.phone .light-won h1 { font-size: clamp(24px, 5.7cqh, 34px); line-height: 1.3; margin: 3px 0; }
+.phone .winner-wish { margin: 6px 0; padding: 9px 8px; width: 100%; }
+.phone .winner-wish i { font-size: 10px; line-height: 1.5; }
+.phone .winner-wish b { margin: 5px 0; font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
+.phone .winner-wish span { font-size: 10px; line-height: 1.5; }
+.phone .light-won > p { font-size: 11px; line-height: 1.7; margin: 2px 0; }
+.phone .light .lucky-ring { width: clamp(100px, 27cqh, 165px); height: auto; aspect-ratio: 1; margin: 8px auto; }
+.phone .light .sync-live { margin-top: 8px; line-height: 1.7; }
+
+/* Finale and closure. */
+.phone .scroll > .m-scene.glow-finale { padding: 16px 18px; gap: 4px; min-height: 0; }
+.phone .glow-finale > h1 { font-size: clamp(25px, 5.5cqh, 35px); line-height: 1.35; margin: 5px 0; }
+.phone .glow-finale > .finale-subtitle { margin: 0 0 5px; font-size: 10px; }
+.phone .scroll > .glow-finale > .mobile-celebration-stage { flex: 1 1 0; min-height: 100px; }
+.phone .finale-mobile-status { min-height: 0; padding: 6px 0; line-height: 1.6; }
+.phone .finale-mobile-status b { font-size: 12px; }
+.phone .finale-mobile-status p { font-size: 10px; }
+.phone .finale-mobile-status span { font-size: 9px; }
+.phone .m-scene.glow.glow-finale > #viewMine { min-height: 40px; padding: 9px 6px; margin: 0; font-size: 12px; }
+.phone .close { text-align: center; justify-content: center; }
+.phone .close h1 { margin: 14px 0; }
+.phone .close .mine-card { margin: 10px 0; padding: 12px; }
+.phone .mine-card b { overflow-wrap: anywhere; line-height: 1.5; }
+
+/* A desktop comparison always gives the phone the remaining viewport height. */
+@media (min-width: 821px) {
+  .sync-page, .sync-page:has(.generated-preview) { display: flex; flex-direction: column; height: calc(var(--app-height, 100dvh) - 68px); min-height: 0; padding: 14px 18px 10px; }
+  .sync-page .sync-head { flex: none; margin-bottom: 10px; }
+  .sync-page .sync-grid, .sync-page:has(.generated-preview) .sync-grid { flex: 1 1 0; min-height: 0; grid-template-columns: minmax(0, 1fr) 355px; }
+  .sync-page .sync-phone { height: 100%; min-height: 0; }
+  .sync-page .sync-phone > .mobile { height: calc(100% - 25px); min-height: 0; padding: 0; }
+  .sync-page .sync-phone .phone { height: 100%; min-height: 0; }
+  .sync-page .sync-hint { flex: none; padding-top: 7px; line-height: 15px; }
+  .sync-page .sync-wall { max-height: 100%; overflow: hidden; }
+}
+@media (min-width: 821px) and (max-width: 1100px) {
+  .sync-page .sync-grid, .sync-page:has(.generated-preview) .sync-grid { grid-template-columns: minmax(0, 1fr) 310px; }
+}
+@media (max-width: 1000px) {
+  main[data-route="#mobile"] > .mobile, main[data-route="#mobile"] > .mobile:has(.generated-preview) { display: block; }
+  main[data-route="#mobile"] .intro { display: none; }
+  main[data-route="#mobile"] > .mobile > .phone { width: min(390px, 100%); margin: auto; }
+}
+@media (max-width: 820px) {
+  .sync-phone { min-height: 0; height: auto; }
+  .sync-phone > .mobile { min-height: 0; padding: 0; }
+  .sync-phone .phone { width: min(390px, 100%); height: calc(var(--app-height, 100dvh) - 90px); min-height: 0; margin: auto; }
+}
+@media (max-width: 680px) {
+  #app:has(main[data-route="#mobile"]) > header { height: 54px; }
+  main[data-route="#mobile"] { height: calc(var(--app-height, 100dvh) - 54px); }
+  main[data-route="#mobile"] > .mobile, main[data-route="#mobile"] > .mobile:has(.generated-preview) { padding: 6px 6px max(6px, env(safe-area-inset-bottom)); }
+  main[data-route="#mobile"] > .mobile > .phone { width: min(430px, 100%); height: 100%; max-height: none; border-width: 4px; border-radius: 28px; }
+  .phone > .bar { height: 34px; min-height: 34px; padding: 0 18px; }
+}
+@container (max-height: 490px) {
+  .phone .scroll > .m-scene { padding: 12px 16px; gap: 4px; }
+  .phone .scroll > .m-scene.visitor-landing { padding: 16px !important; }
+  .phone .collect h1 { margin: 1px 0 4px; }
+  .phone .collect form { padding: 8px 10px; }
+  .phone .collect form > label { margin: 5px 0 4px; }
+  .phone .choices button { height: 76px; }
+  .phone .collect .submit { margin-top: 8px; }
+  .phone .waiting h1 { margin: 3px 0; }
+  .phone .waiting > p { margin-top: 3px; }
+  .phone .wish-reminder { margin-top: 4px; padding: 6px 2px; font-size: 12px; }
+  .phone .drawn-wish { padding: 7px 6px; margin: 3px 0; }
+  .phone .winner-wish { padding: 7px 6px; margin: 3px 0; }
+  .phone .scroll > .handoff > .handoff-lantern { min-height: 125px; }
+}

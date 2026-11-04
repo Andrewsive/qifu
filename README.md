@@ -38,6 +38,8 @@ npm run dev -- --port 4173
 
 控制台可手动切换节目、抽取指定愿灯、增加模拟游客、运行加速演示。万灯同辉在双屏页支持重播。
 
+游客手机的所有阶段共用一屏自适应布局：人物、花灯与动画根据可用高度调整，完整保留提示、心愿文字和操作按钮。支持小屏手机、竖屏/横屏切换和桌面双屏预览。
+
 ## 演示说明
 
 - 本版本使用 localStorage / sessionStorage 模拟状态。相同浏览器、相同站点的页面共享演出状态；其他人的浏览器各自运行独立的体验。
@@ -81,6 +83,7 @@ git push
 - `src/main.js`：游客流程、节目状态、队列与三端页面。
 - `src/wish-lantern.js`：四种个人花灯的 SVG 绘制。
 - `src/generated-preview.css`：愿灯生成页的一屏布局。
+- `src/mobile-fit.css`、`src/mobile-fit.js`：全部游客阶段的一屏布局与尺寸适配。
 - `src/celebration.js`：万灯同辉动画与纪念图导出。
 - `src/*.css`：白墙、手机与双屏联调的视觉样式。
 - `scripts/deploy-pages.mjs`：将构建产物发布到 GitHub Pages。
