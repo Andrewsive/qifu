@@ -2,6 +2,16 @@
 export function installMobileFit() {
   const screens = new Map();
   let frame = 0;
+  function fitPreview(preview) {
+    const desktop = window.matchMedia('(min-width: 821px)').matches;
+    preview.dataset.phoneRatio = desktop ? '9:19.5' : 'viewport';
+    if (desktop) {
+      const scale = Math.min(preview.clientWidth / 390, preview.clientHeight / 845);
+      preview.style.setProperty('--phone-preview-scale', String(Math.max(.05, scale)));
+    } else {
+      preview.style.removeProperty('--phone-preview-scale');
+    }
+  }
   function fit(screen) {
     const scene = screen.querySelector(':scope > .m-scene');
     const width = screen.clientWidth;
@@ -38,6 +48,13 @@ export function installMobileFit() {
     if (!viewport || viewport.scale === 1) {
       document.documentElement.style.setProperty('--app-height', (viewport?.height || window.innerHeight) + 'px');
     }
+    document.querySelectorAll('.mobile > .phone').forEach(phone => {
+      const preview = document.createElement('div');
+      preview.className = 'phone-preview';
+      phone.before(preview);
+      preview.append(phone);
+    });
+    document.querySelectorAll('.phone-preview').forEach(fitPreview);
     for (const [screen, observer] of screens) {
       if (!screen.isConnected) { observer.disconnect(); screens.delete(screen); }
     }
@@ -45,6 +62,8 @@ export function installMobileFit() {
       if (!screens.has(screen)) {
         const observer = new ResizeObserver(schedule);
         observer.observe(screen);
+        const preview = screen.closest('.phone-preview');
+        if (preview) observer.observe(preview);
         screens.set(screen, observer);
       }
       fit(screen);

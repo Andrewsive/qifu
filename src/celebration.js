@@ -145,8 +145,8 @@ function mount(){
     const c=canvas.getContext('2d');if(!c)continue;
     const scene={canvas,c,w:1,h:1,phase:'',mobile:canvas.dataset.surface==='mobile',resize:null};
     scene.resize=new ResizeObserver(()=>{
-      const box=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5);
-      scene.w=Math.max(1,box.width);scene.h=Math.max(1,box.height);
+      const dpr=Math.min(devicePixelRatio||1,1.5);
+      scene.w=Math.max(1,canvas.clientWidth);scene.h=Math.max(1,canvas.clientHeight);
       canvas.width=Math.round(scene.w*dpr);canvas.height=Math.round(scene.h*dpr);c.setTransform(dpr,0,0,dpr,0,0);
     });scene.resize.observe(canvas);scenes.set(canvas,scene);
   }

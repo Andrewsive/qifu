@@ -50,6 +50,8 @@ npm run dev -- --port 4173
 
 游客手机的所有阶段共用一屏自适应布局：人物、花灯与动画根据可用高度调整，完整保留提示、心愿文字和操作按钮。支持小屏手机、竖屏/横屏切换和桌面双屏预览。
 
+桌面手机预览采用 9:19.5 的固定竖屏比例，整个设备随窗口空间等比缩放，普通联调与净画面模式的外形保持一致。实际手机访问时使用设备本身的可用视口。
+
 ## 演示说明
 
 - 本版本使用 localStorage / sessionStorage 模拟状态。相同浏览器、相同站点的页面共享演出状态；其他人的浏览器各自运行独立的体验。
@@ -94,6 +96,7 @@ git push
 - `src/wish-lantern.js`：四种个人花灯的 SVG 绘制。
 - `src/generated-preview.css`：愿灯生成页的一屏布局。
 - `src/mobile-fit.css`、`src/mobile-fit.js`：全部游客阶段的一屏布局与尺寸适配。
+- `src/phone-preview.css`：桌面手机预览的固定比例与等比缩放。
 - `src/recording-demo.js`、`src/recording-demo.css`：79秒完整演示时间轴、控制条与净画面模式。
 - `src/celebration.js`：万灯同辉动画与纪念图导出。
 - `src/*.css`：白墙、手机与双屏联调的视觉样式。

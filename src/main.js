@@ -15,6 +15,7 @@ import './component-fixes.css';
 import './generated-preview.css';
 import './mobile-fit.css';
 import './recording-demo.css';
+import './phone-preview.css';
 import { createRecordingDemo } from './recording-demo.js';
 import { installMobileFit } from './mobile-fit.js';
 import { renderWishLantern } from './wish-lantern.js';
