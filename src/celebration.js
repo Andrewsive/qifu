@@ -51,10 +51,10 @@ function town(c, w, h, seconds, isMobile) {
     if(x>w*.38 && x<w*.64)continue;
     const houseW=w*(isMobile?.095:.066), houseH=h*(.075+noise(i+2)*.075);
     const lit = smooth((seconds-(i%8)*.37-1.4)/2);
-    c.globalAlpha=.75; c.fillStyle='#142a26'; c.fillRect(x-houseW*.5,y-houseH,houseW,houseH);
+    c.globalAlpha=.75; c.fillStyle='#16243b'; c.fillRect(x-houseW*.5,y-houseH,houseW,houseH);
     c.strokeStyle=`rgba(220,171,93,${.12+lit*.68})`;c.lineWidth=Math.max(.6,w/1800);
     c.strokeRect(x-houseW*.5,y-houseH,houseW,houseH);
-    c.fillStyle='#0d211f';c.beginPath();c.moveTo(x-houseW*.68,y-houseH+.007*h);
+    c.fillStyle='#0b172c';c.beginPath();c.moveTo(x-houseW*.68,y-houseH+.007*h);
     c.quadraticCurveTo(x-houseW*.47,y-houseH+.012*h,x,y-houseH-.026*h);
     c.quadraticCurveTo(x+houseW*.47,y-houseH+.012*h,x+houseW*.68,y-houseH+.007*h);c.closePath();c.fill();c.stroke();
     for(let j=0;j<3;j++) {
@@ -72,7 +72,7 @@ function town(c, w, h, seconds, isMobile) {
   }
   // The arched bridge connects the two illuminated banks.
   const left=w*.365,right=w*.65,top=h*.685,base=h*.82;
-  c.globalAlpha=.93;c.fillStyle='#263a2e';c.strokeStyle=`rgba(244,198,112,${.2+awake*.7})`;c.lineWidth=Math.max(1,w*.001);
+  c.globalAlpha=.93;c.fillStyle='#29354c';c.strokeStyle=`rgba(244,198,112,${.2+awake*.7})`;c.lineWidth=Math.max(1,w*.001);
   c.beginPath();c.moveTo(left,base);c.bezierCurveTo(left+w*.035,top,right-w*.055,top,right,base);c.lineTo(right,h*.855);c.lineTo(left,h*.855);c.closePath();
   c.moveTo(w*.44,h*.855);c.bezierCurveTo(w*.445,h*.755,w*.565,h*.755,w*.58,h*.855);c.closePath();c.fill('evenodd');c.stroke();
   for(let i=0;i<13;i++) {
@@ -93,7 +93,7 @@ function town(c, w, h, seconds, isMobile) {
 
 function paint(c,w,h,seconds,isMobile=false,background=false){
   c.clearRect(0,0,w,h);
-  if(background){const bg=c.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#0a202b');bg.addColorStop(.65,'#19382e');bg.addColorStop(1,'#061b1c');c.fillStyle=bg;c.fillRect(0,0,w,h)}
+  if(background){const bg=c.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#0b1730');bg.addColorStop(.65,'#1b2c47');bg.addColorStop(1,'#080f22');c.fillStyle=bg;c.fillRect(0,0,w,h)}
   const gathering=smooth(seconds/3),warmth=smooth((seconds-3)/10),peak=smooth((seconds-10)/6);
   const veil=c.createRadialGradient(w*.52,h*.65,0,w*.52,h*.65,w*.72);
   veil.addColorStop(0,`rgba(255,180,63,${warmth*.17})`);veil.addColorStop(.5,`rgba(255,172,51,${warmth*.05})`);veil.addColorStop(1,'rgba(255,172,51,0)');

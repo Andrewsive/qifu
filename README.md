@@ -81,6 +81,10 @@ npm run deploy
 
 ## 版本管理
 
+视觉改版前的完整功能版已封存为 `backup/2026-11-04-functional`（提交 `92eccfa`），并保留本地源码 ZIP。详细记录与恢复方式见 [版本基线](docs/版本基线.md)。
+
+`codex/night-tour-visual` 是国风夜游视觉分支：深蓝夜色、暖金花灯、朱砂按钮，手机与白墙使用同一套水乡街市与宋韵少女插画。互动流程与79秒演示时序沿用功能基线。
+
 ```sh
 git status
 git add src scripts index.html package.json package-lock.json vite.config.js README.md .gitignore .gitattributes
@@ -98,6 +102,8 @@ git push
 - `src/mobile-fit.css`、`src/mobile-fit.js`：全部游客阶段的一屏布局与尺寸适配。
 - `src/phone-preview.css`：桌面手机预览的固定比例与等比缩放。
 - `src/wish-transfer.js`、`src/wish-transfer.css`：手机收灯后上墙的顺序、动画进度与防重播。
+- `src/night-tour.css`、`src/night-tour-mobile.css`：国风夜游主题与各手机阶段的视觉。
+- `public/assets/night-tour-town.svg`、`public/assets/song-lantern-girl.svg`：水乡灯市与宋韵少女插画，按引用打包。
 - `src/recording-demo.js`、`src/recording-demo.css`：79秒完整演示时间轴、控制条与净画面模式。
 - `src/celebration.js`：万灯同辉动画与纪念图导出。
 - `src/*.css`：白墙、手机与双屏联调的视觉样式。

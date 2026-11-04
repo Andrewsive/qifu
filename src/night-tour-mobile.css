@@ -1,0 +1,257 @@
+/* Shared night-tour palette. Keep the phone's established size and stage layout. */
+.phone {
+  color: #f4e8cd;
+  background: #08172b;
+  border-color: #253348;
+  box-shadow: 0 24px 80px #020710a6, 0 0 0 1px #d4ae6140;
+}
+.phone > .bar {
+  color: #f6e5bf;
+  background: linear-gradient(110deg, #0c2037, #09182b);
+  border-bottom: 1px solid #d9ad602b;
+}
+.phone > .bar b { color: #f7e4bb; font-weight: 500; letter-spacing: .12em; }
+.phone > .scroll,
+.phone.mobile-v2 .scroll { background: #08172b; }
+.phone .scroll > .m-scene {
+  color: #f2e5ca;
+  background: radial-gradient(ellipse at 50% 40%, #29466735, transparent 64%), linear-gradient(180deg, #10243e, #09182c 74%, #071323);
+}
+.phone .m-scene::before {
+  background:
+    radial-gradient(circle at 82% 13%, #ffe6a335 0 1px, transparent 2px),
+    radial-gradient(circle at 16% 32%, #f3cf8b2b 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 58%, #f7ce8124 0 1px, transparent 2px),
+    radial-gradient(ellipse at 80% 0%, #677eab12, transparent 46%),
+    repeating-linear-gradient(173deg, transparent 0 34px, #d1bb8b05 35px);
+}
+.phone .m-scene::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 10px;
+  pointer-events: none;
+  opacity: .6;
+  background:
+    linear-gradient(#d7ae5b70, #d7ae5b70) left top / 19px 1px no-repeat,
+    linear-gradient(#d7ae5b70, #d7ae5b70) left top / 1px 19px no-repeat,
+    linear-gradient(#d7ae5b70, #d7ae5b70) right top / 19px 1px no-repeat,
+    linear-gradient(#d7ae5b70, #d7ae5b70) right top / 1px 19px no-repeat,
+    linear-gradient(#d7ae5b45, #d7ae5b45) left bottom / 19px 1px no-repeat,
+    linear-gradient(#d7ae5b45, #d7ae5b45) left bottom / 1px 19px no-repeat,
+    linear-gradient(#d7ae5b45, #d7ae5b45) right bottom / 19px 1px no-repeat,
+    linear-gradient(#d7ae5b45, #d7ae5b45) right bottom / 1px 19px no-repeat;
+}
+.phone .m-scene h1 { color: #f6e3b9; text-shadow: 0 2px 16px #02091480; }
+.phone .m-scene > p { color: #bac6d6; }
+.phone .m-scene > small,
+.phone .step,
+.phone .step span { color: #d8b66f; }
+.phone .m-scene > button,
+.phone .collect .submit,
+.phone .generated-actions > #enterMarket,
+.phone .m-scene.glow.glow-finale > #viewMine {
+  color: #fff0cf;
+  border: 1px solid #d49a50;
+  background: linear-gradient(105deg, #8c392c, #b35334 52%, #8d392b);
+  box-shadow: inset 0 1px #f5d39533, inset 0 -1px #5a231b66, 0 4px 17px #02081335;
+}
+.phone .m-scene > button:hover,
+.phone .collect .submit:hover,
+.phone .generated-actions > #enterMarket:hover,
+.phone .m-scene.glow.glow-finale > #viewMine:hover {
+  background: linear-gradient(105deg, #9b4430, #c15f3a 52%, #9b432e);
+}
+.phone button:focus-visible,
+.phone input:focus-visible,
+.phone textarea:focus-visible { outline: 2px solid #f5d28a; outline-offset: 2px; }
+.phone button:disabled { filter: saturate(.35); opacity: .65; }
+
+/* See the same canal and warm lanterns before joining the ceremony. */
+.phone .scroll > .m-scene.visitor-landing,
+.phone .scroll > .m-scene.idle {
+  background:
+    linear-gradient(180deg, #08172be6 0%, #0c1e35d9 35%, #0c1c31a8 62%, #071424b8 100%),
+    url('../public/assets/night-tour-town.svg') center bottom / auto 66% no-repeat,
+    #0a1a2f;
+}
+.phone .visitor-landing h1 { text-shadow: 0 2px 20px #020810, 0 0 34px #eeb7611f; }
+.phone .visitor-landing > small { color: #e1b96e; }
+.phone .visitor-invite { color: #c7c2b1; text-shadow: 0 1px 8px #05101c; }
+.phone .m-moon {
+  background: radial-gradient(circle at 38% 32%, #fff4cd, #e7c884 68%, #bb9557);
+  box-shadow: 0 0 0 1px #ffe9b142, 0 0 40px #eebc622e, 0 0 85px #f0b85b12;
+}
+.phone .guide > i { color: #c69d5e68; }
+.phone .guide-lines { border-color: #cfa86265; }
+.phone .guide-lines span { border-color: #cfa86228; color: #d9deDF; }
+.phone .guide-lines span::before { color: #e4be78; }
+.phone .scroll > .guide {
+  background:
+    linear-gradient(180deg, #0b1d33f5, #0b1b30eb 68%, #071525db),
+    url('../public/assets/night-tour-town.svg') center bottom / auto 55% no-repeat,
+    #0a1a2f;
+}
+
+/* A quiet blue writing desk; the lantern remains the warmest object. */
+.phone .scroll > .m-scene.collect {
+  color: #f0e1c1;
+  background: radial-gradient(ellipse at 50% 18%, #a76b2b13, transparent 48%), linear-gradient(180deg, #12263f, #09182c);
+}
+.phone .collect::before { background: repeating-linear-gradient(173deg, transparent 0 32px, #dec38d05 33px); }
+.phone .collect form {
+  background: linear-gradient(150deg, #142b43d9, #0e2035e8);
+  border: 1px solid #b58a4c40;
+  box-shadow: inset 0 0 35px #d4a45904;
+}
+.phone .collect form > label { color: #d7c59e; }
+.phone .collect #count { color: #a8b9cc; }
+.phone .choices button {
+  color: #f2ddaf;
+  background: linear-gradient(180deg, #1b3047, #102239);
+  border-color: #d5b16d3b;
+}
+.phone .choices button > small { color: #9fb0c2; }
+.phone .choices button.chosen {
+  background: radial-gradient(ellipse at 50% 38%, #d99b4e25, transparent 76%), linear-gradient(180deg, #4d3432, #2f2732);
+  border-color: #e4b96e;
+  box-shadow: inset 0 0 0 1px #e4b96e45, 0 0 16px #f0b9590d;
+}
+.phone .choices button.chosen > small { color: #dfc59a; }
+.phone .choices .lantern { filter: drop-shadow(0 3px 5px #f1a84535); }
+.phone .collect input,
+.phone .collect textarea {
+  color: #f5e8d1;
+  caret-color: #f0ca83;
+  background: #08172bc2;
+  border-color: #b9935952;
+  box-shadow: inset 0 2px 8px #01081133;
+}
+.phone .collect input::placeholder,
+.phone .collect textarea::placeholder { color: #879bb2; opacity: 1; }
+.phone .collect input:focus,
+.phone .collect textarea:focus { border-color: #e1b66d; }
+.phone .collect #status { color: #e7b47e; }
+
+/* The cream silk lantern glows against indigo, matching the public wall. */
+.phone .scroll > .m-scene.generated.generated-preview {
+  color: #f1e0ba;
+  background:
+    radial-gradient(ellipse at 50% 42%, #c58d4524, transparent 53%),
+    linear-gradient(180deg, #102640, #08172b 85%);
+}
+.phone .generated-preview::before {
+  background:
+    radial-gradient(circle at 12% 24%, #f3c57b22 0 1px, transparent 2px),
+    radial-gradient(circle at 84% 70%, #f3c57b33 0 1px, transparent 2px),
+    repeating-linear-gradient(172deg, transparent 0 34px, #f2d29a05 35px);
+}
+.phone .generated-heading .step,
+.phone .generated-heading p { color: #c8ae79; }
+.phone .generated-heading h1 { color: #f5e4be; }
+.phone .generated-illustration { filter: drop-shadow(0 0 24px #eca54a2b); }
+.phone .generated-type { color: #d3b177; }
+.phone .generated-type i { background: linear-gradient(90deg, transparent, #c7a364); }
+.phone .generated-preview .generated-status { color: #d5bc8b; }
+.phone .generated-status > i { background: #eeb45d; box-shadow: 0 0 10px #f0bb6090; }
+.phone .generated-actions > #saveDraft {
+  color: #e9cea0;
+  border-color: #d8ad636b;
+  background: #152b403d;
+}
+.phone .generated-actions > #saveDraft:hover { background: #28405970; }
+
+/* Collection and anticipation share a small, warm pool of light. */
+.phone .scroll > .m-scene.handoff,
+.phone .scroll > .m-scene.waiting {
+  background:
+    radial-gradient(ellipse at 50% 32%, #b77b382c, transparent 45%),
+    linear-gradient(180deg, #122640, #0a1b30 68%, #071527);
+}
+.phone .handoff-copy { color: #b3c0d0; }
+.phone .handoff-copy b { color: #f4d69a; }
+.phone .handoff-lantern small,
+.phone .waiting > small { color: #dab576; }
+.phone .handoff-lantern strong { color: #f8e6bf; }
+.phone .handoff > p { color: #b3c0d0; }
+.phone .waiting-wall-prompt {
+  color: #f0d294;
+  border-color: #d9b46a70;
+  background: linear-gradient(110deg, #b5773020, #cf9b4310);
+  box-shadow: inset 0 0 14px #f3c67605;
+}
+.phone .waiting-wall-prompt span { color: #aebed0; }
+.phone .countdown { color: #ffe2a7; text-shadow: 0 0 22px #dca0444d; }
+.phone .waiting-note { color: #aebed0; }
+.phone .wish-reminder { color: #e5cca0; border-color: #d5ad5d42; }
+
+/* All visitors watch the same light; the selected wish receives extra radiance. */
+.phone .scroll > .m-scene.light,
+.phone .scroll > .m-scene.light-watch,
+.phone .scroll > .m-scene.light-won {
+  background:
+    radial-gradient(ellipse at 50% 30%, #d7903a24, transparent 47%),
+    linear-gradient(180deg, #142943, #0a1b30 64%, #071426);
+}
+.phone .light-won { box-shadow: inset 0 0 70px #f1aa4614; }
+.phone .light-watch > small,
+.phone .light-won > small { color: #dfba78; }
+.phone .song-girl > i { background: #e3bea0; box-shadow: inset 0 16px #172238; }
+.phone .song-girl > b { background: linear-gradient(90deg, #752f2a, #d08057 52%, #8c3b2f); filter: drop-shadow(0 0 8px #d99d4d20); }
+.phone .song-girl > em { background: linear-gradient(90deg, #b96143, #df9a63); }
+.phone .song-girl > span { filter: drop-shadow(0 0 28px #ffc5689c); }
+.phone .drawn-wish,
+.phone .winner-wish,
+.phone .mine-card {
+  color: #f4e1bc;
+  background: linear-gradient(110deg, #21334add, #17283ce8);
+  border-color: #d6ae626b;
+  box-shadow: inset 0 0 20px #f0b96305;
+}
+.phone .drawn-wish small,
+.phone .winner-wish i,
+.phone .mine-card small { color: #d3b47e; }
+.phone .drawn-wish span,
+.phone .winner-wish span,
+.phone .mine-card span { color: #aabbd0; }
+.phone .light-watch h1,
+.phone .light-won h1 { color: #f7e5bf; }
+.phone .watch-wall { color: #ddbf87; }
+.phone .celebrate { color: #ffe0a0; text-shadow: 0 0 18px #e9a85366; }
+.phone .light-won > p { color: #bdc7d3; }
+
+/* The finale stays blue enough for the rising gold to be the climax. */
+.phone .scroll > .m-scene.glow.glow-finale {
+  color: #f4e5c7;
+  background: radial-gradient(ellipse at 50% 46%, #b77c3021, transparent 57%), linear-gradient(180deg, #132b47, #081a30 76%, #071427);
+}
+.phone .glow-finale::before {
+  background:
+    radial-gradient(circle at 82% 14%, #edc27320, transparent 32%),
+    repeating-linear-gradient(174deg, transparent 0 36px, #eed7a306 37px);
+}
+.phone .glow-finale > h1 { color: #ffe6b1; text-shadow: 0 2px 16px #030b17, 0 0 30px #eeb65c35; }
+.phone .glow-finale > .finale-subtitle { color: #b9c4d2; }
+.phone .mobile-celebration-stage {
+  background: radial-gradient(ellipse at 50% 70%, #b8813228, transparent 72%), linear-gradient(180deg, #102b440f, #07152b9c);
+  border-color: #d7b57238;
+}
+.phone .mobile-celebration-stage::after { background: linear-gradient(transparent, #08172ab8); }
+.phone .personal-glow {
+  background: #0d2037d9;
+  border-color: #dbb2646b;
+  box-shadow: 0 5px 25px #020a1855, inset 0 0 24px #eac46c08;
+}
+.phone .personal-glow small { color: #c6ab77; }
+.phone .personal-glow b { color: #f8dfa8; }
+.phone .personal-glow span { color: #aebed0; }
+.phone .finale-mobile-status { color: #ccb68a; }
+.phone .finale-mobile-status > b { color: #efcc8e; }
+.phone .finale-mobile-status > span { color: #98adc5; }
+.phone .scroll > .m-scene.close {
+  background:
+    linear-gradient(180deg, #10233beF, #0a1b30ed 72%, #071427e5),
+    url('../public/assets/night-tour-town.svg') center bottom / auto 55% no-repeat,
+    #0a1a2f;
+}
+.phone .mobile-empty { color: #afbac8; border-color: #d7b57250; }

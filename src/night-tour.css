@@ -1,0 +1,100 @@
+/* Night-tour visual layer. The functional baseline is tagged before this theme. */
+:root {
+  --ink: #091222;
+  --jade: #223b56;
+  --gold: #e2b676;
+  --paper: #f5e7c9;
+  --red: #ad4c36;
+  --line: #d1a76830;
+  --night-sky: #101e36;
+  --night-deep: #070e1c;
+  --night-gold: #f2ce91;
+  color: #ece2cd;
+  background: #070e1c;
+}
+html, body, #app { background: #070e1c; }
+::selection { color: #fff5d9; background: #a45139; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible { outline: 2px solid #f2cd8a; outline-offset: 3px; }
+header { background: #0a1324ed; border-color: #caa87526; box-shadow: 0 3px 20px #02071140; }
+header a small { color: #a0aabe; }
+header nav a { color: #c0c8d4; transition: color .2s, background .2s; }
+header nav a:hover, header nav a[aria-current="page"] { color: #f6d59a; background: #dcad6410; }
+header nav a[aria-current="page"] { box-shadow: inset 0 -1px #ddb575; }
+header > label { color: #a0aabd; border-color: #bbab8538; }
+.seal { color: #f6d291; background: linear-gradient(135deg, #aa5138, #65282b); border-color: #c69757; box-shadow: inset 0 0 12px #edb97615; }
+.intro > span, .chead span, .sync-head > div > span { color: #d6b27e; }
+.intro h2, .chead h2, .sync-head h2 { color: #f2e5cc; }
+.intro p, .intro aside { color: #aab6ca; }
+.intro aside { border-color: #d5a966; background: #19304b40; }
+.mobile { background: radial-gradient(ellipse at 22% 28%, #26365488, transparent 45%), #090f1e; }
+.sync-page { background: radial-gradient(ellipse at 40% 22%, #18274055, transparent 62%), #090f1e; }
+.sync-head > div:last-child { border-color: #d9ac6970; }
+.sync-head > div:last-child > small, .sync-hint { color: #8393ad; }
+.sync-grid > article { background: #0b1526; border-color: #c9a96f2b; box-shadow: inset 0 0 60px #03091733; }
+.sync-grid > article > label, .wallpage > label { color: #9baac0; }
+.recording-toolbar { border-color: #be9b5e4d; background: linear-gradient(110deg, #182942, #101a2b); }
+.recording-actions button, #replayFinale { background: #0e1c31; color: #e6c595; border-color: #c4a26950; }
+.recording-actions button:hover, #replayFinale:hover { background: #25334a; }
+.recording-actions #startRecordingDemo { background: linear-gradient(100deg, #97432e, #b15d3d); border-color: #d6ab69; }
+.recording-actions button:disabled { color: #c3ae89; background: #694a352b; }
+.recording-label, [data-recording-label] { color: #e7c183; }
+.recording-clean .sync-page, .recording-clean .sync-grid > article { background: #070f1f; }
+.wallpage { background: #050b15; }
+.wall { background: #02050c; container-type: inline-size; }
+.boundary, .glow .boundary { background: linear-gradient(180deg, #16233d, #0b172e 65%, #070e1e); }
+.boundary > .mount, .boundary > .village, .boundary > .water { display: none; }
+.night-town-scene { position: absolute; inset: 0; pointer-events: none; background: url('../public/assets/night-tour-town.svg') center bottom / 100% 100% no-repeat; }
+.night-town-scene::after { content: ""; position: absolute; inset: 0; background: linear-gradient(#08112610, transparent 40%, #060b190a); }
+.night-water-glimmer { position: absolute; z-index: 1; left: 2%; right: 2%; top: 73%; bottom: 0; pointer-events: none; background: repeating-linear-gradient(178deg, transparent 0 12px, #efba6210 13px, transparent 14px 23px); opacity: .7; animation: nightWater 7s ease-in-out infinite alternate; mask-image: linear-gradient(transparent, #000 35%, transparent); }
+@keyframes nightWater { to { transform: translateX(1.2%); opacity: .3; } }
+.boundary > .moon { width: 8%; top: 19%; right: 13%; opacity: .82; background: radial-gradient(circle at 38% 36%, #f8e4b1, #cfb78e 83%, #ad987b); box-shadow: 0 0 40px #d8c6a51f, 0 0 110px #c7c6c011; }
+.boundary > .title { z-index: 3; top: 21%; width: 55%; pointer-events: none; text-shadow: 0 2px 12px #050b1f, 0 0 32px #050c21; }
+.title small { color: #c6b28c; font-size: clamp(6px, .74cqw, 11px); letter-spacing: .28em; }
+.title h1, .preview .title h1 { color: #f4e4c3; font-size: clamp(25px, 4.1cqw, 65px); letter-spacing: .22em; margin: 12px 0 10px; }
+.title p { color: #d3ac68; font-size: clamp(7px, .95cqw, 13px); letter-spacing: .9em; }
+.caption { z-index: 12; padding: 8px 12px 5px 0; text-shadow: 0 2px 10px #020714; background: linear-gradient(90deg, #091225aa, transparent); }
+.caption b { color: #f0c987; font-size: clamp(11px, 1.5cqw, 23px); }
+.caption span { color: #b9c1d0; }
+.join-entry { background: #0b182bdf; border-color: #cfa76a66; }
+.join-entry small { color: #acb8cd; }
+.join-entry span { color: #b9c2d0; }
+.crowd-live { background: #0e1c32d9; color: #e0bd82; border-color: #d0aa6152; }
+.crowd-live i { background: #f1c178; box-shadow: 0 0 10px #ebad5a77; }
+.field { z-index: 3; }
+.field > button small { color: #e1e0d8; text-shadow: 0 1px 4px #000, 0 0 8px #06102a; }
+.field > button.on { filter: drop-shadow(0 0 9px #ffc97d88); }
+.lantern > b { border: 1px solid #de9e5966; box-shadow: inset 4px 0 8px #6a281e66, inset -4px 0 8px #6a281e66, inset 0 0 8px #ffe1a630; background: repeating-linear-gradient(90deg, transparent 0 10px, #642a261f 11px, transparent 12px), radial-gradient(ellipse, #fbc978, #c86839 65%, #8c332b); }
+.lantern > i { background: linear-gradient(90deg, #8b522f, #eac17c, #8b522f); }
+.lantern > em { background: #c29251; box-shadow: -5px 3px #c29251, 5px 3px #c29251; }
+.lantern.moon > b { background: radial-gradient(circle at 40% 40%, #fff0b5, #d2a864 65%, #a37144); border-color: #f5dca47a; }
+.lantern.plum > b { background: radial-gradient(ellipse, #f8b16e, #b64d38 70%, #772e2c); }
+.lantern.fish > b { background: radial-gradient(ellipse, #ffd48e, #d4743b 58%, #9e3a2d); }
+.crowd-wish > .lantern { filter: drop-shadow(0 0 13px #f3ae586e); }
+.wish-arrival .arrival-path, .wish-arrival .arrival-wish { z-index: 9; }
+.blessing > div { border-color: #f7c375; background: linear-gradient(90deg, #101c34eb, #0b14248a, transparent); }
+.ritual { color: #efcd91; text-shadow: 0 2px 10px #030718; }
+.participation-intro { background: radial-gradient(ellipse at 50% 62%, #303c51, #101a31 52%, #070e1f); }
+.participation-intro::before { content: ""; position: absolute; z-index: -1; inset: 0; background: url('../public/assets/night-tour-town.svg') center bottom / cover; opacity: .22; }
+.opening-lights i { background: radial-gradient(ellipse at 45% 35%, #ffe0a0, #e69e49 60%, #a84d32); border: 1px solid #f5ca7b77; }
+.boundary > .girl { left: 9%; bottom: 11%; width: 17%; height: 49%; z-index: 4; background: url('../public/assets/song-lantern-girl.svg') center / contain no-repeat; filter: drop-shadow(0 5px 12px #03071488); }
+.girl > i, .girl > b, .girl > em { visibility: hidden; }
+.girl > span { left: 82%; top: 24%; height: 27%; }
+.girl > span::after { width: 24px; height: 34px; left: -12px; border: 1px solid #e9b16e; background: radial-gradient(ellipse, #ffdb95, #de9146 62%, #a54b2f); box-shadow: 0 0 30px #f5b55988; }
+.song-girl { background: url('../public/assets/song-lantern-girl.svg') center / contain no-repeat; }
+.song-girl > i, .song-girl > b, .song-girl > em { visibility: hidden; }
+.glow .night-town-scene { filter: brightness(calc(.8 + var(--town-light, .2) * .8)) saturate(1.15); transition: filter 2.5s; }
+.glow .boundary > .celebration-canvas { z-index: 4; }
+.glow .boundary > .girl { opacity: .3; }
+.celebration-phase { background: linear-gradient(90deg, #09152ad9, transparent); }
+.celebration-caption { text-shadow: 0 2px 14px #040917; }
+.control { background: #0b1426; }
+.grid > aside, .preview { background: #0b172a; border-color: #bc9d6433; }
+.grid > aside > button, .queue > div > button { background: #12223a; color: #c1cbda; }
+.grid > aside > button small, .queue button span small { color: #8e9fb7; }
+.grid > aside > button.active { border-color: #c49b5f; background: linear-gradient(110deg, #473a32, #1c2c42); color: #f3dcaf; }
+.grid > aside > button.run { background: linear-gradient(110deg, #8e3f30, #ad5939); color: #fff0cf; }
+.grid h3 { color: #d6b98b; }
+.walltools button { background: #0a172cdf; color: #e9ce9e; }
+.toast { color: #f4d49b; background: #14233a; border: 1px solid #c398595f; box-shadow: 0 12px 40px #0008; }
+@media (prefers-reduced-motion: reduce) { .night-water-glimmer { animation: none; } }
