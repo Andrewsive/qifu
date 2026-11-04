@@ -9,6 +9,13 @@
 - [白墙投影](https://andrewsive.github.io/qifu/#wall)
 - [演出控制](https://andrewsive.github.io/qifu/#control)
 
+## 视觉版本对比
+
+- [国风夜游](https://andrewsive.github.io/qifu/?style=night-tour#sync)：深蓝夜色、朱砂花灯与暖金倒影；原版保存在 `backup/2026-11-04-night-tour` 标签。
+- [宋韵工笔](https://andrewsive.github.io/qifu/?style=gongbi#sync)：绢本米金、淡青绿与精细水乡画卷，配独立工笔仕女美术。
+
+顶部“视觉版本”菜单可在同一节目、同一盏愿灯上原地切换，便于对照。默认地址仍显示国风夜游；两个专属地址可分别分享。水墨雅韵将在后续单独制作。
+
 ## 快速体验
 
 需要 Node.js 20.19+ 或 22.12+，推荐使用 Chrome 或 Edge。
@@ -103,6 +110,8 @@ git push
 - `src/phone-preview.css`：桌面手机预览的固定比例与等比缩放。
 - `src/wish-transfer.js`、`src/wish-transfer.css`：手机收灯后上墙的顺序、动画进度与防重播。
 - `src/night-tour.css`、`src/night-tour-mobile.css`：国风夜游主题与各手机阶段的视觉。
+- `src/gongbi.css`、`src/visual-variants.js`、`src/visual-variants.css`：独立工笔主题、专属链接与实时风格切换。
+- `public/assets/gongbi-town-v1.png`、`public/assets/gongbi-girl-v1.png`：工笔水乡和透明仕女插画，生成方式与提示词见 [美术记录](docs/宋韵工笔美术记录.md)。
 - `public/assets/night-tour-town.svg`、`public/assets/song-lantern-girl.svg`：水乡灯市与宋韵少女插画，按引用打包。
 - `src/recording-demo.js`、`src/recording-demo.css`：79秒完整演示时间轴、控制条与净画面模式。
 - `src/celebration.js`：万灯同辉动画与纪念图导出。

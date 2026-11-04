@@ -1,0 +1,155 @@
+/* An independent silk-painting edition; the night-tour files remain intact. */
+:root[data-visual="gongbi"] {
+  --ink: #403e31;
+  --jade: #61756c;
+  --gold: #aa793d;
+  --paper: #f1e5ca;
+  --red: #a34732;
+  --line: #a28c5d4d;
+  color: #4e4b3b;
+  background: #e8dfcb;
+}
+html[data-visual="gongbi"], html[data-visual="gongbi"] body, html[data-visual="gongbi"] #app { background: #e8dfcb; }
+html[data-visual="gongbi"] ::selection { color: #fff5dc; background: #9d4c36; }
+html[data-visual="gongbi"] header { background: #f0e7d3f2; border-color: #9f875a5c; box-shadow: 0 2px 20px #5a4b2d0c; }
+html[data-visual="gongbi"] header nav a { color: #727160; }
+html[data-visual="gongbi"] header nav a:hover, html[data-visual="gongbi"] header nav a[aria-current="page"] { color: #903f2d; background: #a9854210; box-shadow: inset 0 -1px #a14732; }
+html[data-visual="gongbi"] header a small { color: #8b8169; }
+html[data-visual="gongbi"] header > label { color: #877c63; }
+html[data-visual="gongbi"] .visual-picker select { color: #6a5335; background: #faf2df; border-color: #a88955a0; }
+html[data-visual="gongbi"] .seal { color: #f3dba9; background: linear-gradient(135deg, #b45539, #8e3d2e); border-color: #ae854e; }
+html[data-visual="gongbi"] .intro > span, html[data-visual="gongbi"] .chead span, html[data-visual="gongbi"] .sync-head > div > span { color: #a07742; }
+html[data-visual="gongbi"] .intro h2, html[data-visual="gongbi"] .chead h2, html[data-visual="gongbi"] .sync-head h2 { color: #494c3c; }
+html[data-visual="gongbi"] .intro p, html[data-visual="gongbi"] .intro aside { color: #7b7966; }
+html[data-visual="gongbi"] .intro aside { border-color: #ab8244; background: #f9efda77; }
+html[data-visual="gongbi"] .mobile, html[data-visual="gongbi"] .sync-page { background: radial-gradient(ellipse at 25% 20%, #f6ecd5, transparent 58%), #e9e1ce; }
+html[data-visual="gongbi"] .sync-head > div:last-child b { color: #9c6937; }
+html[data-visual="gongbi"] .sync-head > div:last-child small, html[data-visual="gongbi"] .sync-hint { color: #92876e; }
+html[data-visual="gongbi"] .sync-grid > article { background: #f1e9d7; border-color: #a58c5752; box-shadow: inset 0 0 45px #ab8b4520; }
+html[data-visual="gongbi"] .sync-grid > article > label, html[data-visual="gongbi"] .wallpage > label { color: #8d7955; }
+html[data-visual="gongbi"] .recording-toolbar { color: #746348; border-color: #a88a535e; background: linear-gradient(110deg, #f3e8cc, #e7dfca); }
+html[data-visual="gongbi"] .recording-actions button, html[data-visual="gongbi"] #replayFinale { color: #6f624c; background: #efe5cf; border-color: #ac915f70; }
+html[data-visual="gongbi"] .recording-actions button:hover, html[data-visual="gongbi"] #replayFinale:hover { background: #dfd5bd; color: #804a2d; }
+html[data-visual="gongbi"] .recording-actions #startRecordingDemo { color: #fff1d1; border-color: #9a6c37; background: linear-gradient(100deg, #a34d32, #8d3c2c); }
+html[data-visual="gongbi"] .recording-progress b { color: #916331; }
+html[data-visual="gongbi"] .recording-progress span { color: #91836a; }
+html[data-visual="gongbi"] .recording-track { background: #aa8e4b28; }
+html[data-visual="gongbi"] .recording-clean .sync-page, html[data-visual="gongbi"] .recording-clean .sync-grid > article { background: #e7deca; }
+html[data-visual="gongbi"] .wallpage { background: #191f1c; }
+html[data-visual="gongbi"] .wall { background: #020504; }
+html[data-visual="gongbi"] .boundary { background: #c9c6a9; }
+html[data-visual="gongbi"] .night-town-scene { background-image: url('../public/assets/gongbi-town-v1.png'); }
+html[data-visual="gongbi"] .night-town-scene::after { background: linear-gradient(#efd8a60d, transparent 55%, #82562c10); }
+html[data-visual="gongbi"] .night-water-glimmer { opacity: .5; mix-blend-mode: soft-light; }
+html[data-visual="gongbi"] .boundary > .moon { opacity: .4; background: radial-gradient(circle at 40% 40%, #faf0d3, #d6c99d); box-shadow: 0 0 40px #f6dfae40; }
+html[data-visual="gongbi"] .boundary > .title { top: 22%; text-shadow: 0 1px 6px #eee3c8c4; }
+html[data-visual="gongbi"] .title h1 { color: #413b2b; text-shadow: 0 1px 4px #f6e8c660; }
+html[data-visual="gongbi"] .title small { color: #706647; }
+html[data-visual="gongbi"] .title p { color: #a15a34; }
+html[data-visual="gongbi"] .caption { color: #4e482e; text-shadow: 0 1px 4px #f9e8c1; background: linear-gradient(90deg, #eee1bcca, transparent); border-color: #91682f88; padding-left: 8px; }
+html[data-visual="gongbi"] .caption b { color: #80572e; }
+html[data-visual="gongbi"] .caption span { color: #665a3c; }
+html[data-visual="gongbi"] .join-entry { color: #655333; background: #f3e7cce8; border-color: #99753b88; box-shadow: 0 6px 16px #5d442d22; }
+html[data-visual="gongbi"] .join-entry b { color: #864128; }
+html[data-visual="gongbi"] .join-entry small, html[data-visual="gongbi"] .join-entry span { color: #7a7057; }
+html[data-visual="gongbi"] .crowd-live { color: #735631; background: #f2e7ccdb; border-color: #aa854a80; }
+html[data-visual="gongbi"] .field > button small { color: #4c4232; text-shadow: 0 1px 4px #fff1c9, 0 0 9px #e9dab5; }
+html[data-visual="gongbi"] .field > button { top: var(--gongbi-y, var(--y)); }
+html[data-visual="gongbi"] .crowd-wish, html[data-visual="gongbi"] .arrival-wish { color: #754125; text-shadow: 0 1px 4px #fff0c5, 0 0 9px #edd2a6; }
+html[data-visual="gongbi"] .crowd-wish small, html[data-visual="gongbi"] .arrival-wish small { color: #826238; }
+html[data-visual="gongbi"] .arrival-wish span { color: #5b654f; }
+html[data-visual="gongbi"] .boundary > .girl { background-image: url('../public/assets/gongbi-girl-v1.png'); width: 20%; left: 6%; bottom: 9%; height: 55%; filter: drop-shadow(0 5px 7px #4e3a2536); }
+html[data-visual="gongbi"] .girl > span { left: 84%; top: 5%; }
+html[data-visual="gongbi"] .song-girl { background-image: url('../public/assets/gongbi-girl-v1.png'); }
+html[data-visual="gongbi"] .song-girl > span { left: 161px; top: -4px; }
+html[data-visual="gongbi"] .ritual { color: #714e2c; text-shadow: 0 1px 4px #f9e4b8; }
+html[data-visual="gongbi"] .blessing > div { color: #51452e; border-color: #9f743a; background: linear-gradient(90deg, #f8e9cce8, #f2e3cbb0, transparent); text-shadow: none; }
+html[data-visual="gongbi"] .blessing small { color: #9a6535; }
+html[data-visual="gongbi"] .blessing p { color: #4d4531; }
+html[data-visual="gongbi"] .blessing span { color: #766247; }
+html[data-visual="gongbi"] .participation-intro { color: #4f4937; background: radial-gradient(ellipse at 50% 48%, #f1e5c5f2, #d4d0b8eb); }
+html[data-visual="gongbi"] .participation-intro::before { background-image: url('../public/assets/gongbi-town-v1.png'); opacity: .6; }
+html[data-visual="gongbi"] .participation-intro > small { color: #7b6b48; }
+html[data-visual="gongbi"] .participation-intro p { color: #9d5931; }
+html[data-visual="gongbi"] .glow .boundary { background: #594f38; }
+html[data-visual="gongbi"] .glow .night-town-scene { filter: brightness(.68) saturate(1.05); }
+html[data-visual="gongbi"] .glow .boundary > .title h1 { color: #fff0cc; text-shadow: 0 2px 12px #302c22, 0 0 18px #eac4773b; }
+html[data-visual="gongbi"] .glow .title small, html[data-visual="gongbi"] .glow .title p { color: #e6c891; }
+html[data-visual="gongbi"] .glow .boundary > .field > button small { color: #eed9ae; text-shadow: 0 2px 6px #43351c; }
+html[data-visual="gongbi"] .celebration-phase { color: #ebcf98; background: linear-gradient(90deg, #414632d9, transparent); }
+html[data-visual="gongbi"] .control { background: #e9e2cf; }
+html[data-visual="gongbi"] .grid > aside, html[data-visual="gongbi"] .preview { background: #f1e9d7; border-color: #a48b5b59; }
+html[data-visual="gongbi"] .grid h3 { color: #8a6b3e; }
+html[data-visual="gongbi"] .grid > aside > button, html[data-visual="gongbi"] .queue > div > button { color: #6a6853; background: #e9e2ce; }
+html[data-visual="gongbi"] .grid > aside > button.active { color: #7b412a; background: #dfcfae; border-color: #a27940; }
+html[data-visual="gongbi"] .grid > aside > button.run { color: #fff0cc; background: #a04b33; }
+html[data-visual="gongbi"] .grid > aside > button small, html[data-visual="gongbi"] .queue button span small { color: #999074; }
+html[data-visual="gongbi"] .queue button i { color: #9b8664; }
+html[data-visual="gongbi"] .walltools button { color: #f1deb7; background: #4b4939d9; }
+html[data-visual="gongbi"] .toast { color: #6f4d2c; background: #f4e6c9; border-color: #ac834d; }
+
+/* A warm silk desk and painted scenery run through every visitor stage. */
+html[data-visual="gongbi"] .phone { color: #4e4937; background: #eee0c3; border-color: #787763; box-shadow: 0 20px 65px #5b4e3129, 0 0 0 1px #ad8a4e80; }
+html[data-visual="gongbi"] .phone > .bar { color: #ede3c6; background: linear-gradient(110deg, #535d4d, #424e43); border-color: #b59b5e88; }
+html[data-visual="gongbi"] .phone > .bar b { color: #f1e6c8; }
+html[data-visual="gongbi"] .phone > .scroll { background: #ede0c5; }
+html[data-visual="gongbi"] .phone .scroll > .m-scene { color: #514932; background: radial-gradient(ellipse at 50% 35%, #fff5d9aa, transparent 70%), #eddfbf; }
+html[data-visual="gongbi"] .phone .m-scene::before { opacity: .45; background: repeating-linear-gradient(0deg, transparent 0 3px, #80684205 4px), repeating-linear-gradient(90deg, transparent 0 3px, #fff9e014 4px); }
+html[data-visual="gongbi"] .phone .m-scene::after { opacity: .6; filter: sepia(.7) brightness(.7); }
+html[data-visual="gongbi"] .phone .m-scene h1 { color: #4c4b37; text-shadow: 0 1px 5px #fff2d178; }
+html[data-visual="gongbi"] .phone .m-scene > small, html[data-visual="gongbi"] .phone .step, html[data-visual="gongbi"] .phone .step span { color: #9d713b; }
+html[data-visual="gongbi"] .phone .m-scene > p { color: #746b50; }
+html[data-visual="gongbi"] .phone .m-scene > button, html[data-visual="gongbi"] .phone .collect .submit, html[data-visual="gongbi"] .phone .generated-actions > #enterMarket, html[data-visual="gongbi"] .phone .m-scene.glow.glow-finale > #viewMine { color: #fff1cc; border-color: #a36f3b; background: linear-gradient(105deg, #ae5239, #9b432f, #8a3d2c); box-shadow: inset 0 1px #f2c98b40, 0 4px 12px #75502d15; }
+html[data-visual="gongbi"] .phone .m-scene > button:hover, html[data-visual="gongbi"] .phone .collect .submit:hover { background: linear-gradient(105deg, #bb6041, #a74b32); }
+html[data-visual="gongbi"] .phone .scroll > .m-scene.visitor-landing { background: linear-gradient(#f0e4ccee, #f0e2c5c4 44%, #d5c79e24), url('../public/assets/gongbi-town-v1.png') center bottom / cover no-repeat, #eee1c3; }
+html[data-visual="gongbi"] .phone .visitor-landing h1 { color: #464c3b; text-shadow: 0 1px 5px #fff1c999; }
+html[data-visual="gongbi"] .phone .visitor-landing > small { color: #856338; }
+html[data-visual="gongbi"] .phone .visitor-invite { color: #8f6637; text-shadow: 0 1px 4px #f7e7bf; }
+html[data-visual="gongbi"] .phone .m-moon { background: radial-gradient(circle at 42% 36%, #fff4d2, #e1c987 68%, #b29556); box-shadow: 0 0 0 1px #b99c62aa, 0 0 40px #e6be6b38; }
+html[data-visual="gongbi"] .phone .scroll > .guide { background: linear-gradient(#f0e3c7f2, #f1e3cbd9 70%, #e7d6b488), url('../public/assets/gongbi-town-v1.png') center bottom / auto 55% no-repeat, #efe1c5; }
+html[data-visual="gongbi"] .phone .guide > i { color: #b5925c80; }
+html[data-visual="gongbi"] .phone .guide-lines { border-color: #b3925770; }
+html[data-visual="gongbi"] .phone .guide-lines span { color: #746e55; border-color: #b3925745; }
+html[data-visual="gongbi"] .phone .guide-lines span::before { color: #a16f3d; }
+html[data-visual="gongbi"] .phone .collect form { background: #f8efdcd4; border-color: #b39a645a; box-shadow: inset 0 0 35px #d5bc8014; }
+html[data-visual="gongbi"] .phone .collect form > label { color: #74643f; }
+html[data-visual="gongbi"] .phone .choices button { color: #665538; border-color: #b9a16a70; background: #f2e8d1; }
+html[data-visual="gongbi"] .phone .choices button.chosen { border-color: #a55536; background: #e9d9ba; box-shadow: inset 0 0 0 1px #a5553666; }
+html[data-visual="gongbi"] .phone .choices button > small, html[data-visual="gongbi"] .phone .choices button.chosen > small { color: #a38a5d; }
+html[data-visual="gongbi"] .phone .collect input, html[data-visual="gongbi"] .phone .collect textarea { color: #57583f; background: #fffaedb0; border-color: #b9a47499; box-shadow: inset 0 2px 8px #9e7a3b08; caret-color: #a24d32; }
+html[data-visual="gongbi"] .phone .collect input::placeholder, html[data-visual="gongbi"] .phone .collect textarea::placeholder { color: #a99c7c; }
+html[data-visual="gongbi"] .phone .collect #count { color: #9e855a; }
+html[data-visual="gongbi"] .phone .collect #status { color: #a55032; }
+html[data-visual="gongbi"] .phone .scroll > .m-scene.generated.generated-preview { background: radial-gradient(ellipse at 50% 40%, #fff6dfa6, transparent 65%), linear-gradient(#efe3c7, #e6d5b1); }
+html[data-visual="gongbi"] .phone .generated-heading h1 { color: #4c4d37; }
+html[data-visual="gongbi"] .phone .generated-heading p, html[data-visual="gongbi"] .phone .generated-type, html[data-visual="gongbi"] .phone .generated-preview .generated-status { color: #9b7944; }
+html[data-visual="gongbi"] .phone .generated-actions > #saveDraft { color: #8e6535; border-color: #a7844e99; background: #f9ebd150; }
+html[data-visual="gongbi"] .phone .generated-actions > #saveDraft:hover { background: #decca6; }
+html[data-visual="gongbi"] .phone .scroll > .m-scene.handoff, html[data-visual="gongbi"] .phone .scroll > .m-scene.waiting { background: radial-gradient(ellipse at 50% 30%, #fcecc397, transparent 59%), linear-gradient(#e7dfc5, #d5dbc9); }
+html[data-visual="gongbi"] .phone .handoff-copy { color: #8a7854; }
+html[data-visual="gongbi"] .phone .handoff-copy b, html[data-visual="gongbi"] .phone .handoff-lantern strong { color: #78532e; }
+html[data-visual="gongbi"] .phone .handoff-lantern small, html[data-visual="gongbi"] .phone .waiting > small { color: #9d7139; }
+html[data-visual="gongbi"] .phone .waiting-wall-prompt { color: #80582f; border-color: #b39457a0; background: #f1e5c6a6; }
+html[data-visual="gongbi"] .phone .waiting-wall-prompt span, html[data-visual="gongbi"] .phone .waiting-note { color: #808366; }
+html[data-visual="gongbi"] .phone .countdown { color: #996335; text-shadow: 0 1px 1px #fff1c8, 0 0 22px #c7a25330; }
+html[data-visual="gongbi"] .phone .wish-reminder { color: #755d39; border-color: #b1955b70; }
+html[data-visual="gongbi"] .phone .scroll > .m-scene.light-watch, html[data-visual="gongbi"] .phone .scroll > .m-scene.light-won { background: radial-gradient(ellipse at 60% 32%, #fff4d7b3, transparent 68%), linear-gradient(#dfdac2, #ece0c2 72%, #d3d4bb); }
+html[data-visual="gongbi"] .phone .light-won { box-shadow: inset 0 0 70px #c8a65c1f; }
+html[data-visual="gongbi"] .phone .light-watch h1, html[data-visual="gongbi"] .phone .light-won h1 { color: #68532e; }
+html[data-visual="gongbi"] .phone .celebrate { color: #a24a2b; text-shadow: 0 0 18px #cd9c4f70; }
+html[data-visual="gongbi"] .phone .drawn-wish, html[data-visual="gongbi"] .phone .winner-wish, html[data-visual="gongbi"] .phone .mine-card { color: #605233; background: #f6e9c9c9; border-color: #b08c4f88; box-shadow: inset 0 0 20px #fff5d44d; }
+html[data-visual="gongbi"] .phone .drawn-wish small, html[data-visual="gongbi"] .phone .winner-wish i, html[data-visual="gongbi"] .phone .mine-card small { color: #a17a3d; }
+html[data-visual="gongbi"] .phone .drawn-wish span, html[data-visual="gongbi"] .phone .winner-wish span, html[data-visual="gongbi"] .phone .mine-card span, html[data-visual="gongbi"] .phone .watch-wall { color: #92906e; }
+html[data-visual="gongbi"] .phone .light-won > p { color: #878061; }
+html[data-visual="gongbi"] .phone .scroll > .m-scene.glow.glow-finale { background: linear-gradient(#4d5747ee, #6d6546aa 50%, #313e36aa), url('../public/assets/gongbi-town-v1.png') center bottom / cover no-repeat, #515a48; color: #f0e0b7; }
+html[data-visual="gongbi"] .phone .glow-finale > h1 { color: #ffeac0; text-shadow: 0 2px 12px #403c25; }
+html[data-visual="gongbi"] .phone .glow-finale > .finale-subtitle { color: #d6c9a5; }
+html[data-visual="gongbi"] .phone .mobile-celebration-stage { background: radial-gradient(ellipse at 50% 70%, #e8b65e20, transparent 72%); border-color: #d9bf7e55; }
+html[data-visual="gongbi"] .phone .mobile-celebration-stage::after { background: linear-gradient(transparent, #3b47362b); }
+html[data-visual="gongbi"] .phone .personal-glow { background: #f3e3bfe3; border-color: #c59c55; box-shadow: 0 5px 25px #393c222b; }
+html[data-visual="gongbi"] .phone .personal-glow small, html[data-visual="gongbi"] .phone .personal-glow span { color: #958254; }
+html[data-visual="gongbi"] .phone .personal-glow b { color: #654e2d; }
+html[data-visual="gongbi"] .phone .finale-mobile-status > b { color: #f3d291; }
+html[data-visual="gongbi"] .phone .finale-mobile-status > p, html[data-visual="gongbi"] .phone .finale-mobile-status > span { color: #d5c6a2; }
+html[data-visual="gongbi"] .phone .scroll > .m-scene.close { background: linear-gradient(#ece1c7f2, #eadbc1d9 65%, #ded4b77a), url('../public/assets/gongbi-town-v1.png') center bottom / auto 66% no-repeat, #e9ddc1; }
+html[data-visual="gongbi"] .phone .mobile-empty { color: #908164; border-color: #b298615e; }
