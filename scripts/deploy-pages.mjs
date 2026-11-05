@@ -92,10 +92,14 @@ try {
   console.log('Staging the built website…');
   git(['add', '--all'], temporary);
 
-  if (git(['status', '--porcelain'], temporary)) {
-    git(['commit', '-m', 'deploy: publish demo from ' + sourceCommit], temporary);
+  const nextTree = git(['write-tree'], temporary);
+  const previousTree = previous ? git(['rev-parse', 'HEAD^{tree}'], temporary) : null;
+  if (nextTree !== previousTree) {
+    // Commit the complete build tree without diffing absent historical blobs.
+    const commit = git(['commit-tree', nextTree, ...(previous ? ['-p', 'HEAD'] : []), '-m', 'deploy: publish demo from ' + sourceCommit], temporary);
+    git(['update-ref', 'refs/heads/' + branch, commit], temporary);
     console.log('Uploading the build to gh-pages…');
-    git(['push', '--set-upstream', 'origin', branch], temporary);
+    git(['-c', 'pack.window=0', 'push', '--set-upstream', 'origin', branch], temporary);
     console.log('Published build: https://andrewsive.github.io/qifu/');
   } else {
     console.log('The published build is already up to date.');
