@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import { createWishTransfer, wishTransferView, syncWallArrival } from '../src/wish-transfer.js';
 import { RECORDING_DURATION, RECORDING_STEPS } from '../src/recording-demo.js';
 
-test('phone collection finishes before the single wall arrival starts', () => {
+test('submission lights the wall immediately and the phone then enters waiting', () => {
   const event = createWishTransfer({ wishId: 'visitor', startedAt: 1000 });
   assert.equal(wishTransferView(event, 1000).phone, 'handoff');
-  assert.equal(wishTransferView(event, 6999).wallActive, false);
+  assert.equal(wishTransferView(event, 1000).wallActive, true);
+  assert.equal(wishTransferView(event, 4999).wallActive, true);
+  assert.equal(wishTransferView(event, 5000).wall, 'settled');
   assert.equal(wishTransferView(event, 7000).phone, 'waiting');
-  assert.equal(wishTransferView(event, 7000).wall, 'floating');
-  assert.equal(wishTransferView(event, 10999).wallActive, true);
-  assert.equal(wishTransferView(event, 11000).wall, 'settled');
+  assert.equal(wishTransferView(event, 7000).wall, 'settled');
   assert.equal(event.endsAt, 127000);
 });
 
@@ -34,15 +34,15 @@ test('rebinding resumes absolute wall progress and cannot replay an expired arri
       }
     },
   };
-  syncWallArrival(boundary, event, 'arrival', 5000);
+  syncWallArrival(boundary, event, 'arrival', -1);
   assert.equal(insertions, 0);
-  syncWallArrival(boundary, event, 'arrival', 6200);
+  syncWallArrival(boundary, event, 'arrival', 200);
   assert.equal(insertions, 1);
   assert.equal(properties.get('--arrival-offset'), '-200ms');
-  syncWallArrival(boundary, event, 'arrival', 8500);
+  syncWallArrival(boundary, event, 'arrival', 2500);
   assert.equal(insertions, 1);
   assert.equal(properties.get('--arrival-offset'), '-2500ms');
-  syncWallArrival(boundary, event, 'arrival', 10000);
+  syncWallArrival(boundary, event, 'arrival', 4000);
   syncWallArrival(boundary, event, 'arrival', 16000);
   assert.equal(nodes.size, 0);
   assert.equal(classes.has('wish-arrival'), false);

@@ -28,32 +28,33 @@ export function finalePhase(seconds) {
   return { id: 'hold', title: '新年快乐', copy: '灯火长明，愿岁岁平安' };
 }
 
-export function releaseLampPose(index, seconds) {
+export function releaseLampPose(index, seconds, origin = null) {
   const seed = index + 41;
   const flight = ease((seconds - 2 - noise(seed) * 2) / 7);
   return {
-    x: .08 + noise(seed + 1) * .84 + Math.sin(seconds * .45 + index) * .004,
-    y: .82 + (.25 + noise(seed + 2) * .4 - .82) * flight,
+    x: origin ? origin.x + (.08 + noise(seed + 1) * .84 + Math.sin(seconds * .45 + index) * .004 - origin.x) * flight : .08 + noise(seed + 1) * .84 + Math.sin(seconds * .45 + index) * .004,
+    y: (origin?.y ?? .82) + (.25 + noise(seed + 2) * .4 - (origin?.y ?? .82)) * flight,
     scale: .5 + noise(seed + 3) * .6,
-    alpha: ease((seconds - noise(seed) * 2) / 3),
+    alpha: origin ? 1 : ease((seconds - noise(seed) * 2) / 3),
   };
 }
 
 /** Released lights remain visible and converge to the text, rather than exiting at the roof. */
-export function finaleLampPose(index, seconds, target) {
-  const start = releaseLampPose(index, 12);
+export function finaleLampPose(index, seconds, target, origins = []) {
+  const start = releaseLampPose(index, 12, origins[index]);
+  const cohort = origins.length || 80;
   const pullback = ease(seconds / 7);
-  const far = index < 80
+  const far = index < cohort
     ? { x: .5 + (start.x - .5) * .48, y: .43 + (start.y - .43) * .48 }
     : { x: .035 + noise(index + 91) * .93, y: .23 + noise(index + 97) * .53 };
-  const origin = index < 80 ? start : { x: far.x, y: .9 };
+  const origin = index < cohort ? start : { x: far.x, y: .9 };
   const x = origin.x + (far.x - origin.x) * pullback;
   const y = origin.y + (far.y - origin.y) * pullback;
   const form = ease((seconds - FORMATION_START) / (FORMATION_END - FORMATION_START));
   return {
     x: x + (target.x - x) * form,
     y: y + (target.y - y) * form,
-    alpha: index < 80 ? 1 : ease((seconds - noise(index) * 2) / 4),
+    alpha: index < cohort ? 1 : ease((seconds - noise(index) * 2) / 4),
     scale: (.75 - pullback * .35) * (1 - form) + .36 * form,
   };
 }

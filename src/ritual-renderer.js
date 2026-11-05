@@ -78,14 +78,14 @@ function fireworks(c,w,h,t){
     }
   }c.globalAlpha=1;
 }
-export function paintRitual(c,w,h,t,{finale=false,mobile=false,wish=null,visual=currentVisualVariant().id}={}){
+export function paintRitual(c,w,h,t,{finale=false,mobile=false,wish=null,visual=currentVisualVariant().id,origins=[]}={}){
   c.clearRect(0,0,w,h);c.globalAlpha=1;world(c,w,h,t,finale,mobile,visual);
   if(!finale){
-    for(let i=0;i<80;i++){const p=releaseLampPose(i,t),protectedTitle=!mobile&&p.x>.27&&p.x<.75&&p.y<.31;tiny(c,p.x*w,p.y*h,Math.max(3,Math.min(w*.011,h*.026)*p.scale),p.alpha*(protectedTitle?.18:.8),i)}
+    for(let i=0;i<(origins.length||80);i++){const origin=origins[i],p=releaseLampPose(i,t,origin),protectedTitle=!mobile&&p.x>.27&&p.x<.75&&p.y<.31,targetSize=Math.max(3,Math.min(w*.011,h*.026)*p.scale),size=origin?32*origin.scale*(1-ease(t/9))+targetSize*ease(t/9):targetSize;tiny(c,p.x*w,p.y*h,size,p.alpha*(protectedTitle?.18:.8),i)}
     const hero=heroPose(t);lantern(c,hero.x*w,(hero.y-(mobile?.12:0))*h,h*(mobile?.50:.42)*hero.scale,wish,hero.light);
   }else{
-    const total=mobile?520:920;
-    for(let i=0;i<total;i++){if(i===0&&t<7)continue;const p=finaleLampPose(i,t,targetFor(i,total,w,h,mobile)),size=Math.max(mobile?1.6:2,Math.min(w*.014,h*.025)*p.scale);tiny(c,p.x*w,p.y*h,size,p.alpha*(.78+Math.sin(t*.8+i)*.12),i)}
+    const total=Math.max(origins.length,mobile?520:920);
+    for(let i=0;i<total;i++){if(i===0&&t<7)continue;const p=finaleLampPose(i,t,targetFor(i,total,w,h,mobile),origins),size=Math.max(mobile?1.6:2,Math.min(w*.014,h*.025)*p.scale);tiny(c,p.x*w,p.y*h,size,p.alpha*(.78+Math.sin(t*.8+i)*.12),i)}
     if(t<7){const hero=heroPose(t,true);lantern(c,hero.x*w,(hero.y-(mobile?.12*(1-ease(t/7)):0))*h,h*(mobile?.50:.42)*hero.scale,wish)}
     fireworks(c,w,h,t);
   }c.globalAlpha=1;
@@ -107,7 +107,8 @@ export function installRitualRenderer(glowClock){
     for(const [canvas,entry]of scenes){
       if(!canvas.isConnected)continue;
       const finale=canvas.classList.contains('celebration-canvas'),startedAt=finale?glowClock():Number(canvas.dataset.startedAt)||Date.now(),seconds=Math.max(0,(Date.now()-startedAt)/1000);
-      paintRitual(entry.c,entry.w,entry.h,seconds,{finale,mobile:canvas.dataset.surface==='mobile',wish:{serial:canvas.dataset.serial,name:canvas.dataset.name,wish:canvas.dataset.wish}});
+      if(entry.originsKey!==canvas.dataset.poolOrigins){entry.originsKey=canvas.dataset.poolOrigins;try{entry.origins=JSON.parse(entry.originsKey||'[]')}catch{entry.origins=[]}}
+      paintRitual(entry.c,entry.w,entry.h,seconds,{finale,origins:entry.origins,mobile:canvas.dataset.surface==='mobile',wish:{serial:canvas.dataset.serial,name:canvas.dataset.name,wish:canvas.dataset.wish}});
       const phase=finale?finalePhase(seconds):releasePhase(seconds);
       if(entry.phase!==phase.id){entry.phase=phase.id;const root=canvas.closest('.boundary,.m-scene');root.dataset[finale?'finalePhase':'releasePhase']=phase.id;const title=root.querySelector(finale?'[data-finale-title]':'[data-release-title]'),copy=root.querySelector(finale?'[data-finale-copy]':'[data-release-copy]');if(title)title.textContent=phase.title;if(copy)copy.textContent=phase.copy}
     }if(scenes.size)frame=requestAnimationFrame(tick);

@@ -1,18 +1,18 @@
 export const PHONE_HANDOFF_MS = 6000;
 export const WALL_ARRIVAL_MS = 4000;
 
-/** The phone finishes first; its waiting screen and the wall arrival start together. */
+/** A submitted lamp lights immediately; the phone then settles into its waiting screen. */
 export function createWishTransfer({ wishId, startedAt = Date.now(), waitingMs = 120000 }) {
-  const wallStartedAt = startedAt + PHONE_HANDOFF_MS;
+  const wallStartedAt = startedAt;
   return {
     phase: 'waiting',
     transferId: String(wishId) + ':' + startedAt,
     wishId,
     startedAt,
-    phoneEndsAt: wallStartedAt,
+    phoneEndsAt: startedAt + PHONE_HANDOFF_MS,
     wallStartedAt,
     wallEndsAt: wallStartedAt + WALL_ARRIVAL_MS,
-    endsAt: wallStartedAt + waitingMs,
+    endsAt: startedAt + PHONE_HANDOFF_MS + waitingMs,
   };
 }
 
