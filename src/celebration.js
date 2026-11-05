@@ -1,5 +1,6 @@
 import { currentVisualVariant } from './visual-variants.js';
 import gongbiTownURL from '../public/assets/gongbi-town-v1.png';
+import inkWashTownURL from '../public/assets/ink-wash-town-v1.png';
 
 export const GLOW_START_KEY = 'xixi-glow-start-v1';
 export const FINALE_DURATION_MS = 18000;
@@ -94,19 +95,19 @@ function town(c, w, h, seconds, isMobile) {
   c.globalAlpha=1;
 }
 
-function paint(c,w,h,seconds,isMobile=false,background=false,artwork=null){
+function paint(c,w,h,seconds,isMobile=false,background=false,artwork=null,visualId=currentVisualVariant().id){
   c.clearRect(0,0,w,h);
-  const gongbi=currentVisualVariant().id==='gongbi';
+  const painted=visualId==='gongbi'||visualId==='ink-wash';
   if(background){const bg=c.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#0b1730');bg.addColorStop(.65,'#1b2c47');bg.addColorStop(1,'#080f22');c.fillStyle=bg;c.fillRect(0,0,w,h)}
-  if(background&&gongbi){
-    c.fillStyle='#69694f';c.fillRect(0,0,w,h);
-    if(artwork){const scale=Math.max(w/artwork.width,h/artwork.height),aw=artwork.width*scale,ah=artwork.height*scale;c.drawImage(artwork,(w-aw)/2,(h-ah)/2,aw,ah);c.fillStyle='#30332077';c.fillRect(0,0,w,h)}
+  if(background&&painted){
+    c.fillStyle=visualId==='ink-wash'?'#54675b':'#69694f';c.fillRect(0,0,w,h);
+    if(artwork){const scale=Math.max(w/artwork.width,h/artwork.height),aw=artwork.width*scale,ah=artwork.height*scale;c.drawImage(artwork,(w-aw)/2,(h-ah)/2,aw,ah);c.fillStyle=visualId==='ink-wash'?'#253d327f':'#30332077';c.fillRect(0,0,w,h)}
   }
   const gathering=smooth(seconds/3),warmth=smooth((seconds-3)/10),peak=smooth((seconds-10)/6);
   const veil=c.createRadialGradient(w*.52,h*.65,0,w*.52,h*.65,w*.72);
   veil.addColorStop(0,`rgba(255,180,63,${warmth*.17})`);veil.addColorStop(.5,`rgba(255,172,51,${warmth*.05})`);veil.addColorStop(1,'rgba(255,172,51,0)');
   c.fillStyle=veil;c.fillRect(0,0,w,h);
-  if(!gongbi)town(c,w,h,seconds,isMobile);
+  if(!painted)town(c,w,h,seconds,isMobile);
   // Waves of light travel across the waterfront before the mass release.
   for(let wave=0;wave<3;wave++){
     const t=clamp((seconds-2-wave*1.4)/6);if(t<=0||t>=1)continue;
@@ -178,16 +179,18 @@ const watcher=new MutationObserver(mount);
 watcher.observe(document.getElementById('app'),{childList:true,subtree:true});mount();
 if(import.meta.hot)import.meta.hot.dispose(()=>{watcher.disconnect();if(frame)cancelAnimationFrame(frame);scenes.forEach(s=>s.resize.disconnect());scenes.clear()});
 
-let gongbiExportArtwork;
-function loadGongbiArtwork(){
-  if(!gongbiExportArtwork)gongbiExportArtwork=new Promise(resolve=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>resolve(null);image.src=gongbiTownURL});
-  return gongbiExportArtwork;
+const exportArtworks=new Map();
+function loadExportArtwork(visualId){
+  const source={gongbi:gongbiTownURL,'ink-wash':inkWashTownURL}[visualId];
+  if(!source)return Promise.resolve(null);
+  if(!exportArtworks.has(visualId))exportArtworks.set(visualId,new Promise(resolve=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>resolve(null);image.src=source}));
+  return exportArtworks.get(visualId);
 }
 
 export async function saveFinalePicture(mine){
-  const artwork=currentVisualVariant().id==='gongbi'?await loadGongbiArtwork():null;
+  const variant=currentVisualVariant(),artwork=await loadExportArtwork(variant.id);
   const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1920;
-  const c=canvas.getContext('2d');paint(c,1080,1920,20,true,true,artwork);
+  const c=canvas.getContext('2d');paint(c,1080,1920,20,true,true,artwork,variant.id);
   c.textAlign='center';c.fillStyle='#f6e4ba';c.font='34px SimSun, serif';c.fillText('西溪且留下 · 万愿成灯',540,140);
   c.font='86px SimSun, serif';c.fillText('万灯同辉',540,275);c.font='28px SimSun, serif';c.fillText('万千心愿，汇作一城灯火',540,345);
   if(mine){
@@ -197,5 +200,5 @@ export async function saveFinalePicture(mine){
     const chars=Array.from(mine.wish||'');for(let i=0;i<chars.length;i+=14)c.fillText(chars.slice(i,i+14).join(''),540,935+Math.floor(i/14)*55);
   }
   c.fillStyle='#dfc38f';c.font='25px SimSun, serif';c.fillText('愿岁岁长安，家家团圆',540,1780);c.font='20px SimSun, serif';c.fillText('西溪新春灯事 · 灯火纪念',540,1830);
-  canvas.toBlob(blob=>{if(!blob)return;const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='西溪万灯同辉-'+currentVisualVariant().label+'-'+(mine?.serial||'纪念')+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000)},'image/png');
+  canvas.toBlob(blob=>{if(!blob)return;const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='西溪万灯同辉-'+variant.label+'-'+(mine?.serial||'纪念')+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000)},'image/png');
 }

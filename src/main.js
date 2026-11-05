@@ -21,6 +21,7 @@ import './night-tour.css';
 import './night-tour-mobile.css';
 import './visual-variants.css';
 import './gongbi.css';
+import './ink-wash.css';
 import { mountVisualPicker } from './visual-variants.js';
 import { createWishTransfer, wishTransferView, syncWallArrival } from './wish-transfer.js';
 import { createRecordingDemo } from './recording-demo.js';

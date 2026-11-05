@@ -1,6 +1,7 @@
 export const VISUAL_VARIANTS = [
   { id: 'night-tour', label: '国风夜游', title: '西溪且留下 · 万愿成灯' },
   { id: 'gongbi', label: '宋韵工笔', title: '宋韵工笔 · 西溪且留下' },
+  { id: 'ink-wash', label: '水墨雅韵', title: '水墨雅韵 · 西溪且留下' },
 ];
 
 export function resolveVisualVariant(value) {
