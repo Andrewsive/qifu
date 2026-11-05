@@ -21,7 +21,7 @@ function git(args, cwd = root) {
       env: gitEnv,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
-      timeout: 60000,
+      timeout: 120000,
     }).trim();
   } catch (error) {
     if (error.stderr) process.stderr.write(error.stderr);
@@ -63,7 +63,8 @@ function copyBuild(source, destination) {
 try {
   console.log('Preparing a temporary publishing checkout…');
   if (previous) {
-    git(['clone', '--depth', '1', '--branch', branch, '--single-branch', repository, temporary]);
+    // Only the parent commit/tree is needed: the current build supplies all file contents.
+    git(['clone', '--depth', '1', '--filter=blob:none', '--no-checkout', '--branch', branch, '--single-branch', repository, temporary]);
   } else {
     git(['init', '-b', branch], temporary);
     git(['remote', 'add', 'origin', repository], temporary);
@@ -106,6 +107,10 @@ try {
   // This exact directory was freshly created above and never used as an input path.
   const relative = path.relative(path.resolve(tmpdir()), temporary);
   if (!relative.startsWith('..') && !path.isAbsolute(relative) && path.basename(temporary).startsWith('qifu-pages-')) {
-    rmSync(temporary, { recursive: true, force: true });
+    try {
+      rmSync(temporary, { recursive: true, force: true, maxRetries: 4, retryDelay: 300 });
+    } catch (cleanupError) {
+      console.warn('Temporary checkout cleanup could not finish: ' + cleanupError.code);
+    }
   }
 }
