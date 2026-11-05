@@ -1,5 +1,5 @@
 export const PHONE_HANDOFF_MS = 6000;
-export const WALL_ARRIVAL_MS = 7000;
+export const WALL_ARRIVAL_MS = 4000;
 
 /** The phone finishes first; its waiting screen and the wall arrival start together. */
 export function createWishTransfer({ wishId, startedAt = Date.now(), waitingMs = 120000 }) {
@@ -21,11 +21,11 @@ export function wishTransferView(event, now = Date.now()) {
     return { phone: 'waiting', wall: 'settled', wallActive: false, wallElapsed: 0, phoneElapsed: 0, key: 'settled' };
   }
   const phone = now < event.phoneEndsAt ? 'handoff' : 'waiting';
-  const wall = now < event.wallStartedAt ? 'queued' : now < event.wallEndsAt ? 'rising' : 'settled';
+  const wall = now < event.wallStartedAt ? 'queued' : now < event.wallEndsAt ? 'floating' : 'settled';
   return {
     phone,
     wall,
-    wallActive: wall === 'rising',
+    wallActive: wall === 'floating',
     wallElapsed: Math.max(0, now - event.wallStartedAt),
     phoneElapsed: Math.max(0, now - event.startedAt),
     key: String(event.transferId) + ':' + wall,

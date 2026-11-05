@@ -8,9 +8,9 @@ test('phone collection finishes before the single wall arrival starts', () => {
   assert.equal(wishTransferView(event, 1000).phone, 'handoff');
   assert.equal(wishTransferView(event, 6999).wallActive, false);
   assert.equal(wishTransferView(event, 7000).phone, 'waiting');
-  assert.equal(wishTransferView(event, 7000).wall, 'rising');
-  assert.equal(wishTransferView(event, 13999).wallActive, true);
-  assert.equal(wishTransferView(event, 14000).wall, 'settled');
+  assert.equal(wishTransferView(event, 7000).wall, 'floating');
+  assert.equal(wishTransferView(event, 10999).wallActive, true);
+  assert.equal(wishTransferView(event, 11000).wall, 'settled');
   assert.equal(event.endsAt, 127000);
 });
 
@@ -39,10 +39,10 @@ test('rebinding resumes absolute wall progress and cannot replay an expired arri
   syncWallArrival(boundary, event, 'arrival', 6200);
   assert.equal(insertions, 1);
   assert.equal(properties.get('--arrival-offset'), '-200ms');
-  syncWallArrival(boundary, event, 'arrival', 10000);
+  syncWallArrival(boundary, event, 'arrival', 8500);
   assert.equal(insertions, 1);
-  assert.equal(properties.get('--arrival-offset'), '-4000ms');
-  syncWallArrival(boundary, event, 'arrival', 13000);
+  assert.equal(properties.get('--arrival-offset'), '-2500ms');
+  syncWallArrival(boundary, event, 'arrival', 10000);
   syncWallArrival(boundary, event, 'arrival', 16000);
   assert.equal(nodes.size, 0);
   assert.equal(classes.has('wish-arrival'), false);
@@ -53,12 +53,12 @@ test('legacy waiting events stay settled instead of retroactively replaying', ()
   assert.equal(wishTransferView({ phase: 'waiting', wishId: 'old', startedAt: 0 }, 5000).wallActive, false);
 });
 
-test('the recording gives the wall time to finish before lighting, within the same 79 seconds', () => {
+test('the recording gives the wall time to finish before lighting, within the same 95 seconds', () => {
   const handoff = RECORDING_STEPS.find(step => step.id === 'handoff');
   const waiting = RECORDING_STEPS.find(step => step.id === 'waiting');
   const event = createWishTransfer({ wishId: 'sample', startedAt: 0, waitingMs: waiting.duration });
   assert.equal(handoff.duration, event.phoneEndsAt);
   assert.equal(handoff.duration + waiting.duration, event.endsAt);
   assert.ok(event.wallEndsAt < event.endsAt);
-  assert.equal(RECORDING_DURATION, 79000);
+  assert.equal(RECORDING_DURATION, 95000);
 });

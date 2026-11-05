@@ -1,3 +1,4 @@
+import { RELEASE_DURATION_MS } from './ritual-motion.js';
 export const RECORDING_STEPS = [
   { id: 'lead', label: '录屏准备', duration: 3000 },
   { id: 'opening', label: '开场号召 · 灯市开启', duration: 10000 },
@@ -7,9 +8,9 @@ export const RECORDING_STEPS = [
   { id: 'write', label: '写下心愿与落款', duration: 5000 },
   { id: 'generated', label: '生成专属愿灯', duration: 5000 },
   { id: 'handoff', label: '放愿入灯市 · 手机收灯', duration: 6000 },
-  { id: 'waiting', label: '请抬头看白墙 · 心愿上墙', duration: 8000 },
-  { id: 'lighting', label: '幸运愿灯 · 点灯接福', duration: 8000 },
-  { id: 'glow', label: '万灯同辉 · 众愿共明', duration: 21000 },
+  { id: 'waiting', label: '愿灯点亮 · 低空漂浮', duration: 8000 },
+  { id: 'lighting', label: '点灯放飞 · 幸运主灯', duration: RELEASE_DURATION_MS },
+  { id: 'glow', label: '远景灯海 · 汇字烟花', duration: 33000 },
   { id: 'close', label: '礼成收束 · 留存纪念', duration: 4000 },
 ];
 export const RECORDING_DURATION = RECORDING_STEPS.reduce((sum, step) => sum + step.duration, 0);
@@ -38,7 +39,7 @@ export function createRecordingDemo(hooks, clock = {}) {
     if (typeof document === 'undefined') return;
     const step = RECORDING_STEPS[index];
     document.querySelectorAll('[data-recording-label]').forEach(node => {
-      node.textContent = status === 'completed' ? '演示完成 · 可重新播放' : active() ? step.label : '完整双屏流程 · 约80秒';
+      node.textContent = status === 'completed' ? '演示完成 · 可重新播放' : active() ? step.label : '完整双屏流程 · 约95秒';
     });
     document.querySelectorAll('[data-recording-time]').forEach(node => { node.textContent = timeText(elapsed) + ' / ' + timeText(RECORDING_DURATION); });
     document.querySelectorAll('[data-recording-progress]').forEach(node => { node.style.width = elapsed / RECORDING_DURATION * 100 + '%'; });
@@ -113,7 +114,7 @@ export function createRecordingDemo(hooks, clock = {}) {
         (active() ? '演示进行中' : status === 'completed' ? '↻ 重播完整演示' : '▶ 加速自动演示') + '</button>' +
         (sessionOpen ? '<button id="restartRecordingDemo">重新开始</button><button id="stopRecordingDemo">返回手动体验</button>' : '') +
         '<button id="cleanRecordingDemo" aria-pressed="' + clean + '" title="鼠标移至顶部显示控件，按 Esc 返回">' + (clean ? '退出净画面' : '录屏净画面') + '</button></div>' +
-        '<div class="recording-progress"><div><b data-recording-label role="status" aria-live="polite">完整双屏流程 · 约80秒</b>' +
+        '<div class="recording-progress"><div><b data-recording-label role="status" aria-live="polite">完整双屏流程 · 约95秒</b>' +
         '<span data-recording-time aria-hidden="true">' + timeText(elapsed) + ' / ' + timeText(RECORDING_DURATION) + '</span></div>' +
         '<div class="recording-track"><i data-recording-progress></i></div></div></section>';
     },
