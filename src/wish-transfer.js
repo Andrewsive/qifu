@@ -2,7 +2,7 @@ export const PHONE_HANDOFF_MS = 6000;
 export const WALL_ARRIVAL_MS = 4000;
 
 /** A submitted lamp lights immediately; the phone then settles into its waiting screen. */
-export function createWishTransfer({ wishId, startedAt = Date.now(), waitingMs = 120000 }) {
+export function createWishTransfer({ wishId, startedAt = Date.now(), waitingMs = 120000, ceremonyEndsAt }) {
   const wallStartedAt = startedAt;
   return {
     phase: 'waiting',
@@ -12,7 +12,7 @@ export function createWishTransfer({ wishId, startedAt = Date.now(), waitingMs =
     phoneEndsAt: startedAt + PHONE_HANDOFF_MS,
     wallStartedAt,
     wallEndsAt: wallStartedAt + WALL_ARRIVAL_MS,
-    endsAt: startedAt + PHONE_HANDOFF_MS + waitingMs,
+    endsAt: Number.isFinite(ceremonyEndsAt) ? ceremonyEndsAt : startedAt + PHONE_HANDOFF_MS + waitingMs,
   };
 }
 

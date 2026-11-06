@@ -23,18 +23,20 @@ import './visual-variants.css';
 import './gongbi.css';
 import './ink-wash.css';
 import './ritual-flow.css';
+import './wall-countdown.css';
 import { RELEASE_DURATION_MS, isFinaleStage } from './ritual-motion.js';
 import { releaseCanvas, releasePhoneScene } from './ritual-views.js';
 import { mountVisualPicker } from './visual-variants.js';
 import { createWishTransfer, wishTransferView } from './wish-transfer.js';
 import { createGrowingPool, addPoolGuest, freezeGrowingPool, growingPoolEntries, growingPoolPose, growingPoolScale, syncGrowingPool } from './growing-pool.js';
-import { createRecordingDemo } from './recording-demo.js';
+import { createRecordingDemo, RECORDING_COLLECTION_MS } from './recording-demo.js';
+import { createCollectionClock, collectionCountdown } from './collection-clock.js';
 import { installMobileFit } from './mobile-fit.js';
 import { renderWishLantern } from './wish-lantern.js';
 import { GLOW_START_KEY, FINALE_DURATION_MS, saveFinalePicture, setCelebrationPreviewClock } from './celebration.js';
 const KEY='xixi-wishes-v4',SK='xixi-stage-v4',EK='xixi-event-v4',DK='xixi-draft-v1';
 const OPENING_KEY='xixi-opening-v1',VISITOR_KEY='xixi-visitor-v1',OPENING_MS=10000;
-const POOL_KEY='xixi-wish-pool-v1';
+const POOL_KEY='xixi-wish-pool-v1',COLLECTION_KEY='xixi-collection-clock-v1';
 let demoSandbox = null;
 const glowKey = () => demoSandbox?.glowStartedAt || localStorage.getItem(GLOW_START_KEY) || "";
 const opening=()=>{if(demoSandbox)return demoSandbox.opening;try{return JSON.parse(localStorage.getItem(OPENING_KEY))||{}}catch{return {}}};
@@ -43,15 +45,38 @@ function setVisitor(value){if(demoSandbox){demoSandbox.visitor={...demoSandbox.v
 function personalWish(){return read().find(w=>String(w.id)===String(visitor().wishId))}
 function personalTransfer(){const v=visitor(),ev=event();return String(v.wishId)===String(ev.wishId)?ev:v.transfer||null}
 function transferFrameKey(){return [stage(),wishTransferView(event()).key,wishTransferView(personalTransfer()).phone].join("|")}
-function refreshTransferFrame(){if(stage()==='collect'&&$('main').dataset.transferKey!==transferFrameKey())render();const countdown=$('#countdown'),ev=event();if(countdown&&ev.endsAt){const seconds=Math.max(0,Math.ceil((ev.endsAt-Date.now())/1000));countdown.textContent=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0')}}
+function refreshTransferFrame(){if(stage()==='collect'&&$('main').dataset.transferKey!==transferFrameKey())render();refreshCollectionCountdowns()}
 const stages=[['idle','待机','水乡画卷静候来客'],['guide','引导','扫码入市，写下新岁心愿'],['collect','互动收愿','低空亮灯，静候集体放飞'],['light','点灯放飞','点亮自己的愿灯，幸运主灯同步白墙'],['glow','万灯同辉','远景灯海汇成新年快乐，烟花贺岁'],['close','收束','愿心长明，且留西溪']];
 const types=[['lotus','莲影灯','清和如意','莲'],['moon','月白灯','长乐未央','月'],['fish','锦鲤灯','年年有余','鲤'],['plum','梅枝灯','春信先归','梅']];
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const read=()=>{if(demoSandbox)return demoSandbox.wishes;try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}},write=v=>{if(demoSandbox)demoSandbox.wishes=v;else localStorage.setItem(KEY,JSON.stringify(v));dispatchEvent(new Event('sync'))};
-const stage=()=>demoSandbox?.stage||localStorage.getItem(SK)||'collect',setStage=(v,at=Date.now())=>{const previous=stage();if(v==='idle'||(['guide','collect'].includes(v)&&!['guide','collect'].includes(previous)))storePool(createGrowingPool(at));else if(['light','glow','close'].includes(v))storePool(freezeGrowingPool(poolState(),at));if(demoSandbox){const now=at;if(v==='idle')demoSandbox.opening={startedAt:now,endsAt:now+OPENING_MS};if(v==='glow'){demoSandbox.glowStartedAt=now;demoSandbox.event={...event(),phase:'glow',startedAt:now,endsAt:null};setCelebrationPreviewClock(now)}demoSandbox.stage=v;dispatchEvent(new Event('sync'));return}if(v==='idle')localStorage.setItem(OPENING_KEY,JSON.stringify({startedAt:at,endsAt:at+OPENING_MS}));if(v==='glow'){const now=at;localStorage.setItem(GLOW_START_KEY,String(now));localStorage.setItem(EK,JSON.stringify({...event(),phase:'glow',startedAt:now,endsAt:null}))}localStorage.setItem(SK,v);dispatchEvent(new Event('sync'))};
+const stage=()=>demoSandbox?.stage||localStorage.getItem(SK)||'collect',setStage=(v,at=Date.now())=>{const previous=stage();if(v==='idle'||(['guide','collect'].includes(v)&&!['guide','collect'].includes(previous)))storePool(createGrowingPool(at));else if(['light','glow','close'].includes(v))storePool(freezeGrowingPool(poolState(),at));if(v==='idle')storeCollectionClock(null);else if(['guide','collect'].includes(v)&&!['guide','collect'].includes(previous))startCollectionClock(at);if(demoSandbox){const now=at;if(v==='idle')demoSandbox.opening={startedAt:now,endsAt:now+OPENING_MS};if(v==='glow'){demoSandbox.glowStartedAt=now;demoSandbox.event={...event(),phase:'glow',startedAt:now,endsAt:null};setCelebrationPreviewClock(now)}demoSandbox.stage=v;dispatchEvent(new Event('sync'));return}if(v==='idle')localStorage.setItem(OPENING_KEY,JSON.stringify({startedAt:at,endsAt:at+OPENING_MS}));if(v==='glow'){const now=at;localStorage.setItem(GLOW_START_KEY,String(now));localStorage.setItem(EK,JSON.stringify({...event(),phase:'glow',startedAt:now,endsAt:null}))}localStorage.setItem(SK,v);dispatchEvent(new Event('sync'))};
 const event=()=>{if(demoSandbox)return demoSandbox.event;try{return JSON.parse(localStorage.getItem(EK))||{}}catch{return{}}},setEvent=v=>{if(demoSandbox)demoSandbox.event=v;else localStorage.setItem(EK,JSON.stringify(v));dispatchEvent(new Event('sync'))};
 function storePool(pool){if(demoSandbox)demoSandbox.pool=pool;else localStorage.setItem(POOL_KEY,JSON.stringify(pool));return pool}
 function poolState(){if(demoSandbox?.pool)return demoSandbox.pool;try{const pool=JSON.parse(localStorage.getItem(POOL_KEY));if(pool?.version===1&&Number.isFinite(pool.startedAt)&&Array.isArray(pool.guests))return pool}catch{}const pool=createGrowingPool();return storePool(['light','glow','close'].includes(stage())?freezeGrowingPool(pool):pool)}
+function storeCollectionClock(clock){if(demoSandbox)demoSandbox.collection=clock;else if(clock)localStorage.setItem(COLLECTION_KEY,JSON.stringify(clock));else localStorage.removeItem(COLLECTION_KEY);return clock}
+function startCollectionClock(at=Date.now()){return storeCollectionClock({...createCollectionClock(at,demoSandbox?RECORDING_COLLECTION_MS:undefined),roundId:poolState().cycleId})}
+function collectionClock(){
+  let clock=demoSandbox?.collection;
+  if(!demoSandbox)try{clock=JSON.parse(localStorage.getItem(COLLECTION_KEY))}catch{}
+  const roundId=poolState().cycleId;
+  if(clock?.roundId===roundId&&Number.isFinite(clock.startedAt)&&Number.isFinite(clock.endsAt)&&clock.endsAt>clock.startedAt)return clock;
+  const now=Date.now(),ev=event();
+  if(!demoSandbox&&ev.phase==='waiting'&&ev.endsAt>now)return storeCollectionClock({startedAt:Math.min(ev.startedAt||now,now),endsAt:ev.endsAt,roundId});
+  return startCollectionClock(now);
+}
+function countdownCopy(view){return view.finished&&!read().length?'愿池静候第一盏灯':view.urgent?'灯火将起，请共候这一刻':'愿你的心愿，成为今夜的幸运之选'}
+function wallCountdown(){
+  const clock=collectionClock(),view=collectionCountdown(clock);
+  return `<div class="wall-countdown ${view.urgent?'is-urgent':''}" data-ends-at="${clock.endsAt}"><small>距离点灯放飞还有</small><b role="timer" aria-label="距离点灯放飞还有" data-collection-countdown>${view.text}</b><p data-collection-copy>${countdownCopy(view)}</p></div>`;
+}
+function refreshCollectionCountdowns(){
+  if(!['guide','collect'].includes(stage()))return;
+  const clock=collectionClock(),view=collectionCountdown(clock);
+  $$('[data-collection-countdown]').forEach(node=>{if(node.textContent!==view.text)node.textContent=view.text;node.dataset.endsAt=clock.endsAt});
+  $$('.wall-countdown').forEach(node=>{node.classList.toggle('is-urgent',view.urgent);node.dataset.endsAt=clock.endsAt});
+  $$('[data-collection-copy]').forEach(node=>{const copy=countdownCopy(view);if(node.textContent!==copy)node.textContent=copy});
+}
 function recordPoolGuest(wish,litAt=Date.now()){const before=poolState(),after=addPoolGuest(before,{wishId:wish.id,type:wish.type,litAt});return after===before?before:storePool(after)}
 function refreshGrowingPool(resume=false){
   const pool=poolState(),ev=event(),wish=stage()==='collect'&&ev.phase==='waiting'&&ev.startedAt>=pool.startedAt?read().find(w=>String(w.id)===String(ev.wishId)):null;
@@ -90,7 +115,7 @@ recordingDemo=createRecordingDemo({
   openSession(){
     const wishes=read().map(wish=>({...wish}));
     const serial=Math.max(125,...wishes.map(wish=>Number(wish.serial)||0))+1;
-    demoSandbox={pool:createGrowingPool(),wishes,stage:'collect',event:{},draft:{},visitor:{step:'landing',wishId:null,form:{}},opening:{},glowStartedAt:null,sample:{id:'recording-sample',serial,type:'plum',name:'小溪',wish:'愿家人平安喜乐'}};
+    demoSandbox={collection:null,pool:createGrowingPool(),wishes,stage:'collect',event:{},draft:{},visitor:{step:'landing',wishId:null,form:{}},opening:{},glowStartedAt:null,sample:{id:'recording-sample',serial,type:'plum',name:'小溪',wish:'愿家人平安喜乐'}};
   },
   closeSession(){demoSandbox=null;setCelebrationPreviewClock(null)},
   enter(phase,{startedAt}){
@@ -106,7 +131,7 @@ recordingDemo=createRecordingDemo({
     if(phase==='handoff'){
       const now=startedAt;
       demoSandbox.wishes=[...demoSandbox.wishes,sample];
-      demoSandbox.visitor={step:'submitted',wishId:sample.id,submittedAt:now,form:{},transfer:createWishTransfer({wishId:sample.id,startedAt:now,waitingMs:8000})};
+      demoSandbox.visitor={step:'submitted',wishId:sample.id,submittedAt:now,form:{},transfer:createWishTransfer({wishId:sample.id,startedAt:now,waitingMs:8000,ceremonyEndsAt:collectionClock().endsAt})};
       demoSandbox.draft={};
       demoSandbox.event=demoSandbox.visitor.transfer;
       recordPoolGuest(sample,now);
@@ -132,7 +157,7 @@ function beginLighting(id,startedAt=Date.now()){let all=read(),pool=all.slice(-8
 function wall(inner=false){
   const ws=read(),st=stage(),ev=event(),meta=stages.find(x=>x[0]===st),picked=ws.find(x=>String(x.id)===String(ev.wishId));
   const release=st==='light'&&picked?releaseCanvas(picked,'wall')+`<div class="release-wall-meta"><small>本轮幸运主灯 · 第 ${picked.serial} 盏 · ${htmlText(picked.name)}</small><b data-release-title>点亮心灯</b><p data-release-copy>让美好心愿，与众灯一同启程</p></div>`:'';
-  return `<section class="wall ${isFinaleStage(st)?'glow':''} ${st==='light'&&picked?'lighting':''}"><div class="boundary"><div class="night-town-scene" aria-hidden="true"></div><div class="night-water-glimmer" aria-hidden="true"></div><div class="moon"></div><div class="mount"></div><div class="village"><i></i><i></i><i></i><i></i></div><div class="water"></div><div class="title"><small>西溪灯事 · 新春特别呈现</small><h1>西溪且留下</h1><p>万 愿 成 灯</p></div><div class="field"></div>${release}${isFinaleStage(st)?finaleWall():''}<div class="caption"><b>${meta[1]}</b><span>${meta[2]}</span></div></div>${inner?'':`<div class="walltools"><button id="full">全屏投影</button><button id="shot">保存节目纪念画面</button></div>`}</section>`;
+  return `<section class="wall ${['guide','collect'].includes(st)?'is-collecting':''} ${isFinaleStage(st)?'glow':''} ${st==='light'&&picked?'lighting':''}"><div class="boundary"><div class="night-town-scene" aria-hidden="true"></div><div class="night-water-glimmer" aria-hidden="true"></div><div class="moon"></div><div class="mount"></div><div class="village"><i></i><i></i><i></i><i></i></div><div class="water"></div><div class="title"><small>西溪灯事 · 新春特别呈现</small><h1>西溪且留下</h1><p>万 愿 成 灯</p></div><div class="field"></div>${['guide','collect'].includes(st)?wallCountdown():''}${release}${isFinaleStage(st)?finaleWall():''}<div class="caption"><b>${meta[1]}</b><span>${meta[2]}</span></div></div>${inner?'':`<div class="walltools"><button id="full">全屏投影</button><button id="shot">保存节目纪念画面</button></div>`}</section>`;
 }
 function mobile(){let mine=read().at(-1),st=stage(),meta=stages.find(x=>x[0]===st),picked=read().find(x=>String(x.id)===String(event().wishId));return `<section class="mobile"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>入一盏灯<br>留一桩愿</h2><p>选择灯型，写下心愿。提交后，愿灯将进入公共白墙的点灯队列。</p><aside><b>功能原型</b> 同一浏览器本地状态模拟多人愿灯队列。</aside></div><div class="phone"><div class="bar">19:28 <b>西溪灯市</b> •••</div><div class="scroll"><div class="mobile-stage ${st}"><i></i><div><small>公共白墙 · 当前环节</small><b>${meta[1]}</b><span>${st==='light'&&picked?`正在点亮第 ${picked.serial} 盏 · ${picked.name}`:meta[2]}</span></div></div><div class="hero"><small>西溪且留下 · 新春特别灯事</small><h1>万愿<br>成灯</h1><p>一念入灯，随水入画</p></div><form><label>择一盏愿灯</label><div class="choices">${types.map((x,i)=>`<button type="button" data-t="${x[0]}" class="${i?'':'chosen'}">${L(x[0],'mini')}<b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</div><label>写下心愿 <small id="count">0 / 28</small></label><textarea maxlength="28" placeholder="愿新岁，常安常乐……"></textarea><label>落款昵称</label><input maxlength="8" placeholder="2–8个字"><button class="submit">放愿入灯市 <b>→</b></button><p id="status"></p></form><div class="ticket">${mine?`<small>我的愿灯</small>${L(mine.type)}<b>第 ${mine.serial} 盏</b><p>${mine.wish}</p><span>${mine.name} · 已进入点灯队列</span><button id="save">保存个人纪念图</button>`:'<b>尚未放入愿灯</b><p>完成上方心愿，即可获得专属序号。</p>'}</div></div></div></section>`}
 function control(){let ws=read(),picked=ws.find(x=>String(x.id)===String(event().wishId));return `<section class="control"><div class="chead"><div><span>SHOW CONTROL · 主持 / 控制台</span><h2>万愿成灯 · 演出流程</h2></div><b>● 本地状态同步中</b></div><div class="grid"><aside><h3>节目段落</h3>${stages.map((x,i)=>`<button data-s="${x[0]}" class="${stage()===x[0]?'active':''}"><i>0${i+1}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}<button id="draw" class="run">✦ 随机抽取并点灯</button><button id="auto">▶ 加速自动演示</button><button id="reset">↺ 收束 / 复位</button></aside><div class="preview"><label>白墙输出预监 <span>安全画面边界 100%</span></label>${wall(true)}</div><aside class="queue"><h3>愿灯队列 <span>${ws.length}</span></h3><div>${ws.map((w,i)=>`<button data-pick="${w.id}"><i>${String(i+1).padStart(2,'0')}</i>${L(w.type,'mini')}<span><b>${w.name}</b><small>${w.wish}</small></span><em>${picked&&String(w.id)===String(picked.id)?'点灯中':i?'排队中':'待点亮'}</em></button>`).join('')}</div><button id="mock">＋ 模拟一位新游客</button><button id="clear">清空演示愿灯</button></aside></div></section>`}
@@ -147,7 +172,7 @@ return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBIL
 function generatedWishScene(d){return `<section class="m-scene generated generated-preview"><div class="generated-heading"><div class="step">01 <span>许愿入灯</span></div><h1>我的心愿灯签</h1><p>一盏微光 · 寄予山河</p></div><div class="generated-stage"><figure class="generated-illustration">${renderWishLantern(d)}</figure><div class="generated-type"><i></i>${types.find(x=>x[0]===d.type)?.[1]||'宋韵愿灯'}<i></i></div></div><div class="generated-status"><i></i>已生成，等待上墙</div><div class="generated-actions"><button id="saveDraft"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v10m-4-4 4 4 4-4M3 12v5h14v-5" /></svg>保存愿灯图片</button><button id="enterMarket">放愿望入灯市 <span aria-hidden="true">→</span></button></div></section>`}
 function mobileV3(force=false){if(stage()!=='collect'&&!force)return mobileV2();let d=draft(),mine=personalWish(),body=d.generated?generatedWishScene(d):`<section class="m-scene collect"><div class="step">01 <span>许愿入灯</span></div><h1>我的心愿灯签</h1><form><label>择一盏愿灯</label><div class="choices">${types.map((x,i)=>`<button type="button" data-t="${x[0]}" class="${i?'':'chosen'}">${L(x[0],'mini')}<b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</div><label>写下心愿 <small id="count">0 / 28</small></label><textarea maxlength="28" placeholder="愿新岁，常安常乐……"></textarea><label>落款昵称</label><input maxlength="8" placeholder="2–8个字"><button class="submit">生成我的愿灯 <b>→</b></button><p id="status"></p></form>${mine?`<div class="mine-card">${L(mine.type)}<div><small>上一盏愿灯 · 第 ${mine.serial} 盏</small><b>${mine.wish}</b><span>${mine.name}</span></div></div>`:''}</section>`;return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>许愿入灯</h2><p>先生成并保存个人愿灯，再确认放入灯市；确认后白墙才会播放愿灯点亮动画。</p><aside><b>当前环节</b> 互动收愿 · 低空亮灯，静候集体放飞</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">${body}</div></div></section>`}
 function mobileV4(){let ev=event(),w=read().find(x=>String(x.id)===String(ev.wishId));if(stage()==='collect'&&ev.phase==='arrival'&&w)return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>愿灯入市</h2><p>个人愿灯已经进入公共画面，白墙正在同步播放愿灯点亮动画。</p><aside><b>请抬头</b> 看向白墙，寻找你的愿望光迹</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll"><section class="m-scene entering"><div class="step">01 <span>愿灯上墙</span></div><div class="enter-lantern">${L(w.type)}</div><h1>愿灯正汇入<br>西溪灯市</h1><p>第 ${w.serial} 盏 · ${w.name}</p><div class="look-wall">↑ 请抬头看向公共白墙</div><div class="enter-status"><i></i> 白墙入场动画播放中</div><button id="save">查看我的愿灯</button></section></div></div></section>`;return mobileV3()}
-function mobileV5(){let ev=personalTransfer(),w=personalWish();if(stage()==='collect'&&ev?.phase==='waiting'&&w)return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>等待点灯放飞</h2><p>愿灯已经进入灯市与候选愿池。下一轮仪式开始后，系统将自动抽取一盏幸运愿灯。</p><aside><b>保持期待</b> 你的愿灯，有机会成为白墙上的幸运主灯</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll"><section class="m-scene waiting"><div class="step">01 → 02 <span>等待点灯放飞</span></div><div class="waiting-wall-prompt"><b>↑ 请抬头看向公共白墙</b><span>你的愿灯已留在灯海中，静候集体放飞</span></div><div class="waiting-lantern">${L(w.type)}</div><small>第 ${w.serial} 盏 · ${w.name}</small><h1>愿灯已进入<br>幸运愿池</h1><p>距离点灯放飞还有</p><div class="countdown" id="countdown">02:00</div><div class="waiting-note"><i></i> 倒计时结束将自动进入点灯仪式</div><div class="wish-reminder">“${w.wish}”</div></section></div></div></section>`;return mobileV4()}
+function mobileV5(){let ev=personalTransfer(),w=personalWish();if(stage()==='collect'&&ev?.phase==='waiting'&&w)return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>等待点灯放飞</h2><p>愿灯已经进入灯市与候选愿池。下一轮仪式开始后，系统将自动抽取一盏幸运愿灯。</p><aside><b>保持期待</b> 你的愿灯，有机会成为白墙上的幸运主灯</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll"><section class="m-scene waiting"><div class="step">01 → 02 <span>等待点灯放飞</span></div><div class="waiting-wall-prompt"><b>↑ 请抬头看向公共白墙</b><span>你的愿灯已留在灯海中，静候集体放飞</span></div><div class="waiting-lantern">${L(w.type)}</div><small>第 ${w.serial} 盏 · ${w.name}</small><h1>愿灯已进入<br>幸运愿池</h1><p>距离点灯放飞还有</p><div class="countdown" id="countdown" data-collection-countdown data-ends-at="${collectionClock().endsAt}">${collectionCountdown(collectionClock()).text}</div><div class="waiting-note"><i></i> 倒计时结束将自动进入点灯仪式</div><div class="wish-reminder">“${w.wish}”</div></section></div></div></section>`;return mobileV4()}
 function mobileV6(){return mobileV5().replace('下一轮点灯放飞将在','距离点灯放飞还有').replace('倒计时结束将自动进入点灯仪式','静候灯火亮起，愿你的心愿成为今夜的幸运之选')}
 function mobileV7(){
   const mine=personalWish(),picked=read().find(w=>String(w.id)===String(event().wishId));
@@ -222,7 +247,8 @@ function bindVisitor(phone){
     const existing=a.find(x=>String(x.id)===String(d.id));
     if(existing){setVisitor({step:'submitted',wishId:existing.id,submittedAt:visitor().submittedAt||event().startedAt||0,transfer:String(event().wishId)===String(existing.id)?event():null});localStorage.setItem(DK,'{}');render();toast('这盏愿灯已入市，请继续观看白墙');return}
     const item={id:d.id,serial:d.serial,wish:d.wish,name:d.name,type:d.type},now=Date.now();
-    const transfer=createWishTransfer({wishId:item.id,startedAt:now});
+    if(collectionCountdown(collectionClock(),now).finished&&!a.length)startCollectionClock(now);
+    const transfer=createWishTransfer({wishId:item.id,startedAt:now,ceremonyEndsAt:collectionClock().endsAt});
     // Publish the complete handoff together; a partial sync must not cache the old preview as the handoff screen.
     setVisitor({step:'submitted',wishId:item.id,submittedAt:now,form:{},transfer});
     recordPoolGuest(item,now);
@@ -240,6 +266,7 @@ function bind(){
   $$('.queue button').forEach(button=>button.disabled=recordingDemo.hasSession);
   const ev=event();
   refreshGrowingPool(true);
+  refreshCollectionCountdowns();
   $$('.release-canvas').forEach(canvas=>canvas.dataset.startedAt=ev.startedAt||Date.now());
   $$('.handoff-lantern,.handoff-light').forEach(el=>el.style.animationDelay=-wishTransferView(personalTransfer()).phoneElapsed+'ms');
   if(stage()==='light')$$('.lighting .ritual,.lighting .title,.lighting .girl,.lighting .girl>em,.lighting .girl>span,.lighting .blessing,.lighting .trail,.lighting .field').forEach(el=>el.style.animationDelay=-Math.max(0,Date.now()-ev.startedAt)+'ms');
@@ -269,7 +296,7 @@ function bind(){
   };
   for(const [selector,handler] of Object.entries(handlers)){const button=$(selector);if(button)button.onclick=handler}
 }
-setInterval(()=>{refreshGrowingPool();if(recordingDemo.active)return;refreshTransferFrame();const ev=event();if(!ev.endsAt)return;const left=ev.endsAt-Date.now();if(ev.phase==='waiting'&&left<=0&&stage()==='collect')beginLighting();if(ev.phase==='lighting'&&left<=0&&stage()==='light'){setStage('glow');render();toast('愿灯已放飞 · 灯海汇聚中')}} ,250);
+setInterval(()=>{refreshGrowingPool();if(recordingDemo.active)return;refreshTransferFrame();const ev=event();if(stage()==='collect'&&collectionCountdown(collectionClock()).finished&&read().length){beginLighting();return}if(ev.phase==='lighting'&&ev.endsAt<=Date.now()&&stage()==='light'){setStage('glow');render();toast('愿灯已放飞 · 灯海汇聚中')}} ,250);
 addEventListener('hashchange',render);addEventListener('storage',render);addEventListener('sync',()=>{if(['#mobile','#sync'].includes(location.hash||'#sync'))render()});render();
 function applyParticipationGuide(){
   const st=stage(),clock=opening(),elapsed=Math.max(0,Date.now()-(clock.startedAt||Date.now()));

@@ -1,0 +1,22 @@
+/* The countdown shares the open sky with the inscription, above the low floating pool. */
+html[data-visual] .wall.is-collecting .boundary > .title { top: 21%; }
+html[data-visual] .wall.is-collecting .title small { display: none; }
+html[data-visual] .wall.is-collecting .title h1 { font-size: clamp(18px, 3.4cqw, 52px); line-height: 1.15; margin: 0 0 .6cqw; }
+html[data-visual] .wall.is-collecting .title p { font-size: clamp(6px, .8cqw, 12px); line-height: 1.4; margin: 0; }
+.wall-countdown { position: absolute; z-index: 13; left: 50%; top: 38%; width: 48%; transform: translateX(-50%); text-align: center; color: #f7d99b; pointer-events: none; text-shadow: 0 2px 14px #081326, 0 0 28px #dfad5238; }
+.wall-countdown > small { display: flex; align-items: center; justify-content: center; gap: 1.1cqw; color: #d2b887; font-size: clamp(6px, 1.05cqw, 15px); letter-spacing: .24em; line-height: 1.5; white-space: nowrap; }
+.wall-countdown > small::before, .wall-countdown > small::after { content: ''; width: 12%; height: 1px; background: linear-gradient(90deg, transparent, #c6a46788); }
+.wall-countdown > small::after { rotate: 180deg; }
+.wall-countdown > b { display: block; font-family: 'Palatino Linotype', 'Book Antiqua', Georgia, serif; font-size: clamp(26px, 7.8cqw, 118px); font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: .045em; margin: .4cqw 0 .5cqw; }
+.wall-countdown > p { margin: 0; color: #c7c5b1; font-size: clamp(6px, .85cqw, 12px); line-height: 1.5; letter-spacing: .14em; }
+.wall-countdown.is-urgent > b { color: #ffe8ad; animation: wallCountPulse 1s ease-in-out infinite; }
+.wall-countdown.is-urgent > p { color: #efc788; }
+@keyframes wallCountPulse { 50% { text-shadow: 0 0 28px #ffd17b90, 0 2px 10px #091627; transform: scale(1.025); } }
+html[data-visual="gongbi"] .wall-countdown { color: #8c452a; text-shadow: 0 1px 9px #fff2c7, 0 0 24px #f5dd9d; }
+html[data-visual="gongbi"] .wall-countdown > small, html[data-visual="gongbi"] .wall-countdown > p { color: #695736; }
+html[data-visual="gongbi"] .wall-countdown.is-urgent > b { color: #ae4b2b; }
+html[data-visual="ink-wash"] .wall-countdown { color: #755340; text-shadow: 0 1px 8px #f6f4e9, 0 0 24px #e6e8d9; }
+html[data-visual="ink-wash"] .wall-countdown > small, html[data-visual="ink-wash"] .wall-countdown > p { color: #586452; }
+html[data-visual="ink-wash"] .wall-countdown.is-urgent > b { color: #a1533c; }
+@container (max-width: 500px) { .wall-countdown > p { display: none; } }
+@media (prefers-reduced-motion: reduce) { .wall-countdown.is-urgent > b { animation: none; } }

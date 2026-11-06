@@ -14,6 +14,10 @@ export const RECORDING_STEPS = [
   { id: 'close', label: '礼成收束 · 留存纪念', duration: 4000 },
 ];
 export const RECORDING_DURATION = RECORDING_STEPS.reduce((sum, step) => sum + step.duration, 0);
+export const RECORDING_COLLECTION_MS = RECORDING_STEPS.slice(
+  RECORDING_STEPS.findIndex(step => step.id === 'invite'),
+  RECORDING_STEPS.findIndex(step => step.id === 'lighting'),
+).reduce((sum, step) => sum + step.duration, 0);
 const timeText = milliseconds => {
   const seconds = Math.floor(milliseconds / 1000);
   return String(Math.floor(seconds / 60)).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0');
