@@ -56,7 +56,7 @@ export function renderWishLantern({ type = 'lotus', serial = '', name = '', wish
   const path = sky ? 'M70 100 Q160 55 250 100 Q263 114 260 134 L235 287 Q160 322 85 287 L60 134 Q57 114 70 100Z' : shapes[selected];
   const id = `wish-lantern-${++lanternSequence}`;
   const title = `第${serial}盏愿灯，${name}的心愿：${wish}`;
-  return `<svg class="wish-lantern-art" viewBox="0 0 320 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escapeXml(title)}">
+  return `<svg class="wish-lantern-art" viewBox="${sky?'35 50 250 280':'0 0 320 410'}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escapeXml(title)}">
     <defs>
       <radialGradient id="${id}-paper" cx="50%" cy="44%" r="64%"><stop stop-color="${palette.paper}"/><stop offset=".57" stop-color="${palette.paper}"/><stop offset=".84" stop-color="${palette.mid}"/><stop offset="1" stop-color="${palette.edge}"/></radialGradient>
       <linearGradient id="${id}-metal" x1="0" x2="1"><stop stop-color="#80502e"/><stop offset=".24" stop-color="#c4995c"/><stop offset=".5" stop-color="#efd8a3"/><stop offset=".78" stop-color="#bc884e"/><stop offset="1" stop-color="#74472c"/></linearGradient>
