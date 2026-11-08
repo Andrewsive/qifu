@@ -24,6 +24,8 @@ import './gongbi.css';
 import './ink-wash.css';
 import './ritual-flow.css';
 import './wall-countdown.css';
+import './lantern-crafting.css';
+import { renderCraftScene, bindCraftScene, createCraftPhase, nextCraftPhase, saveCraftPicture } from './lantern-crafting.js';
 import { RELEASE_DURATION_MS, isFinaleStage } from './ritual-motion.js';
 import { releaseCanvas, releasePhoneScene } from './ritual-views.js';
 import { mountVisualPicker } from './visual-variants.js';
@@ -88,6 +90,7 @@ function refreshGrowingPool(resume=false){
   $$('.release-canvas,.celebration-canvas').forEach(canvas=>{if(canvas.dataset.poolOrigins!==origins)canvas.dataset.poolOrigins=origins});
 }
 const draft=()=>{if(demoSandbox)return demoSandbox.draft;try{return JSON.parse(localStorage.getItem(DK))||{}}catch{return{}}},setDraft=v=>{if(demoSandbox)demoSandbox.draft=v;else localStorage.setItem(DK,JSON.stringify(v));dispatchEvent(new Event('sync'))};
+if(['form','generated'].includes(visitor().step))setVisitor({step:'craft',craft:createCraftPhase(draft().generated?'ready':'choose')});
 if(!localStorage.getItem(KEY))write([['愿家人岁岁安康','阿禾','lotus'],['愿新的一年常有好消息','小满','moon'],['愿所求皆如愿，所行皆坦途','南枝','fish'],['愿我们还能一起看很多次春天','清嘉','plum']].map((x,i)=>({id:Date.now()+i,serial:126+i,wish:x[0],name:x[1],type:x[2]})));
 if(event().phase==='arrival')setEvent({...event(),phase:'waiting',endsAt:Date.now()+120000});
 if(!localStorage.getItem(SK))setStage('idle');
@@ -97,6 +100,15 @@ let recordingDemo;
 function stopAutoShow(){if(recordingDemo?.hasSession)recordingDemo.stop()}
 function restartOpening(){stopAutoShow();setVisitor({step:'landing',wishId:null,form:{}});setDraft({});setEvent({});setStage('idle');render()}
 function startAutoShow(){if(location.hash!=='#sync')location.hash='#sync';recordingDemo.start();render()}
+function setCraftPhase(phase,at=Date.now(),duration){
+  setVisitor({step:'craft',craft:createCraftPhase(phase,at,draft().wish,duration)});
+  if(phase==='ready')setDraft({...draft(),generated:true});
+  render();
+}
+function advanceCraft(){
+  const v=visitor();if(v.step!=='craft')return;
+  const next=nextCraftPhase(v.craft);if(next)setCraftPhase(next);
+}
 const L=(t='lotus',s='')=>`<span class="lantern ${t} ${s}"><i></i><b>${types.find(x=>x[0]===t)?.[3]||'愿'}</b><em></em></span>`;
 $('#app').innerHTML=`<header><a href="#sync"><i class="seal">愿</i><span><b>西溪且留下</b><small>万愿成灯 · 新春灯市</small></span></a><nav><a href="#sync">双屏联调</a><a href="#mobile">游客手机</a><a href="#wall">白墙投影</a><a href="#control">演出控制</a><a href="./video-wish.html">视频合成</a></nav><label>LOCAL DEMO · 非现场联网</label></header><main></main>`;
 mountVisualPicker($('header'));
@@ -123,10 +135,11 @@ recordingDemo=createRecordingDemo({
     if(phase==='opening'){setVisitor({step:'landing',wishId:null,form:{}});setStage('idle',startedAt)}
     if(phase==='invite')setStage('collect',startedAt);
     if(phase==='guide')setVisitor({step:'guide'});
-    if(phase==='choose')setVisitor({step:'form',form:{wish:'',name:'',type:'lotus'}});
-    if(phase==='generated'){
-      setVisitor({step:'generated',form:{wish:sample.wish,name:sample.name,type:sample.type}});
-      demoSandbox.draft={...sample,generated:true};
+    if(phase==='choose')setVisitor({step:'craft',form:{wish:'',name:'',type:sample.type},craft:createCraftPhase('choose',startedAt)});
+    if(['unfolding','frame','shaping','write','writing','ignite','igniting','generated'].includes(phase)){
+      const craftPhase=phase==='generated'?'ready':phase;
+      if(['writing','ignite','igniting','generated'].includes(phase)){demoSandbox.draft={...sample,generated:phase==='generated'};setVisitor({form:{wish:sample.wish,name:sample.name,type:sample.type}})}
+      setCraftPhase(craftPhase,startedAt,phase==='writing'?6000:undefined);
     }
     if(phase==='handoff'){
       const now=startedAt;
@@ -141,7 +154,6 @@ recordingDemo=createRecordingDemo({
     if(phase==='close')setStage('close');
   },
   update(phase,progress){
-    if(phase==='choose')updateRecordingForm('','',progress<.5?'lotus':'plum');
     if(phase==='write'){
       const sample=demoSandbox.sample,wish=Array.from(sample.wish),name=Array.from(sample.name);
       const count=Math.floor(progress*(wish.length+name.length+1));
@@ -184,11 +196,12 @@ function syncView(){let meta=stages.find(x=>x[0]===stage());return `<section cla
 function visitorMobile(){
   if(['light','glow','close'].includes(stage()))return mobileV8();
   const v=visitor();
+  if(v.step==='craft')return '<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>亲手做一盏愿灯</h2><p>展纸、撑灯、书愿、点亮，让新岁的心愿有一处安放。</p></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">'+renderCraftScene({craft:v.craft,form:v.form,draft:draft()})+'</div></div></section>';
   if(['form','generated'].includes(v.step))return mobileV3(true);
   if(v.step==='submitted')return mobileV8();
   const isGuide=v.step==='guide';
   const scene=isGuide
-    ? '<section class="m-scene guide"><i>01</i><small>第一步 · 许愿入灯</small><h1>写下一桩<br>新岁心愿</h1><div class="guide-lines"><span>择一盏宋韵灯型</span><span>写下心愿与昵称</span><span>生成灯签，再放入灯市</span></div><button data-go="collect">开始许愿</button></section>'
+    ? '<section class="m-scene guide"><i>01</i><small>第一步 · 亲手成灯</small><h1>做一盏灯<br>寄一桩心愿</h1><div class="guide-lines"><span>择纸撑灯，让愿灯成形</span><span>落笔书愿，留下你的名字</span><span>亲手点亮，再放入灯市</span></div><button data-go="collect">开始制灯</button></section>'
     : '<section class="m-scene idle visitor-landing"><small>西溪且留下 · 新春灯事</small><h1>看灯火入画<br>留一桩心愿</h1><p>万千心愿正在汇入西溪灯市</p><div class="m-moon"></div><div class="visitor-invite">下一盏灯，愿为你而亮</div><button data-go="guide">我也来许愿点灯 →</button></section>';
   return '<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>'+ (isGuide?'许愿引导':'走近西溪灯市')+'</h2><p>看见他人的愿灯在白墙点亮，也为新岁留下一盏自己的愿灯。</p><aside><b>参与灯事</b> '+(isGuide?'选灯、写愿、落款，生成你的灯签':'点击进入数字灯市，开始你的许愿之旅')+'</aside></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">'+scene+'</div></div></section>';
 }
@@ -196,6 +209,7 @@ function visitorViewKey(){
   const v=visitor(),ev=event(),st=stage();
   if(['light','glow','close'].includes(st))return [st,isFinaleStage(st)?glowKey():ev.startedAt,v.wishId].join(':');
   if(v.step==='submitted')return [v.step,v.wishId,st,ev.phase,v.submittedAt||ev.startedAt,wishTransferView(personalTransfer()).phone].join(':');
+  if(v.step==='craft')return [v.step,v.craft?.phase,v.craft?.startedAt,v.form?.type,draft().id||''].join(':');
   return [v.step,draft().id||''].join(':');
 }
 function render(){
@@ -217,7 +231,7 @@ function render(){
 function bindVisitor(phone){
   if(phone.dataset.bound==='yes')return;
   phone.dataset.bound='yes';
-  $$('[data-go]',phone).forEach(b=>b.onclick=()=>{setVisitor({step:b.dataset.go==='collect'?'form':'guide'});render()});
+  $$('[data-go]',phone).forEach(b=>b.onclick=()=>{if(b.dataset.go==='collect')setCraftPhase('choose');else{setVisitor({step:'guide'});render()}});
   const input=$('input',phone),textarea=$('textarea',phone),saved=visitor().form||{};
   if(input)input.value=saved.name||'';
   if(textarea){textarea.value=saved.wish||'';$('#count',phone).textContent=textarea.value.length+' / 28'}
@@ -240,7 +254,7 @@ function bindVisitor(phone){
     rememberForm();setVisitor({step:'generated'});
     setDraft({generated:true,id:Date.now(),serial:126+a.length,wish,name,type});render();
   };
-  $('#saveDraft',phone)?.addEventListener('click',()=>toast('愿灯图片已保存（功能原型反馈）'));
+  $('#saveDraft',phone)?.addEventListener('click',()=>{saveCraftPicture(draft(),document.documentElement.dataset.visual).then(()=>toast('愿灯纪念图已生成，可保存留念')).catch(()=>toast('图片暂未生成，请再试一次'))});
   $('#enterMarket',phone)?.addEventListener('click',()=>{
     const d=draft(),a=read();
     if(!d.generated){render();return}
@@ -260,6 +274,20 @@ function bindVisitor(phone){
   });
   $('#viewMine',phone)?.addEventListener('click',()=>{saveFinalePicture(personalWish());toast('正在生成万灯同辉纪念画面…')});
   $('#save',phone)?.addEventListener('click',()=>toast('个人纪念图已保存（功能原型反馈）'));
+  bindCraftScene(phone,{
+    choose(type){setVisitor({form:{...visitor().form,type}});render()},
+    remember(wish,name){setVisitor({form:{...visitor().form,wish,name}})},
+    action(action){
+      if(action==='reset'){setVisitor({step:'craft',craft:createCraftPhase('choose'),form:{}});setDraft({});render();return}
+      const phases={unfold:'unfolding',shape:'shaping',ignite:'igniting',edit:'write',choose:'choose'};
+      if(phases[action])setCraftPhase(phases[action]);
+    },
+    write(wish,name){
+      const old=draft(),a=read(),type=visitor().form?.type||'lotus';
+      setVisitor({step:'craft',form:{wish,name,type},craft:createCraftPhase('writing',Date.now(),wish)});
+      setDraft({generated:false,id:old.id||Date.now(),serial:old.serial||Math.max(125,...a.map(w=>Number(w.serial)||0))+1,wish,name,type});render();
+    }
+  });
 }
 function bind(){
   const phone=$('.mobile');if(phone)bindVisitor(phone);if(phone)$('.phone',phone).inert=recordingDemo.active;recordingDemo.paintControls();
@@ -269,6 +297,7 @@ function bind(){
   refreshCollectionCountdowns();
   $$('.release-canvas').forEach(canvas=>canvas.dataset.startedAt=ev.startedAt||Date.now());
   $$('.handoff-lantern,.handoff-light').forEach(el=>el.style.animationDelay=-wishTransferView(personalTransfer()).phoneElapsed+'ms');
+  $$('.craft-scene').forEach(el=>el.style.setProperty('--craft-offset',-Math.max(0,Date.now()-(visitor().craft?.startedAt||Date.now()))+'ms'));
   if(stage()==='light')$$('.lighting .ritual,.lighting .title,.lighting .girl,.lighting .girl>em,.lighting .girl>span,.lighting .blessing,.lighting .trail,.lighting .field').forEach(el=>el.style.animationDelay=-Math.max(0,Date.now()-ev.startedAt)+'ms');
   $$('[data-w]').forEach(b=>b.onclick=()=>{
     $$('[data-w]').forEach(x=>x.classList.remove('on'));b.classList.add('on');
@@ -296,7 +325,7 @@ function bind(){
   };
   for(const [selector,handler] of Object.entries(handlers)){const button=$(selector);if(button)button.onclick=handler}
 }
-setInterval(()=>{refreshGrowingPool();if(recordingDemo.active)return;refreshTransferFrame();const ev=event();if(stage()==='collect'&&collectionCountdown(collectionClock()).finished&&read().length){beginLighting();return}if(ev.phase==='lighting'&&ev.endsAt<=Date.now()&&stage()==='light'){setStage('glow');render();toast('愿灯已放飞 · 灯海汇聚中')}} ,250);
+setInterval(()=>{refreshGrowingPool();if(recordingDemo.active)return;advanceCraft();refreshTransferFrame();const ev=event();if(stage()==='collect'&&collectionCountdown(collectionClock()).finished&&read().length){beginLighting();return}if(ev.phase==='lighting'&&ev.endsAt<=Date.now()&&stage()==='light'){setStage('glow');render();toast('愿灯已放飞 · 灯海汇聚中')}} ,250);
 addEventListener('hashchange',render);addEventListener('storage',render);addEventListener('sync',()=>{if(['#mobile','#sync'].includes(location.hash||'#sync'))render()});render();
 function applyParticipationGuide(){
   const st=stage(),clock=opening(),elapsed=Math.max(0,Date.now()-(clock.startedAt||Date.now()));

@@ -31,7 +31,7 @@ function wishLettering(wish, ink) {
     const column = Math.floor(index / perColumn);
     const x = 160 + (columns - 1) * columnGap / 2 - column * columnGap;
     const y = startY + (index % perColumn) * rowGap;
-    return `<text x="${x}" y="${y}" dominant-baseline="central">${escapeXml(char)}</text>`;
+    return `<g class="wish-character" style="--letter-i:${index}"><text class="wish-letter" x="${x}" y="${y}" dominant-baseline="central">${escapeXml(char)}</text><g class="wish-pen" display="none" transform="translate(${x+8} ${y-11})"><path d="M0 0 L15 -29 L20 -26 L5 2Z" fill="#755137"/><path d="M0 0 Q-5 5 -4 10 Q4 7 5 2Z" fill="#3e3025"/><path d="M15 -29 L18 -35 L23 -32 L20 -26Z" fill="#b78a4e"/></g></g>`;
   }).join('')}</g>`;
 }
 
@@ -50,10 +50,10 @@ function lanternMotif(type, palette) {
 }
 
 /** Decorative, self-contained lantern artwork for the generated wish preview. */
-export function renderWishLantern({ type = 'lotus', serial = '', name = '', wish = '' } = {}) {
+export function renderWishLantern({ type = 'lotus', serial = '', name = '', wish = '', blank = false, sky = false } = {}) {
   const selected = palettes[type] ? type : 'lotus';
   const palette = palettes[selected];
-  const path = shapes[selected];
+  const path = sky ? 'M70 100 Q160 55 250 100 Q263 114 260 134 L235 287 Q160 322 85 287 L60 134 Q57 114 70 100Z' : shapes[selected];
   const id = `wish-lantern-${++lanternSequence}`;
   const title = `第${serial}盏愿灯，${name}的心愿：${wish}`;
   return `<svg class="wish-lantern-art" viewBox="0 0 320 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escapeXml(title)}">
@@ -64,12 +64,11 @@ export function renderWishLantern({ type = 'lotus', serial = '', name = '', wish
       <clipPath id="${id}-clip"><path d="${path}"/></clipPath>
       <filter id="${id}-shadow" x="-30%" y="-20%" width="160%" height="150%"><feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#875325" flood-opacity=".16"/></filter>
     </defs>
-    <g fill="none" stroke="#9b633b"><path d="M160 9 V56" stroke-width="2"/><path d="M157 9 V56 M163 9 V56" stroke-width=".5" opacity=".55"/><path d="M152 57 Q151 50 159 49 Q167 49 168 57 Q168 64 160 65 Q152 65 152 57Z" stroke-width="2"/></g>
-    <path d="M134 70 Q160 60 186 70 L188 80 H132Z" fill="url(#${id}-metal)"/>
-    <g filter="url(#${id}-shadow)">
+    ${sky ? '' : `<g fill="none" stroke="#9b633b"><path d="M160 9 V56" stroke-width="2"/><path d="M157 9 V56 M163 9 V56" stroke-width=".5" opacity=".55"/><path d="M152 57 Q151 50 159 49 Q167 49 168 57 Q168 64 160 65 Q152 65 152 57Z" stroke-width="2"/></g><path d="M134 70 Q160 60 186 70 L188 80 H132Z" fill="url(#${id}-metal)"/>`}
+    <g class="wish-lamp-body" filter="url(#${id}-shadow)">
       <path d="${path}" fill="url(#${id}-paper)" stroke="${palette.trim}" stroke-width="1.5"/>
       <g clip-path="url(#${id}-clip)">
-        <path d="M106 74 Q74 192 111 325 M214 74 Q246 192 209 325" fill="none" stroke="${palette.trim}" stroke-width="1" opacity=".36"/>
+        <path class="wish-ribs" d="M106 74 Q74 192 111 325 M214 74 Q246 192 209 325" fill="none" stroke="${palette.trim}" stroke-width="1" opacity=".36"/>
         <path d="M123 74 Q105 192 126 325 M197 74 Q215 192 194 325" fill="none" stroke="#fff4d7" stroke-width="1.5" opacity=".58"/>
         <path d="M46 105 Q160 76 274 105 M46 287 Q160 322 274 287" fill="none" stroke="${palette.trim}" stroke-width="1" opacity=".55"/>
         ${lanternMotif(selected, palette)}
@@ -77,13 +76,13 @@ export function renderWishLantern({ type = 'lotus', serial = '', name = '', wish
       </g>
       <path d="M144 96 H176 M143 99 H177" stroke="${palette.trim}" stroke-width="1" opacity=".55"/>
       <text x="160" y="123" text-anchor="middle" fill="${palette.ink}" font-family="Georgia,'Songti SC',serif" font-size="20" letter-spacing="1">${escapeXml(serial)}</text>
-      <text x="160" y="145" text-anchor="middle" fill="${palette.ink}" font-family="'Songti SC','SimSun',serif" font-size="10.5" letter-spacing="1">${escapeXml(name)}</text>
+      <text class="wish-signature" x="160" y="145" text-anchor="middle" fill="${palette.ink}" font-family="'Songti SC','SimSun',serif" font-size="10.5" letter-spacing="1">${escapeXml(name)}</text>
       <path d="M136 155 H151 M169 155 H184 M156 155 L160 151 L164 155 L160 159Z" fill="none" stroke="${palette.trim}" stroke-width=".75"/>
-      ${wishLettering(wish, palette.ink)}
+      ${blank ? '' : wishLettering(wish, palette.ink)}
       <rect x="226" y="263" width="10" height="13" rx="1.5" fill="#ac5038" opacity=".8"/><text x="231" y="272.5" text-anchor="middle" font-size="8" fill="#fff0cc" font-family="serif">愿</text>
     </g>
-    <path d="M137 315 Q160 323 183 315 L181 324 Q160 331 139 324Z" fill="url(#${id}-metal)"/>
+    ${sky ? `<ellipse cx="160" cy="291" rx="74" ry="17" fill="#b87b4666" stroke="${palette.trim}" stroke-width="2"/><ellipse cx="160" cy="291" rx="65" ry="12" fill="#ffe7ad" opacity=".5"/><path d="M100 289 L220 293 M160 280 V305" stroke="${palette.trim}" fill="none"/><g class="craft-svg-flame" display="none"><path d="M160 302 Q142 291 160 270 Q158 285 167 288 Q173 298 160 302Z" fill="#ffc763"/><path d="M160 301 Q153 295 160 286 Q166 295 160 301Z" fill="#fff9da"/></g>` : `<path d="M137 315 Q160 323 183 315 L181 324 Q160 331 139 324Z" fill="url(#${id}-metal)"/>
     <path d="M160 328 V340" stroke="#a64d32" stroke-width="2"/>
-    <g fill="none" stroke="#ac5937" stroke-width="1.4"><path d="M160 335 L167 342 L160 349 L153 342Z M156 338 H164 V346 H156Z"/><path d="M160 349 Q141 368 142 394 M160 349 Q150 376 151 401 M160 349 V404 M160 349 Q170 376 169 401 M160 349 Q179 368 178 394" stroke="url(#${id}-silk)" stroke-width="2"/><path d="M156 351 Q146 375 146 399 M164 351 Q174 375 174 399" opacity=".55"/></g>
+    <g fill="none" stroke="#ac5937" stroke-width="1.4"><path d="M160 335 L167 342 L160 349 L153 342Z M156 338 H164 V346 H156Z"/><path d="M160 349 Q141 368 142 394 M160 349 Q150 376 151 401 M160 349 V404 M160 349 Q170 376 169 401 M160 349 Q179 368 178 394" stroke="url(#${id}-silk)" stroke-width="2"/><path d="M156 351 Q146 375 146 399 M164 351 Q174 375 174 399" opacity=".55"/></g>`}
   </svg>`;
 }

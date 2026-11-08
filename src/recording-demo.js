@@ -4,9 +4,15 @@ export const RECORDING_STEPS = [
   { id: 'opening', label: '开场号召 · 灯市开启', duration: 10000 },
   { id: 'invite', label: '看见灯市 · 游客加入', duration: 3000 },
   { id: 'guide', label: '手机参与引导', duration: 3000 },
-  { id: 'choose', label: '选择花灯', duration: 3000 },
-  { id: 'write', label: '写下心愿与落款', duration: 5000 },
-  { id: 'generated', label: '生成专属愿灯', duration: 5000 },
+  { id: 'choose', label: '指尖灯作 · 择一张灯纸', duration: 4000 },
+  { id: 'unfolding', label: '灯纸轻展', duration: 3000 },
+  { id: 'frame', label: '以竹为骨', duration: 2000 },
+  { id: 'shaping', label: '撑起孔明灯', duration: 3000 },
+  { id: 'write', label: '写下心愿与落款', duration: 6000 },
+  { id: 'writing', label: '落笔成愿 · 墨迹逐字显现', duration: 6000 },
+  { id: 'ignite', label: '为心愿点一盏灯', duration: 2000 },
+  { id: 'igniting', label: '灯火初明', duration: 2000 },
+  { id: 'generated', label: '亲手成灯 · 留存心愿', duration: 4000 },
   { id: 'handoff', label: '放愿入灯市 · 新灯亮起', duration: 6000 },
   { id: 'waiting', label: '愿灯留池 · 等候放飞', duration: 8000 },
   { id: 'lighting', label: '点灯放飞 · 幸运主灯', duration: RELEASE_DURATION_MS },
@@ -14,6 +20,7 @@ export const RECORDING_STEPS = [
   { id: 'close', label: '礼成收束 · 留存纪念', duration: 4000 },
 ];
 export const RECORDING_DURATION = RECORDING_STEPS.reduce((sum, step) => sum + step.duration, 0);
+const durationLabel='完整双屏流程 · 约'+Math.round(RECORDING_DURATION/1000)+'秒';
 export const RECORDING_COLLECTION_MS = RECORDING_STEPS.slice(
   RECORDING_STEPS.findIndex(step => step.id === 'invite'),
   RECORDING_STEPS.findIndex(step => step.id === 'lighting'),
@@ -43,7 +50,7 @@ export function createRecordingDemo(hooks, clock = {}) {
     if (typeof document === 'undefined') return;
     const step = RECORDING_STEPS[index];
     document.querySelectorAll('[data-recording-label]').forEach(node => {
-      node.textContent = status === 'completed' ? '演示完成 · 可重新播放' : active() ? step.label : '完整双屏流程 · 约95秒';
+      node.textContent = status === 'completed' ? '演示完成 · 可重新播放' : active() ? step.label : durationLabel;
     });
     document.querySelectorAll('[data-recording-time]').forEach(node => { node.textContent = timeText(elapsed) + ' / ' + timeText(RECORDING_DURATION); });
     document.querySelectorAll('[data-recording-progress]').forEach(node => { node.style.width = elapsed / RECORDING_DURATION * 100 + '%'; });
@@ -118,7 +125,7 @@ export function createRecordingDemo(hooks, clock = {}) {
         (active() ? '演示进行中' : status === 'completed' ? '↻ 重播完整演示' : '▶ 加速自动演示') + '</button>' +
         (sessionOpen ? '<button id="restartRecordingDemo">重新开始</button><button id="stopRecordingDemo">返回手动体验</button>' : '') +
         '<button id="cleanRecordingDemo" aria-pressed="' + clean + '" title="鼠标移至顶部显示控件，按 Esc 返回">' + (clean ? '退出净画面' : '录屏净画面') + '</button></div>' +
-        '<div class="recording-progress"><div><b data-recording-label role="status" aria-live="polite">完整双屏流程 · 约95秒</b>' +
+        '<div class="recording-progress"><div><b data-recording-label role="status" aria-live="polite">'+durationLabel+'</b>' +
         '<span data-recording-time aria-hidden="true">' + timeText(elapsed) + ' / ' + timeText(RECORDING_DURATION) + '</span></div>' +
         '<div class="recording-track"><i data-recording-progress></i></div></div></section>';
     },

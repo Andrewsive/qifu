@@ -53,12 +53,12 @@ test('legacy waiting events stay settled instead of retroactively replaying', ()
   assert.equal(wishTransferView({ phase: 'waiting', wishId: 'old', startedAt: 0 }, 5000).wallActive, false);
 });
 
-test('the recording gives the wall time to finish before lighting, within the same 95 seconds', () => {
+test('the recording gives the wall time to finish before lighting, within the complete crafting timeline', () => {
   const handoff = RECORDING_STEPS.find(step => step.id === 'handoff');
   const waiting = RECORDING_STEPS.find(step => step.id === 'waiting');
   const event = createWishTransfer({ wishId: 'sample', startedAt: 0, waitingMs: waiting.duration });
   assert.equal(handoff.duration, event.phoneEndsAt);
   assert.equal(handoff.duration + waiting.duration, event.endsAt);
   assert.ok(event.wallEndsAt < event.endsAt);
-  assert.equal(RECORDING_DURATION, 95000);
+  assert.equal(RECORDING_DURATION, 114000);
 });

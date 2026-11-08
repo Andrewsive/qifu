@@ -28,7 +28,7 @@ test('accelerated wall and phone clocks finish exactly at the recorded release c
   const invite=RECORDING_STEPS.findIndex(step=>step.id==='invite');
   const lighting=RECORDING_STEPS.findIndex(step=>step.id==='lighting');
   const planned=RECORDING_STEPS.slice(invite,lighting).reduce((sum,step)=>sum+step.duration,0);
-  assert.equal(clock.endsAt,start+planned);assert.equal(RECORDING_COLLECTION_MS,33000);
+  assert.equal(clock.endsAt,start+planned);assert.equal(RECORDING_COLLECTION_MS,52000);
   assert.equal(collectionCountdown(clock,start+planned-1000).text,'00:01');
   assert.equal(collectionCountdown(clock,start+planned).finished,true);
 });

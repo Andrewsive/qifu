@@ -1,0 +1,80 @@
+.wish-pen{display:none}
+.phone .scroll>.craft-scene{--craft-ink:#e8d3a4;--craft-muted:#acb2b1;--craft-line:#bc965344;--craft-panel:#152638;--craft-field:#102335;--craft-paper:#ead8ac;display:flex;flex-direction:column;gap:0;height:100%;min-height:0;margin:0;padding:18px 22px 16px;overflow:hidden;text-align:center;color:var(--craft-ink);background:radial-gradient(ellipse at 50% 48%,#9f6a2523,transparent 57%),repeating-linear-gradient(173deg,transparent 0 38px,#aec9c206 39px 40px),linear-gradient(160deg,#13283a,#0b192b)}
+.phone .craft-top{display:flex;align-items:center;justify-content:space-between;flex:none;height:22px;margin:0 0 13px}
+.phone .craft-top>small{font-size:10px;letter-spacing:2px;color:var(--craft-muted)}
+.phone .craft-scene .craft-text{position:static;display:block;width:auto;min-height:25px;margin:5px auto 0;padding:4px 10px;border:0;background:none;box-shadow:none;color:var(--craft-muted);font-size:10px;line-height:1.5;letter-spacing:1px}
+.phone .craft-top .craft-text{font:22px/1 serif;margin:0;padding:0 4px;min-height:22px}
+.phone .craft-steps{display:flex;list-style:none;justify-content:space-between;gap:8px;padding:0;margin:0 0 22px;flex:none}
+.phone .craft-steps li{position:relative;display:flex;align-items:center;gap:5px;font-size:10px;letter-spacing:1px;color:var(--craft-muted);opacity:.55}
+.phone .craft-steps li:not(:last-child):after{position:absolute;content:'';left:calc(100% + 7px);top:9px;width:18px;height:1px;background:var(--craft-line)}
+.phone .craft-steps li>i{display:grid;place-items:center;width:18px;height:18px;font:10px/1 Georgia;border:1px solid currentColor;border-radius:50%}
+.phone .craft-steps li.current,.phone .craft-steps li.done{color:var(--craft-ink);opacity:1}
+.phone .craft-steps li.current>i{background:#c6924c;color:#122235;border-color:#c6924c;box-shadow:0 0 15px #c6924c30}
+.phone .craft-heading{flex:none;position:relative;z-index:2}
+.phone .craft-heading h1{color:var(--craft-ink);font-size:27px;line-height:1.4;letter-spacing:3px;margin:0 0 7px;text-shadow:none}
+.phone .craft-heading p{color:var(--craft-muted);font-size:10px;line-height:1.7;letter-spacing:1px;margin:0}
+.phone .craft-workbench{position:relative;display:flex;align-items:center;justify-content:center;flex:1 1 0;min-height:90px;margin:8px 0 5px;isolation:isolate}
+.phone .craft-lantern{position:relative;z-index:2;display:flex;justify-content:center;width:100%;height:100%;min-height:0}
+.phone .craft-lantern>svg{display:block;width:100%;height:100%;max-width:285px;max-height:420px;overflow:visible}
+.phone .craft-table{position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--craft-line),transparent)}
+.phone .craft-table:after{content:'西溪灯作';position:absolute;top:5px;left:0;right:0;text-align:center;font-size:8px;letter-spacing:5px;opacity:.35}
+.phone .craft-halo{position:absolute;inset:4% 0;background:radial-gradient(ellipse,#edb34c30,transparent 65%);opacity:.25;transition:opacity 1s;z-index:0}
+.phone .craft-controls{position:relative;z-index:3;flex:none;padding-top:16px;width:100%;margin:0}
+.phone .craft-controls .craft-primary,.phone .craft-ready-actions>button{position:static;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:43px;margin:0;padding:10px 12px;border:1px solid #c39459;background:linear-gradient(110deg,#984631,#b45c3e);box-shadow:0 4px 20px #090d1520;color:#ffedc6;font:14px/1.5 'SimSun',serif;letter-spacing:1.2px;border-radius:2px;cursor:pointer}
+.phone .craft-controls .craft-primary span{margin-left:auto;font:20px/1 serif}
+.phone .craft-controls button:focus-visible,.phone .craft-form :is(input,textarea):focus-visible{outline:2px solid #f6c56f;outline-offset:3px}
+.phone .craft-types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 15px}
+.phone .craft-types>button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:auto;min-width:0;height:87px;margin:0;padding:6px 2px;background:#dcb47706;border:1px solid var(--craft-line);box-shadow:none;border-radius:2px;color:var(--craft-ink)}
+.phone .craft-types>button.chosen{border-color:#dba65d;background:#e0af6220;box-shadow:inset 0 0 18px #dba65d0c}
+.phone .craft-types i{display:block;position:relative;width:24px;height:27px;margin:0 0 3px;transform:rotate(-9deg);border-radius:1px;background:linear-gradient(110deg,var(--paper-tint),#f8ecd4 50%,var(--paper-tint));box-shadow:2px 3px 0 #a17d5433}
+.phone .craft-types i:after{content:'';position:absolute;left:48%;height:100%;width:1px;background:#93754c44}
+.phone .craft-types b{font-weight:400;font-size:10px;line-height:1.4;white-space:nowrap}
+.phone .craft-types small{font-size:8px;line-height:1.3;color:var(--craft-muted);white-space:nowrap}
+.phone .craft-invitation{font-size:11px;line-height:1.9;letter-spacing:2px;margin:0 0 17px;color:var(--craft-muted)}
+.phone .craft-progress{font-size:11px;line-height:1.7;letter-spacing:1px;color:var(--craft-ink);padding:8px 16px 4px}
+.phone .craft-progress>i{display:block;height:2px;margin:15px auto 10px;background:var(--craft-line);max-width:180px;overflow:hidden}
+.phone .craft-progress>i>b{display:block;height:100%;width:100%;background:#d6a451;transform-origin:left;animation:craftProgress var(--craft-duration) linear both;animation-delay:var(--craft-offset)}
+.phone .craft-progress>small{font-size:9px;opacity:.6}
+.phone .craft-form{display:flex;flex-direction:column;padding:0;margin:0;background:none;border:0;box-shadow:none;text-align:left}
+.phone .craft-form label{display:flex;justify-content:space-between;margin:0 0 5px;font-size:11px;line-height:1.5;color:var(--craft-ink);letter-spacing:1px}
+.phone .craft-form #count{font-size:9px;font-weight:400;color:var(--craft-muted)}
+.phone .craft-form :is(textarea,input){width:100%;margin:0 0 11px;padding:9px 11px;color:var(--craft-ink);background:var(--craft-field);border:1px solid var(--craft-line);box-shadow:none;border-radius:2px;font:16px/1.5 'SimSun',serif;letter-spacing:1px}
+.phone .craft-form textarea{resize:none;min-height:58px;height:58px;max-height:70px}
+.phone .craft-form input{height:38px;margin-bottom:0}
+.phone .craft-form :is(textarea,input)::placeholder{color:var(--craft-muted);opacity:.6}
+.phone .craft-form #status{color:#e6aa77;font-size:10px;line-height:1.4;min-height:19px;margin:4px 0}
+.phone .craft-write .craft-workbench{min-height:55px;max-height:245px}
+.phone .craft-write .craft-lantern>svg{max-height:245px}
+.phone .craft-finished{display:flex;align-items:center;justify-content:center;gap:7px;color:var(--craft-ink);font-size:10px;line-height:1.7;margin-bottom:15px}
+.phone .craft-finished i{width:5px;height:5px;border-radius:50%;background:#d6a451;box-shadow:0 0 10px #fbc76b}
+.phone .craft-ready-actions{display:flex;flex-direction:column;gap:9px}
+.phone .craft-ready-actions>button:first-child{background:transparent;color:var(--craft-ink);border-color:var(--craft-line)}
+.phone .craft-choose .paper-spread{transform-origin:160px 200px;transform:scaleX(.32) rotate(-5deg)}
+.phone .craft-unfolding .paper-spread{transform-origin:160px 200px;animation:craftUnfold var(--craft-duration) cubic-bezier(.2,.5,.3,1) both;animation-delay:var(--craft-offset)}
+.phone .craft-frame .wish-lamp-body{transform:scale(.95,.32);transform-origin:160px 200px}
+.phone .craft-frame .wish-lantern-art{opacity:.8}
+.phone .craft-shaping .wish-lamp-body{transform-origin:160px 200px;animation:craftShape var(--craft-duration) cubic-bezier(.2,.6,.2,1) both;animation-delay:var(--craft-offset)}
+.phone .craft-shaping .wish-ribs{stroke-dasharray:300;animation:craftRibs var(--craft-duration) ease both;animation-delay:var(--craft-offset)}
+.phone .craft-writing .wish-letter{animation:craftInk .55s ease both;animation-delay:calc(var(--letter-i)*var(--write-step) + var(--craft-offset))}
+.phone .craft-writing .wish-pen{display:initial;animation:craftBrush var(--write-step) linear both;animation-delay:calc(var(--letter-i)*var(--write-step) + var(--craft-offset))}
+.phone .craft-writing .wish-signature{animation:craftSignature .55s ease both;animation-delay:calc(var(--signature-delay) + var(--craft-offset))}
+.phone .craft-ignite .wish-lamp-body{filter:brightness(.77) saturate(.7)}
+.phone .craft-igniting .wish-lamp-body{animation:craftLight var(--craft-duration) ease both;animation-delay:var(--craft-offset)}
+.phone .craft-igniting .craft-halo,.phone .craft-ready .craft-halo{opacity:1}
+:root[data-visual="gongbi"] .phone .scroll>.craft-scene{--craft-ink:#614a32;--craft-muted:#93805c;--craft-line:#a7834844;--craft-field:#f8efdba1;background:radial-gradient(ellipse at 50% 40%,#fff3cc,transparent 68%),repeating-linear-gradient(173deg,transparent 0 30px,#8e714a06 31px 32px),#ecdfc2}
+:root[data-visual="ink-wash"] .phone .scroll>.craft-scene{--craft-ink:#3e514b;--craft-muted:#7b887d;--craft-line:#70816d44;--craft-field:#f4f3e6b0;background:radial-gradient(ellipse at 50% 40%,#f4f1db,transparent 65%),repeating-linear-gradient(173deg,transparent 0 34px,#71807506 35px 36px),#e1e5d9}
+@keyframes craftUnfold{0%{transform:scaleX(.32) rotate(-5deg)}55%{transform:scaleX(1.07) rotate(1deg)}100%{transform:scaleX(1) rotate(0)}}
+@keyframes craftShape{0%{transform:scale(.95,.32);opacity:.65}75%{transform:scale(1.02,1.03)}100%{transform:scale(1);opacity:1}}
+@keyframes craftRibs{from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+@keyframes craftProgress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes craftInk{from{clip-path:inset(0 0 100% 0);opacity:.2}to{clip-path:inset(0);opacity:1}}
+@keyframes craftBrush{0%{opacity:0;translate:-3px -6px}5%{opacity:1;translate:-3px -6px}35%{opacity:1;translate:2px 1px}70%{opacity:1;translate:0 10px}95%,100%{opacity:0;translate:0 13px}}
+@keyframes craftSignature{from{opacity:0}to{opacity:1}}
+@keyframes craftLight{from{filter:brightness(.65) saturate(.6)}70%{filter:brightness(1.2) saturate(1.1)}to{filter:brightness(1)}}
+@keyframes craftFlame{from{opacity:0;transform:scale(.1)}70%{opacity:1;transform:scale(1.25)}to{opacity:1;transform:scale(1)}}
+@keyframes craftFlicker{50%{transform:scale(.9,1.07) rotate(3deg)}}
+@container (max-height:540px){.phone .scroll>.craft-scene{padding:10px 16px}.phone .craft-top{margin-bottom:7px}.phone .craft-steps{margin-bottom:10px}.phone .craft-heading h1{font-size:23px;margin-bottom:4px}.phone .craft-heading p{font-size:9px}.phone .craft-controls{padding-top:10px}.phone .craft-types>button{height:73px}.phone .craft-types{margin-bottom:10px}.phone .craft-controls .craft-primary,.phone .craft-ready-actions>button{min-height:38px;padding:7px 10px;font-size:12px}.phone .craft-invitation{margin-bottom:10px;font-size:10px}.phone .craft-form textarea{height:48px;min-height:48px}.phone .craft-form label{font-size:10px}.phone .craft-form :is(input,textarea){margin-bottom:7px;padding:6px 9px}.phone .craft-form input{height:33px;margin-bottom:0}.phone .craft-finished{margin-bottom:8px}.phone .craft-progress{padding:0}.phone .craft-steps li:not(:last-child):after{width:12px}}
+@media(prefers-reduced-motion:reduce){.phone .craft-scene *{animation:none!important}.phone .craft-unfolding .paper-spread,.phone .craft-shaping .wish-lamp-body{transform:none}.phone .craft-writing .wish-pen{display:none}.phone .craft-progress>i>b{transform:scaleX(1)}}
+
+.phone .craft-igniting .craft-svg-flame{display:initial;transform-origin:160px 302px;animation:craftFlame var(--craft-duration) both;animation-delay:var(--craft-offset)}
+.phone .craft-ready .craft-svg-flame{display:initial;filter:drop-shadow(0 0 5px #ffc35b);transform-origin:160px 302px;animation:craftFlicker 2s infinite}
