@@ -8,6 +8,7 @@
 - [游客手机版](https://andrewsive.github.io/qifu/#mobile)
 - [白墙投影](https://andrewsive.github.io/qifu/#wall)
 - [演出控制](https://andrewsive.github.io/qifu/#control)
+- [视频心愿实时合成：输入祝福并随灯放飞](https://andrewsive.github.io/qifu/video-wish.html)
 
 ## 视觉版本对比
 
@@ -35,6 +36,9 @@ npm run dev -- --port 4173
 | 游客手机 | `/#mobile` |
 | 白墙投影 | `/#wall` |
 | 演出控制 | `/#control` |
+| 视频心愿实时合成 | `/video-wish.html` |
+
+视频合成验证与祈福仪式统一在本仓库管理、独立页面发布。`npm run build` 同时构建两个页面，视频素材随构建打包，在线链接可直接分享给厂家和其他体验者。素材与程序说明见 [视频合成验证](experiments/video-wish/README.md)。
 
 ## 互动流程
 

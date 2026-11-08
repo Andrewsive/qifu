@@ -2,11 +2,13 @@
 
 本地入口：`http://localhost:4173/video-wish.html`。
 
+在线入口：[视频心愿实时合成](https://andrewsive.github.io/qifu/video-wish.html)。与祈福仪式 Demo 共用 `Andrewsive/qifu` 仓库及 GitHub Pages，通过独立 HTML 入口发布。
+
 这是一页独立的合成试验，读取用户提供的《视频节点 1.mp4》（1470×630，24 fps，约6.08秒）。
 
 ## 使用
 
-将原片放到 `output/video-wish/source.mp4`，在项目根目录运行 `npm run dev -- --port 4173`。
+素材在 `experiments/video-wish/media/` 中随源码管理。项目根目录运行 `npm run dev -- --port 4173` 可本地体验；运行 `npm run build` 会同时构建祈福仪式页、视频合成页及两份视频素材，发布到 GitHub Pages 后无需启动本地服务。
 
 网页可实时修改祝福、昵称和编号；支持暂停、重播、拖动时间、半速、文字开关、原片声音、PNG截图。展开定位校准面板后，可在暂停时拖动四角，保存关键帧并导出 JSON。定位修改仅保存在当前浏览器，可随时恢复默认。
 
@@ -22,4 +24,4 @@
 
 网页文字可在播放时更换；MP4是一次导出后的固定成片。两种方式共享定位与排版数据，但文字栅格化和插值实现不同，不作逐像素一致承诺。
 
-原片及输出视频只保存在被 Git 忽略的 `output/` 目录，本次不上传到公开网站。
+2026-11-08 按用户要求将原片与 MP4 样片加入 `media/`，随本页公开发布；`output/` 继续保留本地分析帧和渲染过程文件。重新生成样片后，将 `output/video-wish/wish-sample.mp4` 复制到 `media/` 再构建。

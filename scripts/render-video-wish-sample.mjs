@@ -5,6 +5,7 @@ import { DEFAULT_TRACK,DEFAULT_WISH,TEXT_SIZE,VIDEO_SIZE } from '../experiments/
 import { textLayout } from '../experiments/video-wish/renderer.js';
 
 const root=process.cwd(),output=path.join(root,'output','video-wish');
+const source=path.join(root,'experiments','video-wish','media','source.mp4');
 fs.mkdirSync(output,{recursive:true});
 const font='output/video-wish/ink-font.ttf';
 fs.copyFileSync('C:/Windows/Fonts/simkai.ttf',path.join(root,font));
@@ -17,6 +18,6 @@ function expression(corner,axis){let result=String(DEFAULT_TRACK.at(-1).q[corner
 const order=[0,1,3,2],perspective=order.flatMap((corner,index)=>['x','y'].map((axis,j)=>`${axis}${index}='${expression(corner,j)}'`)).join(':')+':sense=destination:eval=frame:interpolation=cubic';
 const graph=`[0:v]format=gbrp,split=2[base][paper];[1:v]scale=${VIDEO_SIZE.join(':')},format=rgba,perspective=${perspective},fade=t=out:st=2.45:d=0.8:alpha=1[warped];[warped]split=2[col][matte];[col]format=gbrp[ink];[matte]alphaextract,format=gray[mask];[paper][ink]blend=all_mode=multiply[printed];[base][printed][mask]maskedmerge,format=yuv420p[out]`;
 fs.writeFileSync(path.join(output,'render-filter.txt'),graph);
-run(['-i','output/video-wish/source.mp4','-loop','1','-framerate','24','-i','output/video-wish/text-texture.png','-filter_complex',graph,'-map','[out]','-map','0:a?','-c:v','libx264','-crf','18','-preset','fast','-c:a','copy','-t','6.08','-movflags','+faststart','output/video-wish/wish-sample.mp4']);
+run(['-i',source,'-loop','1','-framerate','24','-i','output/video-wish/text-texture.png','-filter_complex',graph,'-map','[out]','-map','0:a?','-c:v','libx264','-crf','18','-preset','fast','-c:a','copy','-t','6.08','-movflags','+faststart','output/video-wish/wish-sample.mp4']);
 fs.writeFileSync(path.join(output,'sample-manifest.json'),JSON.stringify({source:'视频节点 1.mp4',...data,size:VIDEO_SIZE,fps:24,calibration:'manual keyframes',exportedAt:new Date().toISOString()},null,2));
 console.log('MP4 exported: '+path.join(output,'wish-sample.mp4'));

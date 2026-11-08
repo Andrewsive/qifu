@@ -98,7 +98,7 @@ function stopAutoShow(){if(recordingDemo?.hasSession)recordingDemo.stop()}
 function restartOpening(){stopAutoShow();setVisitor({step:'landing',wishId:null,form:{}});setDraft({});setEvent({});setStage('idle');render()}
 function startAutoShow(){if(location.hash!=='#sync')location.hash='#sync';recordingDemo.start();render()}
 const L=(t='lotus',s='')=>`<span class="lantern ${t} ${s}"><i></i><b>${types.find(x=>x[0]===t)?.[3]||'愿'}</b><em></em></span>`;
-$('#app').innerHTML=`<header><a href="#sync"><i class="seal">愿</i><span><b>西溪且留下</b><small>万愿成灯 · 新春灯市</small></span></a><nav><a href="#sync">双屏联调</a><a href="#mobile">游客手机</a><a href="#wall">白墙投影</a><a href="#control">演出控制</a></nav><label>LOCAL DEMO · 非现场联网</label></header><main></main>`;
+$('#app').innerHTML=`<header><a href="#sync"><i class="seal">愿</i><span><b>西溪且留下</b><small>万愿成灯 · 新春灯市</small></span></a><nav><a href="#sync">双屏联调</a><a href="#mobile">游客手机</a><a href="#wall">白墙投影</a><a href="#control">演出控制</a><a href="./video-wish.html">视频合成</a></nav><label>LOCAL DEMO · 非现场联网</label></header><main></main>`;
 mountVisualPicker($('header'));
 function toast(x){let e=document.createElement('div');e.className='toast';e.textContent=x;document.body.append(e);setTimeout(()=>e.remove(),2300)}
 const htmlText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
