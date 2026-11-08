@@ -18,7 +18,7 @@ const shapes = {
   plum: 'M124 80 Q160 72 196 80 L246 106 Q259 113 262 129 L272 183 L259 267 Q257 281 243 290 L194 314 Q160 325 126 314 L77 290 Q63 281 61 267 L48 183 L58 129 Q61 113 74 106Z'
 };
 
-function wishLettering(wish, ink) {
+function wishLettering(wish, ink, centerY = 226.5) {
   const characters = Array.from(String(wish || '愿新岁常安常乐')).slice(0, 28);
   const perColumn = characters.length <= 7 ? characters.length : characters.length === 8 ? 4 : 7;
   const columns = Math.ceil(characters.length / perColumn);
@@ -26,7 +26,7 @@ function wishLettering(wish, ink) {
   const fontSize = rows <= 4 ? 27 : rows === 5 ? 21 : rows === 6 ? 18 : 16;
   const rowGap = rows <= 4 ? 28 : rows === 5 ? 22 : rows === 6 ? 18 : 16;
   const columnGap = fontSize + 7;
-  const startY = 226.5 - (rows - 1) * rowGap / 2;
+  const startY = centerY - (rows - 1) * rowGap / 2;
   return `<g fill="${ink}" font-family="'Songti SC','SimSun',serif" font-size="${fontSize}" text-anchor="middle">${characters.map((char, index) => {
     const column = Math.floor(index / perColumn);
     const x = 160 + (columns - 1) * columnGap / 2 - column * columnGap;
@@ -78,7 +78,7 @@ export function renderWishLantern({ type = 'lotus', serial = '', name = '', wish
       <text x="160" y="123" text-anchor="middle" fill="${palette.ink}" font-family="Georgia,'Songti SC',serif" font-size="20" letter-spacing="1">${escapeXml(serial)}</text>
       <text class="wish-signature" x="160" y="145" text-anchor="middle" fill="${palette.ink}" font-family="'Songti SC','SimSun',serif" font-size="10.5" letter-spacing="1">${escapeXml(name)}</text>
       <path d="M136 155 H151 M169 155 H184 M156 155 L160 151 L164 155 L160 159Z" fill="none" stroke="${palette.trim}" stroke-width=".75"/>
-      ${blank ? '' : wishLettering(wish, palette.ink)}
+      ${blank ? '' : wishLettering(wish, palette.ink, sky ? 212 : 226.5)}
       <rect x="226" y="263" width="10" height="13" rx="1.5" fill="#ac5038" opacity=".8"/><text x="231" y="272.5" text-anchor="middle" font-size="8" fill="#fff0cc" font-family="serif">愿</text>
     </g>
     ${sky ? `<ellipse cx="160" cy="291" rx="74" ry="17" fill="#b87b4666" stroke="${palette.trim}" stroke-width="2"/><ellipse cx="160" cy="291" rx="65" ry="12" fill="#ffe7ad" opacity=".5"/><path d="M100 289 L220 293 M160 280 V305" stroke="${palette.trim}" fill="none"/><g class="craft-svg-flame" display="none"><path d="M160 302 Q142 291 160 270 Q158 285 167 288 Q173 298 160 302Z" fill="#ffc763"/><path d="M160 301 Q153 295 160 286 Q166 295 160 301Z" fill="#fff9da"/></g>` : `<path d="M137 315 Q160 323 183 315 L181 324 Q160 331 139 324Z" fill="url(#${id}-metal)"/>
