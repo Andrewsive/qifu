@@ -16,7 +16,7 @@ export const RECORDING_STEPS = [
   { id: 'generated', label: '亲手成灯 · 留存心愿', duration: 4000 },
   { id: 'handoff', label: '放愿入灯市 · 新灯亮起', duration: 6000 },
   { id: 'waiting', label: '愿灯留池 · 等候放飞', duration: 8000 },
-  { id: 'lighting', label: '孔明灯放飞 · 万愿同行', duration: RELEASE_DURATION_MS },
+  { id: 'lighting', label: '少女点灯 · 万愿放飞', duration: RELEASE_DURATION_MS },
   { id: 'glow', label: '远景灯海 · 汇字烟花', duration: 33000 },
   { id: 'lottery', label: '灯市好礼 · 头像滚动开奖', duration: LOTTERY_DURATION_MS+5000 },
   { id: 'close', label: '礼成收束 · 留存纪念', duration: 4000 },

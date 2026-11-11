@@ -9,5 +9,5 @@ export function releaseCanvas(wish, surface = 'wall') {
 }
 
 export function releasePhoneScene(mine) {
-  return `<section class="m-scene release-mobile"><div class="step">02 <span>孔明灯放飞</span></div><h1>灯起，愿行</h1><p>${mine?'你的心愿，正在随灯启程':'万千孔明灯，一同飞向新岁'}</p><div class="release-stage">${releaseCanvas(mine,'mobile')}</div>${mine?`<div class="release-identity">第 ${escape(mine.serial)} 盏 · ${escape(mine.name)}</div>`:''}<div class="release-status"><b data-release-title>万灯启程</b><p data-release-copy>让美好心愿，与众灯一同启程</p></div><small class="release-note">灯火相伴，共迎新岁</small></section>`;
+  return `<section class="m-scene release-mobile"><div class="step">02 <span>少女点灯 · 孔明灯放飞</span></div><h1>灯起，愿行</h1><p>宋韵少女点亮心灯，与万千愿灯共同启程</p><div class="release-stage">${releaseCanvas(null,'mobile')}</div>${mine?`<div class="release-identity">我的愿灯 · 第 ${escape(mine.serial)} 盏 · ${escape(mine.name)} · 一同启程</div>`:''}<div class="release-status"><b data-release-title>少女点灯</b><p data-release-copy>一盏心灯亮起，照见万千新岁期盼</p></div><small class="release-note">灯火相伴，共迎新岁</small></section>`;
 }

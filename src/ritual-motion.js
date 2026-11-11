@@ -15,7 +15,7 @@ export function floatingPose(id, seconds = 0) {
 }
 
 export function releasePhase(seconds) {
-  if (seconds < 3) return { id: 'igniting', title: '万灯启程', copy: '让美好心愿，与众灯一同启程' };
+  if (seconds < 3) return { id: 'igniting', title: '少女点灯', copy: '一盏心灯亮起，照见万千新岁期盼' };
   if (seconds < 8) return { id: 'releasing', title: '心愿放飞', copy: '你的愿灯，与万千心愿一同启程' };
   return { id: 'joining', title: '愿赴新岁', copy: '让灯火带着祝福，汇入远方灯海' };
 }

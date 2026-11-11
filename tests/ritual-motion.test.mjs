@@ -12,10 +12,12 @@ test('collection stays low and floating for all visitors and never turns into an
   assert.equal(poolLantern().replace(/<[^>]*>/g,''),'');
 });
 
-test('every phone flies its own wish and the public release has no selected visitor', () => {
+test('girl lights a shared blank main lantern on both screens, with personal identity kept outside the animation', () => {
   const mine={id:'alice',serial:1,name:'小溪',wish:'家人安康'},picked={id:'bob',serial:2,name:'阿禾',wish:'学业有成'};
   const phone=releasePhoneScene(mine,picked),wall=releaseCanvas(null);
-  assert.match(phone,/data-wish-id="alice"/);assert.match(phone,/data-wish="家人安康"/);
+  assert.match(phone,/少女点灯/);assert.match(phone,/第 1 盏 · 小溪/);
+  assert.match(phone,/data-wish-id=""/);assert.match(phone,/data-wish=""/);
+  assert.doesNotMatch(phone,/家人安康|data-wish-id="alice"/);
   assert.doesNotMatch(phone,/学业有成|release-lucky/);
   assert.match(wall,/孔明灯共同放飞动画/);assert.doesNotMatch(wall,/bob|学业有成/);
   assert.doesNotMatch(releasePhoneScene(picked,picked),/release-lucky|恭喜|幸运/);
