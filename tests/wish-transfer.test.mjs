@@ -60,5 +60,5 @@ test('the recording gives the wall time to finish before lighting, within the co
   assert.equal(handoff.duration, event.phoneEndsAt);
   assert.equal(handoff.duration + waiting.duration, event.endsAt);
   assert.ok(event.wallEndsAt < event.endsAt);
-  assert.equal(RECORDING_DURATION, 114000);
+  assert.equal(RECORDING_DURATION, 135500);
 });

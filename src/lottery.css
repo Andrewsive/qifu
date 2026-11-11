@@ -1,0 +1,80 @@
+.wall.lottery .field,.wall.lottery .caption,.wall.lottery .wall-countdown{display:none!important}
+.wall.lottery .night-town-scene{opacity:.24!important}
+.wall.lottery .boundary>.title{z-index:12!important;top:16%!important;opacity:.9!important;animation:none!important}
+.wall.lottery .title h1{font-size:clamp(20px,2.8cqw,42px)!important;margin:0!important}
+.wall.lottery .title small,.wall.lottery .title p{display:none}
+.lottery-scene{--lottery-ink:#f0d7a6;--lottery-muted:#b3b5aa;--lottery-line:#c7a36745;color:var(--lottery-ink);text-align:center;isolation:isolate}
+.lottery-wall{position:absolute;z-index:13;inset:29% 5% 4%;display:flex;flex-direction:column;gap:6px;container-type:size}
+.lottery-heading{position:relative;z-index:2;flex:none}
+.lottery-heading>small{font-size:clamp(6px,1.1cqh,10px);letter-spacing:3px;color:#c8a66c}
+.lottery-heading :is(h1,h2){font-weight:400;font-size:clamp(16px,5.5cqh,30px);line-height:1.3;letter-spacing:5px;margin:4px 0}
+.lottery-heading>p{font-size:clamp(6px,2cqh,11px);margin:0;color:var(--lottery-muted);letter-spacing:1px}
+.lottery-focus{position:relative;z-index:2;flex:1 1 0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.lottery-avatar{display:inline-flex;position:relative;flex:none;width:var(--avatar-size,40px);height:var(--avatar-size,40px);border:1px solid #d8b77d99;border-radius:50%;background:#364c55;overflow:hidden;box-shadow:0 0 0 3px #f2cf8b0a}
+.lottery-avatar>:is(svg,img){display:block;width:100%;height:100%;object-fit:cover}
+.lottery-ready-avatars{display:flex;justify-content:center;gap:12px;--avatar-size:clamp(24px,12cqh,65px)}
+.lottery-ready-copy,.lottery-reveal-copy,.lottery-rolling-copy{font-size:clamp(7px,2.7cqh,12px);margin:7px 0 0;color:#e2c58d;letter-spacing:2px}
+.lottery-reels{display:flex;justify-content:center;gap:18px;--avatar-size:clamp(36px,15cqh,72px);--avatar-slot:clamp(65px,24cqh,105px)}
+.lottery-reel{position:relative;width:calc(var(--avatar-size) + 27px);height:var(--avatar-slot);border:1px solid #e7c17788;border-radius:48px;background:radial-gradient(ellipse,#cea45330,transparent);overflow:hidden;box-shadow:0 0 24px #e0ab4030}
+.lottery-reel:after{position:absolute;content:'';inset:0;pointer-events:none;box-shadow:inset 0 10px 12px #101d2b,inset 0 -10px 12px #101d2b;border-radius:inherit}
+.lottery-reel-track{animation:lotteryReel .85s linear infinite;animation-delay:var(--reel-delay)}
+.lottery-reel-item{height:var(--avatar-slot);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.lottery-reel-item>span:last-child{font-size:clamp(8px,2.4cqh,12px);line-height:1.4;color:#ebd9b4}
+.lottery-reveal{display:flex;align-items:center;justify-content:center;gap:20px;--avatar-size:clamp(36px,14cqh,68px)}
+.lottery-person{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0}
+.lottery-person>b{font-size:clamp(7px,2.6cqh,12px);line-height:1.3;font-weight:400;max-width:100%;overflow-wrap:anywhere;color:var(--lottery-ink)}
+.lottery-person>small{font-size:clamp(6px,1.8cqh,9px);line-height:1.3;color:var(--lottery-muted)}
+.lottery-person.is-revealed{animation:lotteryReveal .75s both}
+.lottery-person.is-revealed .lottery-avatar{box-shadow:0 0 28px #f5bf4c60;border:2px solid #eccd88}
+.lottery-board{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;flex:none;min-height:33%;padding-top:5px}
+.lottery-prize{margin:0;padding:8px 6px 9px;border:1px solid var(--lottery-line);background:linear-gradient(140deg,#d5ad5812,#0d1b2d70);min-width:0;border-radius:3px}
+.lottery-prize h3{display:flex;align-items:center;justify-content:center;gap:6px;font-size:clamp(9px,3cqh,14px);font-weight:400;margin:0 0 7px;letter-spacing:2px}
+.lottery-prize h3>i{display:grid;place-items:center;width:20px;height:20px;border:1px solid #caaa6470;border-radius:50%;font-style:normal;font-size:11px}
+.lottery-prize>div{display:flex;justify-content:center;align-items:start;gap:9px;--avatar-size:clamp(20px,9cqh,38px)}
+.lottery-prize:first-child{border-color:#d2af6a99;background:linear-gradient(140deg,#b88b3024,#0d1b2d70)}
+.lottery-prize:first-child h3{color:#f3d89e}
+.lottery-pending{font-size:clamp(7px,2.3cqh,11px);color:var(--lottery-muted);padding:8px 0;letter-spacing:1px}
+.lottery-complete{display:flex;flex-direction:column;align-items:center;gap:6px}
+.lottery-complete>i{font-style:normal;font-size:clamp(15px,6cqh,30px);color:#edc579;text-shadow:0 0 22px #eaba55}
+.lottery-complete>b{font-weight:400;font-size:clamp(12px,4cqh,20px);letter-spacing:3px}
+.lottery-complete>p,.lottery-message>p{font-size:clamp(7px,2.3cqh,11px);color:var(--lottery-muted);margin:0;line-height:1.6}
+.lottery-message>b{display:block;font-weight:400;font-size:22px;letter-spacing:3px;margin-bottom:10px}
+.lottery-sparkles{position:absolute;inset:15% 0 auto;font-size:16px;color:#f2c16a;letter-spacing:50px;opacity:.14;z-index:0;pointer-events:none}
+.lottery-empty .lottery-board{opacity:.4}
+.lottery-host-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;margin-bottom:12px;border:1px solid #bda46c55;background:#142638;color:#c8b58e;font-size:11px}
+.lottery-host-tools p{flex:1;margin:0;line-height:1.7}
+.lottery-host-tools button,.lottery-control button{padding:8px 12px;background:#9a4e36;border:1px solid #cca165;color:#f5e4c1;cursor:pointer;font:inherit}
+.lottery-host-tools button:disabled,.lottery-control button:disabled{opacity:.4;cursor:default}
+.lottery-control{display:flex;flex-direction:column;gap:7px;padding-top:12px;border-top:1px solid #ba9b5d44;font-size:10px;line-height:1.7;color:#b8b39f}
+.lottery-control p{margin:0}
+.lottery-control strong{color:#dab576;font-weight:400}
+.recording-clean .lottery-host-tools{display:none}
+.phone .scroll>.lottery-mobile{display:flex;flex-direction:column;gap:8px;height:100%;min-height:0;padding:18px 18px 16px;background:radial-gradient(ellipse at 50% 35%,#b18a3223,transparent 62%),linear-gradient(#11273c,#091a2b);overflow:hidden}
+.phone .lottery-mobile .lottery-heading :is(h1,h2){font-size:26px;letter-spacing:3px;margin:7px 0}
+.phone .lottery-mobile .lottery-heading small{font-size:10px}
+.phone .lottery-mobile .lottery-heading p{font-size:10px;line-height:1.6}
+.phone .lottery-mobile .lottery-focus{flex:1 1 0;min-height:80px}
+.phone .lottery-mobile .lottery-reels{--avatar-size:64px;--avatar-slot:100px;gap:10px}
+.phone .lottery-mobile .lottery-ready-avatars{flex-wrap:wrap;gap:10px;--avatar-size:49px;max-width:210px}
+.phone .lottery-mobile .lottery-reveal{--avatar-size:60px;gap:12px}
+.phone .lottery-mobile .lottery-person>b{font-size:11px}
+.phone .lottery-mobile .lottery-person>small{font-size:8px}
+.phone .lottery-mobile .lottery-board{display:flex;flex-direction:column;gap:7px;min-height:0;padding:0;flex:none}
+.phone .lottery-mobile .lottery-prize{display:flex;align-items:center;gap:8px;padding:8px;min-height:62px}
+.phone .lottery-mobile .lottery-prize h3{font-size:11px;margin:0;flex:none;letter-spacing:1px;width:75px}
+.phone .lottery-mobile .lottery-prize h3>i{width:18px;height:18px;font-size:9px}
+.phone .lottery-mobile .lottery-prize>div{flex:1;gap:11px;--avatar-size:29px;align-items:center}
+.phone .lottery-mobile .lottery-prize .lottery-person{gap:2px}
+.phone .lottery-mobile .lottery-prize .lottery-person>b{font-size:9px}
+.phone .lottery-mobile .lottery-prize .lottery-person>small{display:none}
+.phone .lottery-mobile .lottery-pending{font-size:9px;padding:5px}
+.phone .lottery-mobile .lottery-complete>b{font-size:18px;letter-spacing:2px}
+.phone .lottery-mobile .lottery-complete>p{font-size:10px;line-height:1.6;max-width:240px}
+.phone .lottery-phone-note{flex:none;font-size:9px;line-height:1.6;color:#cbb98d;text-align:center}
+.phone .lottery-mobile>#lotterySaveFinale{position:static;flex:none;width:100%;min-height:40px;padding:9px 7px;margin:0;font-size:12px;border:1px solid #bf9a5e;background:#934b35;color:#fae5b8}
+html[data-visual="gongbi"] .lottery-scene{--lottery-ink:#ecd3a0;--lottery-muted:#c3bda6}
+html[data-visual="ink-wash"] .lottery-scene{--lottery-ink:#e6ddbc;--lottery-muted:#b5c1b6}
+@keyframes lotteryReel{from{transform:translateY(0)}to{transform:translateY(calc(-1*var(--reel-count,12)*var(--avatar-slot)))}}
+@keyframes lotteryReveal{from{opacity:0;transform:scale(.7)}65%{opacity:1;transform:scale(1.08)}to{opacity:1;transform:scale(1)}}
+@container (max-height:520px){.phone .scroll>.lottery-mobile{padding:12px 14px;gap:6px}.phone .lottery-mobile .lottery-heading :is(h1,h2){font-size:22px;margin:4px 0}.phone .lottery-mobile .lottery-focus{min-height:65px}.phone .lottery-mobile .lottery-reels{--avatar-size:44px;--avatar-slot:75px}.phone .lottery-mobile .lottery-reveal{--avatar-size:42px}.phone .lottery-mobile .lottery-prize{min-height:51px;padding:5px 7px}.phone .lottery-mobile .lottery-prize>div{--avatar-size:25px}.phone .lottery-mobile .lottery-complete>i{display:none}.phone .lottery-mobile .lottery-ready-avatars{--avatar-size:34px;max-width:260px}.phone .lottery-mobile .lottery-reveal-copy,.phone .lottery-mobile .lottery-rolling-copy{font-size:9px;margin-top:5px}}
+@media(prefers-reduced-motion:reduce){.lottery-reel-track{animation-duration:4s}.lottery-person.is-revealed{animation:none}}

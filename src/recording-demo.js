@@ -1,4 +1,5 @@
 import { RELEASE_DURATION_MS } from './ritual-motion.js';
+import { LOTTERY_DURATION_MS } from './lottery.js';
 export const RECORDING_STEPS = [
   { id: 'lead', label: '录屏准备', duration: 3000 },
   { id: 'opening', label: '开场号召 · 灯市开启', duration: 10000 },
@@ -15,8 +16,9 @@ export const RECORDING_STEPS = [
   { id: 'generated', label: '亲手成灯 · 留存心愿', duration: 4000 },
   { id: 'handoff', label: '放愿入灯市 · 新灯亮起', duration: 6000 },
   { id: 'waiting', label: '愿灯留池 · 等候放飞', duration: 8000 },
-  { id: 'lighting', label: '点灯放飞 · 幸运主灯', duration: RELEASE_DURATION_MS },
+  { id: 'lighting', label: '孔明灯放飞 · 万愿同行', duration: RELEASE_DURATION_MS },
   { id: 'glow', label: '远景灯海 · 汇字烟花', duration: 33000 },
+  { id: 'lottery', label: '灯市好礼 · 头像滚动开奖', duration: LOTTERY_DURATION_MS+5000 },
   { id: 'close', label: '礼成收束 · 留存纪念', duration: 4000 },
 ];
 export const RECORDING_DURATION = RECORDING_STEPS.reduce((sum, step) => sum + step.duration, 0);
