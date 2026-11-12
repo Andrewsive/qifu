@@ -1,3 +1,4 @@
+import { savePrizeGift } from './lottery-gift.js';
 import './style.css';
 import './ritual.css';
 import './mobile-stages.css';
@@ -26,7 +27,8 @@ import './ritual-flow.css';
 import './wall-countdown.css';
 import './lantern-crafting.css';
 import './lottery.css';
-import { createLottery,startLottery,lotteryView,lotteryScene } from './lottery.js';
+import './lottery-gift.css';
+import { createLottery,startLottery,lotteryView,lotteryScene,personalPrize,personalGift } from './lottery.js';
 import { renderCraftScene, bindCraftScene, createCraftPhase, nextCraftPhase, saveCraftPicture } from './lantern-crafting.js';
 import { RELEASE_DURATION_MS, isFinaleStage } from './ritual-motion.js';
 import { releaseCanvas, releasePhoneScene } from './ritual-views.js';
@@ -54,14 +56,16 @@ function storeLottery(value){if(demoSandbox)demoSandbox.lottery=value;else if(va
 function isLotteryScreen(){return stage()==='lottery'||stage()==='close'&&!!lotteryState()?.winners}
 function beginLottery(autostart=true,at=Date.now()){
   const roundId=poolState().cycleId;let state=lotteryState();
-  if(!state||state.roundId!==roundId)state=createLottery(read(),roundId);
+  if(!state||state.roundId!==roundId){state=createLottery(read(),roundId);setVisitor({lotteryPrizeTab:'gift',lotteryPreviewWishId:null})}
   if(autostart)state=startLottery(state,at);
   storeLottery(state);setStage('lottery',at);render();
 }
 function runLottery(){const state=lotteryState();if(!state)return;storeLottery(startLottery(state));render()}
 function replayLottery(){const state=lotteryState();if(!state?.winners)return;storeLottery({...state,startedAt:Date.now()});setStage('lottery');render()}
-function lotteryTools(){const state=lotteryState(),view=lotteryView(state);return `<div class="lottery-host-tools"><p>${state?.participants.length||0} 位参与者 · 一等奖1名 / 二等奖2名 / 三等奖3名<br>头像为本地演示形象 · 同一参与者不重复获奖</p><button id="startLottery" ${view.phase!=='ready'?'disabled':''}>开始头像抽奖</button><button id="replayLottery" ${view.phase!=='done'?'disabled':''}>重播开奖动画</button></div>`}
-function lotteryPhone(){return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>灯市好礼</h2><p>孔明灯放飞仪式礼成，与白墙共同揭晓新春好彩头。</p></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">${lotteryScene(lotteryState(),{surface:'mobile',wishId:visitor().wishId})}</div></div></section>`}
+function lotteryViewerId(){return visitor().lotteryPreviewWishId??visitor().wishId}
+function lotteryPreviewSelect(){const state=lotteryState(),view=lotteryView(state),value=visitor().lotteryPreviewWishId||'';return `<label class="lottery-preview-label">手机预览身份<select id="lotteryPreview" aria-label="手机预览身份"><option value="">当前游客</option>${(state?.participants||[]).map(p=>{const prize=personalPrize(state,p.wishId,view);return `<option value="${htmlText(p.wishId)}" ${value===p.wishId?'selected':''}>${htmlText(p.name)} · ${prize?prize.label:view.phase==='done'?'未中奖':'待开奖'}</option>`}).join('')}</select></label>`}
+function lotteryTools(){const state=lotteryState(),view=lotteryView(state);return `<div class="lottery-host-tools"><p>${state?.participants.length||0} 位参与者 · 一等奖1名 / 二等奖2名 / 三等奖3名<br>头像为本地演示形象 · 同一参与者不重复获奖</p>${lotteryPreviewSelect()}<button id="startLottery" ${view.phase!=='ready'?'disabled':''}>开始头像抽奖</button><button id="replayLottery" ${view.phase!=='done'?'disabled':''}>重播开奖动画</button></div>`}
+function lotteryPhone(){return `<section class="mobile mobile-v2"><div class="intro"><span>VISITOR MOBILE · 游客端</span><h2>灯市好礼</h2><p>孔明灯放飞仪式礼成，与白墙共同揭晓新春好彩头。</p></div><div class="phone"><div class="bar">19:28 <b>万愿成灯</b> •••</div><div class="scroll">${lotteryScene(lotteryState(),{surface:'mobile',wishId:lotteryViewerId(),showGift:visitor().lotteryPrizeTab!=='list',animationAt:visitor().lotteryPreviewWishId?visitor().lotteryPreviewAt:undefined})}</div></div></section>`}
 function personalTransfer(){const v=visitor(),ev=event();return String(v.wishId)===String(ev.wishId)?ev:v.transfer||null}
 function transferFrameKey(){return [stage(),wishTransferView(event()).key,wishTransferView(personalTransfer()).phone].join("|")}
 function refreshTransferFrame(){if(stage()==='collect'&&$('main').dataset.transferKey!==transferFrameKey())render();refreshCollectionCountdowns()}
@@ -115,7 +119,7 @@ if(stage()==='glow'&&!localStorage.getItem(GLOW_START_KEY))localStorage.setItem(
 if(stage()==='idle'&&!opening().endsAt)localStorage.setItem(OPENING_KEY,JSON.stringify({startedAt:Date.now(),endsAt:Date.now()+OPENING_MS}));
 let recordingDemo;
 function stopAutoShow(){if(recordingDemo?.hasSession)recordingDemo.stop()}
-function restartOpening(){stopAutoShow();storeLottery(null);setVisitor({step:'landing',wishId:null,form:{}});setDraft({});setEvent({});setStage('idle');render()}
+function restartOpening(){stopAutoShow();storeLottery(null);setVisitor({step:'landing',wishId:null,form:{},lotteryPrizeTab:'gift',lotteryPreviewWishId:null});setDraft({});setEvent({});setStage('idle');render()}
 function startAutoShow(){if(location.hash!=='#sync')location.hash='#sync';recordingDemo.start();render()}
 function setCraftPhase(phase,at=Date.now(),duration){
   setVisitor({step:'craft',craft:createCraftPhase(phase,at,draft().wish,duration)});
@@ -228,7 +232,7 @@ function visitorMobile(){
 }
 function visitorViewKey(){
   const v=visitor(),ev=event(),st=stage();
-  if(isLotteryScreen())return ['lottery',lotteryState()?.startedAt,lotteryView(lotteryState()).key,v.wishId].join(':');
+  if(isLotteryScreen())return ['lottery',lotteryState()?.startedAt,lotteryView(lotteryState()).key,lotteryViewerId(),v.lotteryPrizeTab].join(':');
   if(['light','glow','close'].includes(st))return [st,isFinaleStage(st)?glowKey():ev.startedAt,v.wishId].join(':');
   if(v.step==='submitted')return [v.step,v.wishId,st,ev.phase,v.submittedAt||ev.startedAt,wishTransferView(personalTransfer()).phone].join(':');
   if(v.step==='craft')return [v.step,v.craft?.phase,v.craft?.startedAt,v.form?.type,draft().id||''].join(':');
@@ -314,6 +318,7 @@ function bindVisitor(phone){
 function bind(){
   const phone=$('.mobile');if(phone)bindVisitor(phone);if(phone)$('.phone',phone).inert=recordingDemo.active;recordingDemo.paintControls();
   $$('#mock,#clear').forEach(button=>button.disabled=recordingDemo.hasSession);
+  const preview=$('#lotteryPreview');if(preview)preview.onchange=()=>{setVisitor({lotteryPreviewWishId:preview.value||null,lotteryPreviewAt:Date.now(),lotteryPrizeTab:'gift'});render()};
   const ev=event();
   refreshGrowingPool(true);
   refreshCollectionCountdowns();
@@ -337,6 +342,9 @@ function bind(){
     '#startLottery':()=>{stopAutoShow();runLottery()},
     '#replayLottery':()=>{stopAutoShow();replayLottery()},
     '#lotterySaveFinale':()=>saveFinalePicture(personalWish()),
+    '#showLotteryWinners':()=>{setVisitor({lotteryPrizeTab:'list'});render()},
+    '#showPrizeGift':()=>{setVisitor({lotteryPrizeTab:'gift'});render()},
+    '#savePrizeGift':()=>{const gift=personalGift(lotteryState(),lotteryViewerId());if(!gift)return toast('请等待你的奖项揭晓');savePrizeGift(gift).then(()=>toast('消费券图片已生成')).catch(()=>toast('图片暂未生成，请再试一次'))},
     '#full':()=>$('.wall').requestFullscreen?.(),
     '#shot':()=>saveFinalePicture(personalWish()),
     '#mock':()=>{const a=read(),i=a.length,ss=['愿奔赴皆有回响','愿春风常伴，旧愿皆偿','愿日日有欢喜','愿山河无恙，家人安康'],wish={id:Date.now(),serial:126+i,type:types[i%4][0],wish:ss[i%4],name:['小荷','云舟','阿桥','听雨'][i%4]};if(['guide','collect'].includes(stage()))recordPoolGuest(wish);write([...a,wish]);render()},

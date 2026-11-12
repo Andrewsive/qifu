@@ -1,0 +1,42 @@
+.lottery-preview-label{display:flex;flex-direction:column;gap:4px;font-size:9px;color:#c9b78f;letter-spacing:1px}
+.lottery-preview-label select{min-width:145px;max-width:210px;padding:6px 8px;background:#0e2033;border:1px solid #bca16b66;color:#eed5a7;font:11px/1.5 'SimSun',serif}
+.phone .scroll>.lottery-mobile.lottery-winner{display:flex;flex-direction:column;align-items:stretch;gap:8px;position:relative;padding:20px 24px 17px;color:#eed8a9;background:radial-gradient(ellipse at 50% 24%,#ad772a38,transparent 60%),linear-gradient(#10283e,#0c1b30);overflow:hidden}
+.phone .lottery-winner .gift-celebration{position:relative;flex:none;height:72px;display:grid;place-items:center;z-index:2}
+.gift-celebration>span{display:grid;place-items:center;width:55px;height:55px;border:1px solid #f0ce85;border-radius:50%;font:32px/1 'SimSun',serif;background:linear-gradient(130deg,#b27137,#e5bc70,#a56530);color:#fff2cb;box-shadow:0 0 0 6px #ebc47410,0 0 45px #efb85240;animation:giftSeal .9s cubic-bezier(.18,.7,.2,1) both;animation-delay:var(--win-offset)}
+.gift-celebration>i{position:absolute;left:calc(50% - 2px);top:50%;width:4px;height:10px;border-radius:2px;background:#ffdd88;box-shadow:0 0 8px #eac36e;animation:giftRays 2.6s ease-out both;animation-delay:calc(var(--win-offset) + var(--ray-delay));transform:rotate(var(--ray));pointer-events:none}
+.gift-celebration>i:nth-child(3n){background:#db8d69;height:6px}
+.phone .gift-heading{flex:none;text-align:center;position:relative;z-index:2}
+.phone .gift-heading>small{color:#c7ab72;font-size:10px;letter-spacing:2px}
+.phone .gift-heading h1{font-size:38px;line-height:1.2;font-weight:400;margin:6px 0 5px;letter-spacing:7px;color:#ffe6b0;text-shadow:0 0 26px #dcb56450}
+.phone .gift-heading>p{font-size:13px;line-height:1.7;color:#ddbd82;margin:0;letter-spacing:2px}
+.phone .gift-owner{display:flex;align-items:center;justify-content:center;gap:9px;flex:none;min-height:38px;--avatar-size:31px;font-size:12px;color:#ddc69e}
+.phone .gift-owner>span:last-child{text-align:left;line-height:1.5}
+.phone .gift-owner small{display:block;font-size:9px;color:#9ca9ac}
+.phone .prize-voucher{position:relative;flex:1 1 0;min-height:230px;max-height:375px;display:flex;flex-direction:column;isolation:isolate;margin:3px 0 2px;border:1px solid #d6ae6c;border-radius:7px;background:repeating-linear-gradient(174deg,transparent 0 29px,#896d3a05 30px 31px),radial-gradient(ellipse at 45% 30%,#fff3d9,#ead3a6);color:#694b31;box-shadow:0 7px 27px #050d1930,inset 0 0 45px #d2ab5430;animation:giftCard .8s ease both;animation-delay:var(--win-offset)}
+.phone .voucher-top{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:12px 14px 0;flex:none}
+.phone .voucher-top>small{font-size:9px;letter-spacing:1px;color:#987b4c}
+.phone .voucher-top>b{font-size:10px;line-height:1.5;font-weight:400;border:1px solid #a6634166;border-radius:20px;padding:3px 8px;background:#b46b4010;color:#985338;white-space:nowrap}
+.phone .voucher-main{position:relative;flex:1 1 0;min-height:80px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:9px 12px}
+.phone .voucher-main>i{position:absolute;right:15px;top:12px;border:1px solid #a97c4850;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font-style:normal;font-size:13px;color:#ab8051;opacity:.5}
+.phone .voucher-main h2{font-size:30px;line-height:1.5;font-weight:400;letter-spacing:4px;margin:0;color:#714931}
+.phone .voucher-main p{font-size:11px;line-height:1.7;letter-spacing:2px;margin:3px 0;color:#987044}
+.phone .voucher-main>span{font-size:9px;line-height:1.5;margin-top:8px;letter-spacing:1px;color:#aa8d5d}
+.phone .voucher-code{position:relative;flex:none;padding:12px 10px 2px;border-top:1px dashed #ad895780}
+.phone .voucher-code:before,.phone .voucher-code:after{content:'';position:absolute;top:-7px;width:12px;height:12px;background:#102136;border-radius:50%}
+.phone .voucher-code:before{left:-7px;border-right:1px solid #cba161}
+.phone .voucher-code:after{right:-7px;border-left:1px solid #cba161}
+.phone .voucher-code>small{display:block;font-size:8px;color:#987b4c;letter-spacing:3px}
+.phone .voucher-code>strong{display:block;font:13px/1.8 Georgia,serif;letter-spacing:2px;color:#7a5333;margin:3px 0 5px;overflow-wrap:anywhere}
+.phone .voucher-code p{font-size:9px;line-height:1.7;margin:0;color:#967d56}
+.phone .voucher-demo{flex:none;text-align:center;font-size:7px;line-height:1.4;padding:5px 5px 8px;color:#aa946f;letter-spacing:2px}
+.phone .gift-actions{display:flex;flex-direction:column;gap:7px;flex:none;padding-top:4px}
+.phone .gift-actions>button,.phone .lottery-mobile>#showPrizeGift{position:static;width:100%;min-height:40px;padding:9px 10px;margin:0;border:1px solid #ceab6a;border-radius:2px;background:linear-gradient(110deg,#975038,#b06a45);color:#ffe9bd;font:13px/1.5 'SimSun',serif;letter-spacing:1.5px;box-shadow:none;cursor:pointer}
+.phone .gift-actions>button:last-child{background:transparent;border-color:#c5a26950;color:#ceb584;font-size:11px}
+.phone .gift-actions>button:focus-visible{outline:2px solid #f4d28b;outline-offset:2px}
+.phone .lottery-winner>.gift-note{flex:none;margin:0;text-align:center;font-size:9px;line-height:1.4;color:#8e9da7;letter-spacing:.5px}
+@keyframes giftSeal{from{opacity:0;transform:scale(.35) rotate(-15deg)}65%{opacity:1;transform:scale(1.12) rotate(3deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes giftRays{0%{opacity:0;transform:rotate(var(--ray)) translateY(-12px) scale(.3)}15%{opacity:1}100%{opacity:0;transform:rotate(var(--ray)) translateY(-140px) scale(1.1)}}
+@keyframes giftCard{from{opacity:0;transform:translateY(15px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@container (max-height:620px){.phone .scroll>.lottery-mobile.lottery-winner{padding:13px 19px 12px;gap:6px}.phone .lottery-winner .gift-celebration{height:45px}.gift-celebration>span{width:37px;height:37px;font-size:23px}.phone .gift-heading>small{font-size:8px}.phone .gift-heading h1{font-size:30px;margin:4px 0}.phone .gift-heading>p{font-size:11px}.phone .gift-owner{min-height:28px;--avatar-size:26px;font-size:10px}.phone .gift-owner small{font-size:8px}.phone .prize-voucher{min-height:207px}.phone .voucher-top{padding:8px 10px 0}.phone .voucher-top>small{font-size:8px}.phone .voucher-top>b{font-size:9px;padding:2px 7px}.phone .voucher-main{min-height:65px;padding:5px 10px}.phone .voucher-main h2{font-size:25px}.phone .voucher-main p{font-size:10px;margin:0}.phone .voucher-main>span{font-size:8px;margin-top:4px}.phone .voucher-code{padding:8px 8px 0}.phone .voucher-code>strong{font-size:12px;margin:1px 0 3px}.phone .voucher-code p{font-size:8px}.phone .voucher-demo{padding:3px 3px 6px;font-size:7px}.phone .gift-actions>button{min-height:35px;padding:6px 8px;font-size:12px}.phone .gift-actions>button:last-child{font-size:10px}.phone .lottery-winner>.gift-note{font-size:8px}}
+@container (max-height:490px){.phone .scroll>.lottery-mobile.lottery-winner{padding:10px 16px;gap:4px}.phone .lottery-winner .gift-celebration{height:29px}.gift-celebration>span{width:25px;height:25px;font-size:16px}.phone .gift-heading h1{font-size:25px;margin:3px 0}.phone .gift-heading>small{font-size:7px}.phone .gift-heading>p{font-size:10px}.phone .gift-owner{min-height:24px;--avatar-size:22px}.phone .prize-voucher{min-height:183px}.phone .voucher-main{min-height:51px}.phone .voucher-main h2{font-size:22px}.phone .voucher-main>span{display:none}.phone .voucher-main>i{top:6px;width:21px;height:21px;font-size:11px}.phone .voucher-code>strong{font-size:11px}.phone .gift-actions{gap:5px;padding:2px 0 0}.phone .gift-actions>button{min-height:31px;padding:5px 7px;font-size:11px}.phone .gift-note{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.gift-celebration>i{display:none}.gift-celebration>span,.phone .prize-voucher{animation:none}}
